@@ -10,6 +10,7 @@ import { acceptJobOffer, activeEmployment, applyForJob, leaveJob } from '../simu
 import { activeEnrollment, startEducation, withdrawEducation } from '../simulation/educationEngine';
 import { saveWorld } from '../persistence/store';
 import { FinancePanel } from './FinancePanel';
+import { DeepModulesPanel } from './DeepModulesPanel';
 import { Logo } from './Logo';
 
 const money=new Intl.NumberFormat('en-US',{style:'currency',currency:'USD',maximumFractionDigits:0});
@@ -27,7 +28,7 @@ export function AppShell({initial,onReset}:{initial:WorldState;onReset:()=>void}
   if(nav==='life')content=<Life world={world} age={age} onFocus={goalId=>setWorld(w=>setPlayerGoalFocus(w,goalId))} onChange={setWorld}/>;
   else if(nav==='people')content=<People world={world} onChange={setWorld}/>;
   else if(nav==='money')content=<FinancePanel world={world} onChange={setWorld}/>;
-  else if(nav==='world')content=<WorldView world={world}/>;
+  else if(nav==='world')content=<><WorldView world={world}/><DeepModulesPanel world={world} onChange={setWorld}/></>;
   else content=<Timeline world={world}/>;
   return <div className="app-shell">
     <header className="topbar"><Logo/><div className="top-date"><span>{fmtDate(world.date)}</span><small>Age {age} · {world.character.location}</small></div><button className="icon-btn" onClick={()=>{setSpeed(0);onReset();}} title="Start a new world"><RotateCcw size={18}/></button></header>
@@ -85,7 +86,6 @@ function WorldView({world}:{world:WorldState}){
   return <><div className="metric-grid"><Metric label="Inflation" value={`${world.economy.inflationRate.toFixed(1)}%`} detail="Annualized environment"/><Metric label="Unemployment" value={`${world.economy.unemploymentRate.toFixed(1)}%`} detail="Labor market"/><Metric label="Labor demand" value={`${Math.round(world.laborMarket.demandIndex)}/100`} detail={`${Math.round(world.laborMarket.remoteShare)}% remote share`}/><Metric label="Market" value={titleCase(world.market.regime)} detail={`Equity index ${world.market.usEquityIndex.toFixed(1)}`}/></div>
     <Section title="Living-world engine"><div className="world-engine"><div><Target size={20}/><span><b>{world.npcActivity.length}</b><small>NPC decisions remembered</small></span></div><div><Users size={20}/><span><b>{world.npcs.length}</b><small>People currently represented</small></span></div><div><Brain size={20}/><span><b>Hidden</b><small>{privateSecrets} private truths exist outside your knowledge</small></span></div></div></Section>
     <Section title="Economic institutions"><div className="institution-grid">{world.employers.map(e=><article className="institution-card" key={e.id}><BriefcaseBusiness size={19}/><b>{e.name}</b><small>{e.industry} · stability {Math.round(e.stability)}</small></article>)}{world.educationInstitutions.map(i=><article className="institution-card" key={i.id}><GraduationCap size={19}/><b>{i.name}</b><small>{i.kind.replace('_',' ')} · quality {Math.round(i.quality)}</small></article>)}</div></Section>
-    <Section title="World principle"><article className="manifesto"><span className="eyebrow">EVERA RULE 01</span><h2>The world does not exist for you.</h2><p>You exist inside it. Other people can date, move, build families, study, work, invest and make decisions without waiting for you.</p></article></Section>
   </>;
 }
 function Timeline({world}:{world:WorldState}){const personal=world.character.human.memories.slice().sort((a,b)=>b.date.localeCompare(a.date)).slice(0,10);return <><Section title="Life timeline">{world.memories.map(m=><article className="memory" key={m.id}><time>{fmtDate(m.date)}</time><div><h3>{m.title}</h3><p>{m.summary}</p></div></article>)}</Section><Section title="Personal memory">{personal.length?personal.map(m=><article className="memory subtle" key={m.id}><time>{fmtDate(m.date)}</time><div><span className="eyebrow">{m.kind.toUpperCase()}</span><p>{m.summary}</p></div></article>):<Empty text="No additional long-term memories have formed yet."/>}</Section></>;}
