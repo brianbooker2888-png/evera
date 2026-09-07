@@ -3,14 +3,16 @@ import { Baby, Brain, BriefcaseBusiness, Building2, CalendarDays, CircleDollarSi
 import type { NavArea, Partnership, WorldState } from '../types/game';
 import { ageOn, setPlayerGoalFocus, stepWorld } from '../simulation/engine';
 import { habitSignal, needSignal, relationshipSignal } from '../simulation/humanEngine';
-import { attemptRelationshipStep, haveConversation, partnershipFor, partnershipLabel, relationshipPotential, romanceEligible, setFamilyPlan, type RelationshipAction } from '../simulation/relationshipEngine';
+import { attemptRelationshipStep, partnershipFor, partnershipLabel, relationshipPotential, romanceEligible, setFamilyPlan, type RelationshipAction } from '../simulation/relationshipEngine';
 import { activeHouseholdForPerson, reassignHouseholdLabor } from '../simulation/householdEngine';
 import { applyParentingAction, childrenOf, type ParentingAction } from '../simulation/familyEngine';
 import { acceptJobOffer, activeEmployment, applyForJob, leaveJob } from '../simulation/careerEngine';
 import { activeEnrollment, startEducation, withdrawEducation } from '../simulation/educationEngine';
+import { haveNarratedConversation } from '../narration/conversationFacade';
 import { saveWorld } from '../persistence/store';
 import { FinancePanel } from './FinancePanel';
 import { DeepModulesPanel } from './DeepModulesPanel';
+import { TimelinePanel } from './TimelinePanel';
 import { Logo } from './Logo';
 
 const money=new Intl.NumberFormat('en-US',{style:'currency',currency:'USD',maximumFractionDigits:0});
@@ -29,7 +31,7 @@ export function AppShell({initial,onReset}:{initial:WorldState;onReset:()=>void}
   else if(nav==='people')content=<People world={world} onChange={setWorld}/>;
   else if(nav==='money')content=<FinancePanel world={world} onChange={setWorld}/>;
   else if(nav==='world')content=<><WorldView world={world}/><DeepModulesPanel world={world} onChange={setWorld}/></>;
-  else content=<Timeline world={world}/>;
+  else content=<TimelinePanel world={world} onChange={setWorld}/>;
   return <div className="app-shell">
     <header className="topbar"><Logo/><div className="top-date"><span>{fmtDate(world.date)}</span><small>Age {age} · {world.character.location}</small></div><button className="icon-btn" onClick={()=>{setSpeed(0);onReset();}} title="Start a new world"><RotateCcw size={18}/></button></header>
     <section className="timebar"><button className={speed===0?'active':''} onClick={()=>setSpeed(0)}><Pause size={16}/>Pause</button>{([1,5,20] as const).map(s=><button key={s} className={speed===s?'active':''} onClick={()=>setSpeed(s)}><Play size={15}/>{s}×</button>)}<button onClick={()=>setWorld(w=>stepWorld(w,1))}><Clock3 size={16}/>Next day</button></section>
@@ -75,7 +77,7 @@ function People({world,onChange}:{world:WorldState;onChange:(w:WorldState)=>void
 function PersonCard({world,npcId,onChange}:{world:WorldState;npcId:string;onChange:(w:WorldState)=>void}){
   const[text,setText]=useState(''),npc=world.npcs.find(n=>n.id===npcId)!,rel=world.relationships.find(r=>r.fromId===world.character.id&&r.toId===npcId),p=partnershipFor(world,world.character.id,npcId),potential=relationshipPotential(world,world.character.id,npcId),eligible=romanceEligible(world,world.character.id,npcId),latest=world.conversations.find(c=>c.personIds.includes(npcId)&&c.personIds.includes(world.character.id));
   const actions:RelationshipAction[]=[];if(!p&&eligible)actions.push('ask_date');if(p?.status==='dating')actions.push('exclusive');if(p&&['exclusive','engaged'].includes(p.status)&&!p.cohabitingHouseholdId)actions.push('move_in');if(p?.status==='exclusive')actions.push('engage');if(p?.status==='engaged')actions.push('marry');if(p?.status==='married')actions.push('separate');if(p?.status==='separated')actions.push('divorce');
-  const submit=()=>{if(!text.trim())return;onChange(haveConversation(world,npcId,text));setText('');};
+  const submit=()=>{if(!text.trim())return;onChange(haveNarratedConversation(world,npcId,text));setText('');};
   return <article className="person-card"><div className="person-row bare"><div className="avatar small">{initials(npc.name)}</div><div className="person-copy"><h3>{npc.name}</h3><p>{npc.role} · {npc.location}</p><small>{relationshipSignal(rel)}</small><small>{p?`${partnershipLabel(p.status)}${p.cohabitingHouseholdId?' · living together':''}`:eligible?potential.chemistry>=60?'There seems to be some chemistry.':'The romantic picture is uncertain.':'No clear romantic possibility.'}</small></div><HeartHandshake size={20}/></div>{actions.length>0&&<div className="action-row">{actions.map(a=><button className="secondary-btn" key={a} onClick={()=>onChange(attemptRelationshipStep(world,npcId,a))}>{actionLabel(a)}</button>)}</div>}{p&&['exclusive','engaged','married'].includes(p.status)&&<FamilyPlanControl partnership={p} world={world} onChange={onChange}/>}<div className="conversation-box"><MessageCircle size={17}/><input placeholder={`Talk to ${npc.name.split(' ')[0]}…`} value={text} onChange={e=>setText(e.target.value)} onKeyDown={e=>{if(e.key==='Enter')submit();}}/><button onClick={submit}>Send</button></div>{latest&&<p className="reply">{latest.response}</p>}</article>;
 }
 function FamilyPlanControl({partnership,world,onChange}:{partnership:Partnership;world:WorldState;onChange:(w:WorldState)=>void}){return <label className="compact-select"><span>Family plan</span><select value={partnership.familyPlan} onChange={e=>onChange(setFamilyPlan(world,partnership.id,e.target.value as Partnership['familyPlan']))}><option value="avoid">Avoid pregnancy</option><option value="not_now">Not now</option><option value="open">Open to it</option><option value="trying">Trying</option></select></label>;}
@@ -88,7 +90,6 @@ function WorldView({world}:{world:WorldState}){
     <Section title="Economic institutions"><div className="institution-grid">{world.employers.map(e=><article className="institution-card" key={e.id}><BriefcaseBusiness size={19}/><b>{e.name}</b><small>{e.industry} · stability {Math.round(e.stability)}</small></article>)}{world.educationInstitutions.map(i=><article className="institution-card" key={i.id}><GraduationCap size={19}/><b>{i.name}</b><small>{i.kind.replace('_',' ')} · quality {Math.round(i.quality)}</small></article>)}</div></Section>
   </>;
 }
-function Timeline({world}:{world:WorldState}){const personal=world.character.human.memories.slice().sort((a,b)=>b.date.localeCompare(a.date)).slice(0,10);return <><Section title="Life timeline">{world.memories.map(m=><article className="memory" key={m.id}><time>{fmtDate(m.date)}</time><div><h3>{m.title}</h3><p>{m.summary}</p></div></article>)}</Section><Section title="Personal memory">{personal.length?personal.map(m=><article className="memory subtle" key={m.id}><time>{fmtDate(m.date)}</time><div><span className="eyebrow">{m.kind.toUpperCase()}</span><p>{m.summary}</p></div></article>):<Empty text="No additional long-term memories have formed yet."/>}</Section></>;}
 function Metric({label,value,detail}:{label:string;value:string;detail:string}){return <article className="metric"><span>{label}</span><strong>{value}</strong><small>{detail}</small></article>;}
 function Section({title,subtitle,children}:{title:string;subtitle?:string;children:ReactNode}){return <section className="section"><header><h2>{title}</h2>{subtitle&&<p>{subtitle}</p>}</header><div className="section-body">{children}</div></section>;}
 function Empty({text}:{text:string}){return <div className="empty"><CircleDollarSign size={26}/><p>{text}</p></div>;}
