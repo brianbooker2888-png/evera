@@ -4,7 +4,6 @@ const config:CapacitorConfig={
   appId:'com.evera.game',
   appName:'EVERA',
   webDir:'dist',
-  bundledWebRuntime:false,
   server:{androidScheme:'https'}
 };
 
