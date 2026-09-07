@@ -1,5 +1,27 @@
 # EVERA Changelog
 
+## v0.7.0 — Grounded Narration & Life Chapters
+
+- Upgraded the world save schema to v7.
+- Added narration settings and persistent annual Life Chapters to save state.
+- Added a canonical scene-context compiler for dialogue and narrative generation.
+- Separated canonical facts, remembered/believed information and rumors inside narration context.
+- Added speaker-specific knowledge filtering so narration cannot reveal a secret the speaker does not know.
+- Added personality-, age- and relationship-aware voice profiles.
+- Added a deterministic offline narration provider that requires no network connection.
+- Added a narration provider registry with mandatory offline fallback.
+- Added a vendor-neutral remote-provider adapter that receives only sanitized scene context instead of the full save.
+- Added grounding validation so provider responses may only cite fact IDs supplied in the approved context packet.
+- Added a narration-safe conversation facade: deterministic relationship intent/tone and consequences are applied first, and only the stored reply text is narrated afterward.
+- Routed the People conversation UI through grounded narration.
+- Added Annual Life Chapters generated from recorded events, memories, careers, sports seasons and logistics-business history.
+- Added automatic prior-year chapter creation at the January 1 simulation boundary.
+- Added a Timeline autobiography UI with narration mode controls and archived chapters.
+- Added Phase 7 responsive styling and bumped the PWA cache to v7.
+- Added v6 → v7 migration while preserving all earlier migration paths.
+- Added dedicated grounding regression tests for secret leakage, rumor certainty, narration immutability, deterministic output, annual chapter generation and v6 migration.
+- Kept production online-model integration optional and deferred; v0.7 remains fully functional offline.
+
 ## v0.6.0 — Sports & Logistics Business
 
 - Upgraded the world save schema to v6.

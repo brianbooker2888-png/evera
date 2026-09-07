@@ -92,7 +92,7 @@ describe('Phase 3 relationships and households',()=>{
 describe('Phase 4 education and careers',()=>{
   it('initializes employment, employers, openings and skills',()=>{
     const world=createWorld(draft,321);
-    expect(world.version).toBe(6);expect(activeEmployment(world)).toBeTruthy();
+    expect(world.version).toBe(7);expect(activeEmployment(world)).toBeTruthy();
     expect(world.employers.length).toBeGreaterThan(2);expect(world.jobOpenings.some(j=>j.status==='open')).toBe(true);
   });
   it('pays from the employment contract and accepts a strong offer',()=>{
@@ -165,12 +165,13 @@ describe('Phase 6 sports and logistics business',()=>{
 });
 
 describe('save migration',()=>{
-  it('upgrades a v5-shaped save into v6 without losing prior-system history',()=>{
+  it('upgrades a v5-shaped save into v7 without losing prior-system history',()=>{
     const current=createWorld(draft,99);
     const{sportsLeagues,sportsTeams,sportsParticipants,athleteProfiles,coachProfiles,sportsContracts,sportsFixtures,sportsSeasonStats,businesses,warehouseFacilities,businessEmployees,logisticsContracts,logisticsKpis,businessOpportunities,...phase5Rest}=current;
     void sportsLeagues;void sportsTeams;void sportsParticipants;void athleteProfiles;void coachProfiles;void sportsContracts;void sportsFixtures;void sportsSeasonStats;void businesses;void warehouseFacilities;void businessEmployees;void logisticsContracts;void logisticsKpis;void businessOpportunities;
     const legacy={...phase5Rest,version:5};const migrated=migrateWorld(legacy);
-    expect(migrated?.version).toBe(6);expect(migrated?.npcs.length).toBe(current.npcs.length);expect(migrated?.financialAccounts.length).toBeGreaterThan(0);
+    expect(migrated?.version).toBe(7);expect(migrated?.npcs.length).toBe(current.npcs.length);expect(migrated?.financialAccounts.length).toBeGreaterThan(0);
     expect(migrated?.sportsLeagues.length).toBeGreaterThan(0);expect(migrated?.businessOpportunities.length).toBeGreaterThan(0);
+    expect(migrated?.narrationSettings.mode).toBe('offline');expect(migrated?.annualLifeChapters).toEqual([]);
   });
 });
