@@ -1,5 +1,26 @@
 # EVERA Changelog
 
+## v0.4.0 — Education, Careers & Labor Market
+
+- Upgraded the world save schema to v4.
+- Added persistent public/charter school, university and trade-school institutions.
+- Added age-appropriate automatic school enrollment for minors.
+- Added postsecondary enrollment with admission logic, tuition, scholarships, GPA, attendance, credits and student debt.
+- Added persistent credentials earned through completed education programs.
+- Added transferable skill records for Communication, Analysis, Operations, Leadership and Technology.
+- Added persistent employers and job openings with compensation, schedule, work mode and qualification requirements.
+- Added deterministic job applications that can progress through submitted, interview, offer and rejection states.
+- Added explicit player acceptance of job offers.
+- Added canonical employment history with salary, pay frequency, benefits, workload, schedule, performance and satisfaction.
+- Replaced the Phase 1 fixed Friday paycheck with payroll generated from the active employment contract.
+- Added skill development from work experience and workload effects on stress/energy.
+- Added a labor-market model for demand, wage conditions and remote-work share.
+- Integrated work and education schedules with household schedules.
+- Added Career and Education player interfaces within LIFE and institution visibility within WORLD.
+- Added student debt visibility in MONEY.
+- Added v1/v2/v3 → v4 save migration and v4 normalization.
+- Expanded deterministic regression tests for education, applications, employment, payroll and migration.
+
 ## v0.3.0 — Relationships & Households
 
 - Added canonical partnership state separate from directional relationship feelings.
