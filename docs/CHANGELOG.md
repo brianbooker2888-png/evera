@@ -1,5 +1,30 @@
 # EVERA Changelog
 
+## v0.8.0 — Optional Cloud Sync & Native Packaging
+
+- Kept the canonical simulation world schema at v7 because cloud/device metadata is infrastructure rather than gameplay state.
+- Upgraded local IndexedDB storage to keep sync/device metadata separately from the world save.
+- Added persistent device IDs, local revisions, last-synced revisions/checksums and sync status.
+- Added deterministic stable-JSON checksums for world payload comparison.
+- Added an optional cloud-save provider contract.
+- Added an optional Supabase provider with persisted sessions, email-link authentication and per-user save transport.
+- Added a Supabase `evera_saves` SQL schema with row-level-security policies.
+- Added optimistic revision checking so stale devices cannot blindly overwrite newer cloud saves.
+- Added conservative sync classification: same, upload, download or conflict.
+- Added explicit divergent-history conflict handling instead of attempting unsafe field-level merging of two simulation timelines.
+- Added Cloud & Device UI with sign-in, manual sync, sign-out and conflict-resolution actions.
+- Kept local saving fully functional when cloud configuration, authentication or connectivity is absent.
+- Added a same-origin Netlify narration gateway so optional provider credentials stay server-side.
+- Added a Netlify remote narration provider client with the existing deterministic offline fallback.
+- Added environment templates for optional Supabase and remote narration configuration.
+- Added Capacitor core, iOS and Android packaging dependencies and configuration.
+- Added scripts for generating, syncing and opening native projects.
+- Added CI gates for production dependency security, native config typechecking and temporary iOS/Android wrapper generation.
+- Added Phase 8 cloud synchronization tests covering stable checksums and divergent-history decisions.
+- Added `docs/CLOUD_NATIVE.md` covering cloud setup, sync semantics, security boundaries and native packaging.
+- Bumped the PWA cache to v8.
+- External Supabase credentials, production narration-provider credentials and app-store signing remain deployment tasks rather than hard-coded repository state.
+
 ## v0.7.0 — Grounded Narration & Life Chapters
 
 - Upgraded the world save schema to v7.

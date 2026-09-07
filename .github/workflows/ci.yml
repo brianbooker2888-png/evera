@@ -14,9 +14,16 @@ jobs:
           node-version: 22
       - name: Install dependencies
         run: npm install
+      - name: Production dependency security gate
+        run: npm audit --omit=dev --audit-level=high
       - name: Simulation typecheck
         run: npm run typecheck:simulation
       - name: Tests
         run: npm test
       - name: Production build
         run: npm run build
+      - name: Generate native wrappers
+        run: |
+          npx cap add android
+          npx cap add ios
+          npx cap sync

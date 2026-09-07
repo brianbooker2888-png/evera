@@ -5,7 +5,7 @@
 
 EVERA is a local-first persistent life and world simulation. The player is one person inside a world that continues independently.
 
-## Current build — v0.7.0 Grounded Narration & Life Chapters
+## Current build — v0.8.0 Optional Cloud Sync & Native Packaging
 
 ### Foundation
 - React + TypeScript + Vite
@@ -13,7 +13,7 @@ EVERA is a local-first persistent life and world simulation. The player is one p
 - Deterministic seeded simulation engine
 - Local IndexedDB autosave and offline PWA shell
 - Five primary areas: Life, People, World, Money, Timeline
-- GitHub Actions release gate: strict simulation typecheck, Vitest and production build
+- GitHub Actions release gate: production dependency security gate, strict simulation typecheck, Vitest, production build and Capacitor wrapper generation
 
 ### Human simulation
 - Multidimensional traits, values, needs, health, habits, goals and memories
@@ -64,23 +64,37 @@ EVERA is a local-first persistent life and world simulation. The player is one p
 - Interactive hiring, staffing, pricing, facility and contract controls inside WORLD
 
 ### Grounded narration
-- Narration-specific canonical context compiler
-- Explicit separation of canonical facts, beliefs and rumors
-- Speaker knowledge filtering so NPCs cannot narrate secrets they do not know
+- Canonical context compiler with fact / belief / rumor separation
+- Speaker knowledge and secret filtering
 - Personality-, age- and relationship-aware voice profiles
-- Deterministic offline narration provider with no network dependency
-- Free-text conversations apply simulation consequences first, then narrate the reply
-- Annual Life Chapters generated from recorded events, memories, careers, sports and business facts
-- Persistent autobiography inside TIMELINE
-- Narration mode setting for offline or enhanced-when-available behavior
-- Provider registry and vendor-neutral remote adapter for future online AI providers
-- Mandatory offline fallback if an optional provider is unavailable
+- Deterministic offline narration provider with mandatory fallback
+- Annual Life Chapters and persistent autobiography inside TIMELINE
+- Provider registry and vendor-neutral remote adapter
+- Same-origin Netlify narration gateway so optional provider secrets remain server-side
 
-Remote providers are not authoritative and never receive the full save. A provider may only receive a sanitized scene packet compiled from facts the narration layer is allowed to express.
+### Optional cloud & cross-device sync
+- Local IndexedDB remains the authoritative save while offline
+- Device/revision metadata is stored separately from simulation state
+- Deterministic world checksums
+- Optional Supabase email-link authentication and cloud save transport
+- Row-level-security schema included in `docs/supabase-schema.sql`
+- Safe upload/download when only one side changed
+- Explicit conflict flow when two devices independently advance the same life
+- No field-level auto-merge of divergent simulation timelines
+- Cloud failures never block local play or local saving
+
+### Native packaging
+- Capacitor configuration for one shared web/iOS/Android codebase
+- Working bundle identifier `com.evera.game` while EVERA remains a working brand
+- Scripts for adding, syncing and opening iOS/Android projects
+- CI generates temporary iOS and Android wrappers to verify packaging compatibility
+- Generated platform projects are not the source of truth; React/TypeScript remains the core application
 
 ### Save compatibility
-- v1 → v2 → v3 → v4 → v5 → v6 → v7 migrations
-- Prior family, relationship, career, finance, sports, business, memory and timeline state is preserved while later modules are added
+- Canonical simulation save schema remains v7 in app v0.8 because cloud/device metadata is infrastructure, not gameplay state
+- v1 → v2 → v3 → v4 → v5 → v6 → v7 migrations remain supported
+
+See `docs/CLOUD_NATIVE.md` for cloud, security and Capacitor setup.
 
 ## Run
 
@@ -97,10 +111,12 @@ npm test
 npm run build
 ```
 
-## Architecture principle
+## Architecture principles
 
 > The database is truth. AI is narration.
 
 > The simulation decides what happened. Narration decides how it is expressed.
 
-Core simulation remains deterministic and fully playable offline. AI may enrich player-facing language, but it may not invent canonical facts or decide outcomes.
+> Offline is the baseline. Cloud is an enhancement.
+
+Core simulation remains deterministic and fully playable offline. AI, accounts and cloud services may enrich the experience, but they may not become prerequisites for the life simulation.
