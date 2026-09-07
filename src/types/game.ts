@@ -1,3 +1,5 @@
+import type { FinanceWorldState } from './finance';
+
 export type Sex = 'female' | 'male';
 export type Orientation = 'straight' | 'gay' | 'bisexual';
 export type NavArea = 'life' | 'people' | 'world' | 'money' | 'timeline';
@@ -83,8 +85,8 @@ export interface LedgerEntry { id:string; date:string; description:string; amoun
 export interface LifeEvent { id:string; date:string; title:string; body:string; type:'routine'|'opportunity'|'relationship'|'finance'|'world'; priority:'low'|'medium'|'major'; }
 export interface Memory { id:string; date:string; title:string; summary:string; significance:number; }
 
-export interface WorldState {
-  version:4; seed:number; date:string; character:Character; npcs:Npc[]; relationships:RelationshipState[];
+export interface WorldState extends FinanceWorldState {
+  version:5; seed:number; date:string; character:Character; npcs:Npc[]; relationships:RelationshipState[];
   partnerships:Partnership[]; households:Household[]; pregnancies:Pregnancy[]; familyLinks:FamilyLink[]; custodyPlans:CustodyPlan[]; conversations:ConversationRecord[];
   educationInstitutions:EducationInstitution[]; educationEnrollments:EducationEnrollment[]; credentials:Credential[]; skills:SkillRecord[];
   employers:Employer[]; employments:Employment[]; jobOpenings:JobOpening[]; jobApplications:JobApplication[]; laborMarket:LaborMarket;
