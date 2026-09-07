@@ -9,7 +9,7 @@ const draft={firstName:'Health',lastName:'Test',age:38,sex:'male' as const,orien
 describe('Phase 9 health and healthcare',()=>{
   it('initializes health profiles for the player and instantiated nearby people',()=>{
     const world=createWorld(draft,9001);
-    expect(world.version).toBe(9);
+    expect(world.version).toBe(10);
     expect(world.healthProfiles.some(p=>p.personId===world.character.id)).toBe(true);
     expect(world.healthProfiles.some(p=>p.personId==='npc-friend')).toBe(true);
     expect(world.healthProfiles.every(p=>p.deductibleYear===Number(world.date.slice(0,4)))).toBe(true);
@@ -41,15 +41,16 @@ describe('Phase 9 health and healthcare',()=>{
     expect(a.character.human.health).toEqual(b.character.human.health);
   });
 
-  it('migrates a v7 save through v9 without losing existing systems',()=>{
+  it('migrates a v7 save through v10 without losing existing systems',()=>{
     const current=createWorld(draft,9005);
-    const {healthProfiles,medicalConditions,medicalEncounters,medicalBills,medications,deathRecords,funeralRecords,estatePlans,estateCases,ancestorArchives,controlTransitions,crimeIncidents,criminalCases,criminalRecords,incarcerationRecords,civilCases,...rest}=current;void healthProfiles;void medicalConditions;void medicalEncounters;void medicalBills;void medications;void deathRecords;void funeralRecords;void estatePlans;void estateCases;void ancestorArchives;void controlTransitions;void crimeIncidents;void criminalCases;void criminalRecords;void incarcerationRecords;void civilCases;
+    const {healthProfiles,medicalConditions,medicalEncounters,medicalBills,medications,deathRecords,funeralRecords,estatePlans,estateCases,ancestorArchives,controlTransitions,crimeIncidents,criminalCases,criminalRecords,incarcerationRecords,civilCases,lifestyleProfiles,homeLifestyles,homeUpgrades,vehicleUseProfiles,wardrobeItems,hobbies,pets,travelPlans,lifestyleOutings,householdServices,deviceAssets,calendarCommitments,lifestyleMilestones,...rest}=current;void healthProfiles;void medicalConditions;void medicalEncounters;void medicalBills;void medications;void deathRecords;void funeralRecords;void estatePlans;void estateCases;void ancestorArchives;void controlTransitions;void crimeIncidents;void criminalCases;void criminalRecords;void incarcerationRecords;void civilCases;void lifestyleProfiles;void homeLifestyles;void homeUpgrades;void vehicleUseProfiles;void wardrobeItems;void hobbies;void pets;void travelPlans;void lifestyleOutings;void householdServices;void deviceAssets;void calendarCommitments;void lifestyleMilestones;
     const migrated=migrateWorld({...rest,version:7});
-    expect(migrated?.version).toBe(9);
+    expect(migrated?.version).toBe(10);
     expect(migrated?.npcs.length).toBe(current.npcs.length);
     expect(migrated?.sportsLeagues.length).toBe(current.sportsLeagues.length);
     expect(migrated?.annualLifeChapters).toEqual(current.annualLifeChapters);
     expect(migrated?.healthProfiles.some(p=>p.personId===current.character.id)).toBe(true);
     expect(migrated?.deathRecords).toEqual([]);
+    expect(migrated?.lifestyleProfiles.length).toBeGreaterThan(0);
   });
 });
