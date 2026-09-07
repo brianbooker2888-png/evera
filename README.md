@@ -5,7 +5,7 @@
 
 EVERA is a local-first persistent life and world simulation. The player is one person inside a world that continues independently.
 
-## Current build — v0.9.0 Health & Healthcare
+## Current build — v0.10.0 Mortality, Law & Legacy
 
 ### Foundation
 - React + TypeScript + Vite
@@ -21,9 +21,36 @@ EVERA is a local-first persistent life and world simulation. The player is one p
 - Autonomous goal-directed NPC decisions
 - Directional relationships, person-specific knowledge and canonical secrets
 
+### Mortality, estates & generations
+- Canonical v9 mortality/legal/legacy world state
+- Hidden age-, health- and circumstance-driven mortality for the controlled character and high-fidelity NPCs
+- Persistent death records with cause, date and age at death
+- Controlled-character death immediately stops further time advancement until continuation is resolved
+- Funeral records, survivor grief and household/employment cleanup
+- Wills and deterministic intestacy fallback
+- Life-insurance proceeds captured before policy cleanup
+- Estate settlement across cash, debts, property, vehicles and business ownership
+- Investment positions are extinguished during estate settlement so deceased portfolios cannot reappear on later market ticks
+- Permanent ancestor archive containing identity, life dates, career, location, net worth and descendants
+- Existing eligible descendants can become the next controlled character without creating a replacement identity
+- Control-transition history is preserved permanently in Timeline
+- Generation-aware finance initialization prevents prior-generation bills, budgets and policies from being incorrectly reused
+- LIFE becomes a continuation interface after controlled-character death; TIMELINE keeps permanent dynasty history afterward
+
+### Crime, law & consequences
+- Persistent crime incidents with offense, severity, evidence, victim and discovery state
+- Discovery is separate from the underlying incident, allowing delayed investigations
+- Investigation, criminal charge, plea, trial, acquittal and conviction state
+- Public-defender/private-attorney representation and legal costs
+- Fines, legal debt, incarceration and release
+- Active criminal records reduce job-application competitiveness
+- Incarceration blocks ordinary hiring and ends affected hiring processes
+- Employment history no longer auto-respawns a job after resignation, conviction or another job-ending event
+- Civil claims, negotiation, settlement, trial, judgment and dismissal foundations
+- Legal outcomes use the same canonical checking, debt and ledger systems as the rest of the finance simulation
+
 ### Health & healthcare
-- Canonical v8 health records layered around the existing hidden human-health model
-- Person-specific health profiles for instantiated people
+- Persistent health profiles around the hidden human-health model
 - Hidden preventive, nutrition, sleep, substance, chronic-condition, accident and care-access factors
 - Persistent acute, chronic, mental-health and injury conditions
 - Separate suspected vs diagnosed state so the player does not receive omniscient medical information
@@ -38,8 +65,6 @@ EVERA is a local-first persistent life and world simulation. The player is one p
 - Health events affect energy, stress and other human-state consequences without exposing hidden risk percentages
 - Diagnosed medical history can enter grounded narration and annual Life Chapters only when recorded by the simulation
 
-Mortality is intentionally not enabled in v0.9. Death, estates, inheritance and controlled-character continuation are being built together in Phase 10 so the simulation cannot strand a life after death without a valid continuation path.
-
 ### Relationships, family & households
 - Dating → exclusivity → cohabitation → engagement → marriage → breakup/divorce
 - Autonomous NPC-to-NPC romance
@@ -53,6 +78,7 @@ Mortality is intentionally not enabled in v0.9. Death, estates, inheritance and 
 - Skills, job applications, interviews, offers and employment history
 - Employment contracts with salary, schedules, benefits, performance and satisfaction
 - Contract-driven payroll and labor-market simulation
+- Criminal-history hiring friction integrated into the same application scoring model
 
 ### Money, housing & wealth
 - Canonical checking, savings, brokerage and retirement accounts
@@ -60,7 +86,8 @@ Mortality is intentionally not enabled in v0.9. Death, estates, inheritance and 
 - Credit cards, loans, APR, utilization, delinquency, default and bankruptcy
 - Insurance, vehicles, auto financing, mortgages, homeownership and housing-market exposure
 - Deterministic investment markets, retirement accounts and net-worth accounting
-- Healthcare spending uses the same checking account and financial ledger as the rest of the simulation
+- Healthcare and legal spending use the same checking account and financial ledger as the rest of the simulation
+- Estates and inheritance operate on existing canonical assets and liabilities rather than a separate legacy currency
 
 ### Sports
 - Persistent fictional soccer and American-football leagues, teams, rosters and fixtures
@@ -82,6 +109,7 @@ Mortality is intentionally not enabled in v0.9. Death, estates, inheritance and 
 - Monthly productivity, inventory accuracy, service, safety, labor-cost, utilization, revenue and profit KPIs
 - Business reputation, valuation, debt pressure, opportunities and failure risk
 - Interactive hiring, staffing, pricing, facility and contract controls inside WORLD
+- Business ownership can pass through the estate system when a controlled owner dies
 
 ### Grounded narration
 - Canonical context compiler with fact / belief / rumor separation
@@ -112,11 +140,12 @@ Mortality is intentionally not enabled in v0.9. Death, estates, inheritance and 
 - Generated platform projects are not the source of truth; React/TypeScript remains the core application
 
 ### Save compatibility
-- Canonical simulation schema is v8 in app v0.9 because health/medical history is gameplay state
-- v1 → v2 → v3 → v4 → v5 → v6 → v7 → v8 migration paths remain supported
-- v7 saves are upgraded with health profiles without deleting relationship, family, finance, sports, business, narration or timeline history
+- Canonical simulation schema is v9 in app v0.10 because mortality, estates, legal cases and control transitions are persistent gameplay state
+- v1 → v2 → v3 → v4 → v5 → v6 → v7 → v8 → v9 migration paths remain supported
+- v8 saves are upgraded with empty legal/legacy collections without deleting relationship, family, finance, sports, business, narration, health or timeline history
+- New games are created as true v9 worlds rather than being silently upgraded after creation
 
-See `docs/CLOUD_NATIVE.md` for cloud/security/Capacitor setup and `docs/HEALTH_ARCHITECTURE.md` for the health simulation boundary.
+See `docs/CLOUD_NATIVE.md`, `docs/HEALTH_ARCHITECTURE.md`, `docs/LEGACY_LEGAL_ARCHITECTURE.md` and `docs/PHASE10_ACCEPTANCE.md` for the current system boundaries and release contract.
 
 ## Run
 
@@ -142,5 +171,7 @@ npm run build
 > Offline is the baseline. Cloud is an enhancement.
 
 > Hidden risk is simulation state. Known medical history is player-facing state.
+
+> A generation ends. The world does not.
 
 Core simulation remains deterministic and fully playable offline. AI, accounts and cloud services may enrich the experience, but they may not become prerequisites for the life simulation.

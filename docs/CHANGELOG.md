@@ -1,5 +1,36 @@
 # EVERA Changelog
 
+## v0.10.0 — Mortality, Law & Legacy
+
+- Upgraded the canonical simulation world schema to v9.
+- Added explicit v8 → v9 migration while preserving all prior relationship, family, education, career, finance, sports, business, narration, cloud and health state.
+- Changed new-world creation so fresh games are born as true v9 worlds rather than being silently upgraded after initialization.
+- Added persistent death records, funeral records, estate plans, estate cases, ancestor archives and controlled-generation transition history.
+- Added deterministic age/health/circumstance-driven mortality for the controlled character and high-fidelity NPCs.
+- Controlled-character death now hard-stops further requested time advancement until the player chooses how to continue.
+- Added funeral/grief consequences that affect surviving connected people and active household/life systems.
+- Added player wills and deterministic intestacy fallback.
+- Added life-insurance settlement with ordering that captures proceeds before policy cleanup.
+- Added estate settlement across cash, debts, funeral cost, property, vehicles and business ownership.
+- Cleared deceased investment positions during estate settlement so market ticks cannot recreate a dead person's portfolio.
+- Added permanent ancestor archives and Timeline dynasty/control-transition history.
+- Added continuation as an eligible existing descendant without generating a replacement identity.
+- Preserved the descendant's existing person ID, traits, health, memories, relationships and recorded history during control transfer.
+- Added generation-aware finance initialization so a new controlled generation receives appropriate accounts/obligations without reviving the prior generation's bills or policies.
+- Added crime incidents with separate incident and discovery dates, evidence strength, victims and delayed investigation.
+- Added criminal charges, legal representation, pleas, trials, convictions, acquittals, fines, incarceration and release.
+- Added persistent criminal records and integrated them into job-application competitiveness.
+- Blocked ordinary hiring during incarceration and ended incompatible in-progress hiring processes.
+- Fixed progression initialization so ending a job no longer silently recreates employment after resignation, conviction or future job-ending events.
+- Added civil filing, negotiation, deterministic settlement, trial, judgment and dismissal foundations using canonical finance and ledger state.
+- Added LIFE legal/estate controls while alive and a dedicated generational continuation surface after death.
+- Added permanent ancestor/control-transition presentation to TIMELINE.
+- Added responsive Phase 10 styling for legal and continuation interfaces.
+- Expanded cumulative regression coverage with v8→v9 migration, estate ordering, life insurance, death freeze, exact descendant inheritance, crime discovery, conviction/incarceration, hiring penalties, civil settlement and persistent-unemployment tests.
+- Added `docs/LEGACY_LEGAL_ARCHITECTURE.md` and `docs/PHASE10_ACCEPTANCE.md`.
+- Bumped the PWA cache to v10 and the app version to v0.10.0.
+- Deeper jurisdiction-specific probate, trusts/contested estates, full family-court case simulation and criminal-record effects across every housing/lending/immigration pathway remain explicit future depth rather than being claimed as complete.
+
 ## v0.9.0 — Health & Healthcare
 
 - Upgraded the canonical simulation world schema to v8.

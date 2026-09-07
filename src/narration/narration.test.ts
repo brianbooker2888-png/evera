@@ -64,15 +64,16 @@ describe('Phase 7 grounded narration',()=>{
     expect(next.annualLifeChapters.some(c=>c.year===2026)).toBe(true);
   });
 
-  it('migrates a v6 save into v8 without losing prior systems',()=>{
+  it('migrates a v6 save through v9 without losing prior systems',()=>{
     const current=createWorld(draft,7007);
-    const {narrationSettings,annualLifeChapters,healthProfiles,medicalConditions,medicalEncounters,medicalBills,medications,...rest}=current;void narrationSettings;void annualLifeChapters;void healthProfiles;void medicalConditions;void medicalEncounters;void medicalBills;void medications;
+    const {narrationSettings,annualLifeChapters,healthProfiles,medicalConditions,medicalEncounters,medicalBills,medications,deathRecords,funeralRecords,estatePlans,estateCases,ancestorArchives,controlTransitions,crimeIncidents,criminalCases,criminalRecords,incarcerationRecords,civilCases,...rest}=current;void narrationSettings;void annualLifeChapters;void healthProfiles;void medicalConditions;void medicalEncounters;void medicalBills;void medications;void deathRecords;void funeralRecords;void estatePlans;void estateCases;void ancestorArchives;void controlTransitions;void crimeIncidents;void criminalCases;void criminalRecords;void incarcerationRecords;void civilCases;
     const migrated=migrateWorld({...rest,version:6});
-    expect(migrated?.version).toBe(8);
+    expect(migrated?.version).toBe(9);
     expect(migrated?.npcs.length).toBe(current.npcs.length);
     expect(migrated?.sportsLeagues.length).toBe(current.sportsLeagues.length);
     expect(migrated?.financialAccounts.length).toBe(current.financialAccounts.length);
     expect(migrated?.narrationSettings.mode).toBe('offline');
     expect(migrated?.healthProfiles.length).toBeGreaterThan(0);
+    expect(migrated?.criminalCases).toEqual([]);
   });
 });
