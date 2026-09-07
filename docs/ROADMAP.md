@@ -90,23 +90,31 @@
 - [x] Player-directed care interface inside LIFE
 - [x] Health-aware grounded narration and Life Chapters
 - [x] v7 → v8 migration and deterministic health regression coverage
-- [ ] Mortality and end-of-life outcomes (intentionally Phase 10)
+- [x] Mortality integration delivered in Phase 10
 
 ## Phase 10 — Mortality, crime, law, estates & generational continuation
-- [ ] Age/health/accident-driven mortality model with hidden lifespan
-- [ ] Sudden death, illness-related death and long-term decline paths
-- [ ] NPC mortality and world continuation while distant/offscreen
-- [ ] Funeral, grief, survivor and household consequences
-- [ ] Wills, intestacy, life insurance, estates, trusts and inheritance
-- [ ] Death life review without a universal score
-- [ ] Continue as an eligible descendant or begin a new world
-- [ ] Permanent ancestor archive and dynasty continuity
-- [ ] Crime choices, victimization, investigation and evidence foundations
-- [ ] Arrest, legal representation, plea/trial and conviction state
-- [ ] Criminal-record effects on jobs, housing, finance and relationships
-- [ ] Civil lawsuits and settlement/trial foundations
-- [ ] Family-law and estate disputes
-- [ ] v8 → next schema migration and mortality/legal regression suite
+- [x] Age/health/circumstance-driven mortality model with hidden lifespan
+- [x] Sudden and illness-related death foundations
+- [ ] Expanded terminal-decline and end-of-life care interaction flows
+- [x] High-fidelity NPC mortality with world continuation while offscreen
+- [x] Funeral, grief, survivor and household consequences
+- [x] Wills, intestacy, life insurance, estates and inheritance
+- [ ] Trusts, jurisdiction-specific probate/tax and contested-estate litigation
+- [ ] Expanded narrative death life review beyond the permanent ancestor archive
+- [x] Continue as an eligible existing descendant or start a new world
+- [x] Permanent ancestor archive and dynasty/control-transition continuity
+- [x] Crime choices, victimization, delayed discovery, investigation and evidence foundations
+- [x] Legal representation, plea/trial and conviction/acquittal state
+- [ ] Detailed arrest, jail, bail and pretrial procedure simulation
+- [x] Persistent criminal-record effects on job applications and hiring
+- [ ] Criminal-record integration across every housing, lending, immigration and relationship pathway
+- [x] Civil lawsuits and settlement/trial/judgment foundations
+- [ ] Full family-court case simulation and estate disputes beyond existing divorce/custody foundations
+- [x] Generation-aware finance and inheritance integration
+- [x] Employment-history invariant preventing silent job recreation after resignation/conviction
+- [x] LIFE death/estate/legal interface and TIMELINE dynasty history
+- [x] v8 → v9 migration and mortality/legal regression suite
+- [x] Phase 10 architecture and acceptance documentation
 
 ## Phase 11 — Lifestyle, daily life, possessions & travel
 - [ ] Broader home types, space pressure and household-quality effects
