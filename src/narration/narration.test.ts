@@ -64,11 +64,11 @@ describe('Phase 7 grounded narration',()=>{
     expect(next.annualLifeChapters.some(c=>c.year===2026)).toBe(true);
   });
 
-  it('migrates a v6 save through v10 without losing prior systems',()=>{
+  it('migrates a v6 save through v11 without losing prior systems',()=>{
     const current=createWorld(draft,7007);
-    const {narrationSettings,annualLifeChapters,healthProfiles,medicalConditions,medicalEncounters,medicalBills,medications,deathRecords,funeralRecords,estatePlans,estateCases,ancestorArchives,controlTransitions,crimeIncidents,criminalCases,criminalRecords,incarcerationRecords,civilCases,lifestyleProfiles,homeLifestyles,homeUpgrades,vehicleUseProfiles,wardrobeItems,hobbies,pets,travelPlans,lifestyleOutings,householdServices,deviceAssets,calendarCommitments,lifestyleMilestones,...rest}=current;void narrationSettings;void annualLifeChapters;void healthProfiles;void medicalConditions;void medicalEncounters;void medicalBills;void medications;void deathRecords;void funeralRecords;void estatePlans;void estateCases;void ancestorArchives;void controlTransitions;void crimeIncidents;void criminalCases;void criminalRecords;void incarcerationRecords;void civilCases;void lifestyleProfiles;void homeLifestyles;void homeUpgrades;void vehicleUseProfiles;void wardrobeItems;void hobbies;void pets;void travelPlans;void lifestyleOutings;void householdServices;void deviceAssets;void calendarCommitments;void lifestyleMilestones;
+    const {narrationSettings,annualLifeChapters,healthProfiles,medicalConditions,medicalEncounters,medicalBills,medications,deathRecords,funeralRecords,estatePlans,estateCases,ancestorArchives,controlTransitions,crimeIncidents,criminalCases,criminalRecords,incarcerationRecords,civilCases,lifestyleProfiles,homeLifestyles,homeUpgrades,vehicleUseProfiles,wardrobeItems,hobbies,pets,travelPlans,lifestyleOutings,householdServices,deviceAssets,calendarCommitments,lifestyleMilestones,countries,cities,neighborhoods,industries,worldInstitutions,companyWorldStates,policies,residencyRecords,regionalShocks,worldNews,worldHistory,migrationRecords,currentCityId,currentNeighborhoodId,...rest}=current;void narrationSettings;void annualLifeChapters;void healthProfiles;void medicalConditions;void medicalEncounters;void medicalBills;void medications;void deathRecords;void funeralRecords;void estatePlans;void estateCases;void ancestorArchives;void controlTransitions;void crimeIncidents;void criminalCases;void criminalRecords;void incarcerationRecords;void civilCases;void lifestyleProfiles;void homeLifestyles;void homeUpgrades;void vehicleUseProfiles;void wardrobeItems;void hobbies;void pets;void travelPlans;void lifestyleOutings;void householdServices;void deviceAssets;void calendarCommitments;void lifestyleMilestones;void countries;void cities;void neighborhoods;void industries;void worldInstitutions;void companyWorldStates;void policies;void residencyRecords;void regionalShocks;void worldNews;void worldHistory;void migrationRecords;void currentCityId;void currentNeighborhoodId;
     const migrated=migrateWorld({...rest,version:6});
-    expect(migrated?.version).toBe(10);
+    expect(migrated?.version).toBe(11);
     expect(migrated?.npcs.length).toBe(current.npcs.length);
     expect(migrated?.sportsLeagues.length).toBe(current.sportsLeagues.length);
     expect(migrated?.financialAccounts.length).toBe(current.financialAccounts.length);
@@ -76,5 +76,6 @@ describe('Phase 7 grounded narration',()=>{
     expect(migrated?.healthProfiles.length).toBeGreaterThan(0);
     expect(migrated?.criminalCases).toEqual([]);
     expect(migrated?.lifestyleProfiles.length).toBeGreaterThan(0);
+    expect(migrated?.countries.length).toBeGreaterThan(0);
   });
 });
