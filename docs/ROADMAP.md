@@ -125,9 +125,9 @@
 - [ ] Fully visual automatic outfit selection (Phase 14 presentation layer)
 - [x] Household food strategy, cooking and family-meal foundations
 - [x] Restaurants, entertainment outings and social spending
-- [ ] Expanded hosting/venue catalog tied to Phase 12 locations
+- [ ] Expanded hosting/venue catalog tied to locations
 - [x] Travel planning, destinations, lodging, budget and companion dynamics
-- [ ] Rich destination activities, visas and location-aware travel data (Phase 12)
+- [ ] Rich destination activities and detailed travel/visa rules
 - [x] Hobbies with skill, recreation and social foundations
 - [ ] Expanded hobby-to-career crossover content
 - [x] Pets, care, attachment, aging and pet mortality
@@ -140,20 +140,29 @@
 - [x] Phase 11 architecture, scope and acceptance documentation
 
 ## Phase 12 — Deeper living world, locations & institutions
-- [ ] Country-level tax, healthcare, education, labor, benefit and retirement profiles
-- [ ] City-level wages, housing, industries, schools, transit, crime and culture
-- [ ] Neighborhood-level housing/safety/schools/commute/social context
-- [ ] Moving between cities/countries and immigration/residency foundations
-- [ ] Persistent company growth, contraction, relocation, failure, merger and acquisition
-- [ ] Industry rise/fall and technology disruption
-- [ ] Richer local/world news generated from actual simulation state
-- [ ] Politics/policy changes as world inputs without making politics the core game
-- [ ] Geographic disasters, infrastructure disruption and long-tail recovery
-- [ ] Schools, universities, hospitals and community institutions that evolve over time
+- [x] Country-level tax, healthcare, education, labor, benefit and retirement profiles
+- [x] City-level wages, housing, industries, schools, transit, safety and culture foundations
+- [x] Neighborhood-level housing/safety/schools/transit/social-context foundations
+- [x] Moving between cities/countries and baseline immigration/residency state
+- [x] Persistent company growth, contraction and failure foundations with city footprints
+- [ ] Company relocation, merger and acquisition simulation
+- [x] Industry rise/fall and technology-pressure foundations
+- [x] Richer local/world news generated from actual simulation state
+- [x] Persistent country policy snapshots as world inputs
+- [ ] Dynamic elections, legislation and policy changes
+- [x] Geographic disruption, infrastructure pressure and recovery foundations
+- [ ] Climate-change simulation and pandemic generation
+- [x] Hospitals, universities, transit and community institutions that evolve over time
+- [ ] Full location-specific replacement of every education/healthcare institution interaction
 - [ ] Entertainment, celebrity, media and social-trend ecosystem
-- [ ] Labor shortages, strikes/unionization and supply-chain disruption
-- [ ] World-history archive and starting-year conditions
+- [x] Labor shortages, strikes and supply-chain disruption foundations
+- [x] Permanent world-history archive
+- [ ] Curated historical starting-year modes
 - [ ] Relevant-region deep simulation with distant statistical approximation
+- [x] Location-aware career availability, compensation and payroll-tax integration
+- [x] Location-aware healthcare-access integration
+- [x] v10 → v11 migration and Phase 12 deterministic regression coverage
+- [x] Phase 12 architecture and acceptance documentation
 
 ## Phase 13 — Game modes, onboarding, controls & accessibility
 - [ ] Life Mode

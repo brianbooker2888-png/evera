@@ -1,5 +1,40 @@
 # EVERA Changelog
 
+## v0.12.0 — Deeper Living World & Locations
+
+- Upgraded the canonical simulation world schema to v11.
+- Added explicit v10 → v11 migration while preserving all prior relationship, family, finance, sports, business, narration, health, legal, lifestyle and timeline state.
+- Extended every older migration path through the same v11 living-world upgrade.
+- Added persistent country profiles for the United States, Canada, United Kingdom and Mexico with simplified tax, healthcare, education, labor, benefit, retirement, immigration and cost conditions.
+- Added persistent city profiles for Phoenix, Seattle, Atlanta, Toronto, Vancouver, London, Manchester, Mexico City and Monterrey.
+- Added deterministic custom-city fallback so an unseeded hometown remains distinct instead of being mapped to another city simply because it shares a state/region.
+- Added neighborhood profiles with housing, safety, schools, transit, prestige and density tradeoffs.
+- Made the living-world layer authoritative for local unemployment, housing, wage and labor-demand mirrors consumed by older systems.
+- Added persistent industry demand, wage conditions, growth and automation pressure with deterministic monthly evolution.
+- Added persistent employer/company world state with city footprints, company health, growth, headcount and growing/stable/contracting/failed states.
+- Added factual company expansion/contraction/failure news and permanent world-history records.
+- Made non-remote job availability respect employer city footprints while preserving remote-role portability.
+- Made local wage conditions influence new job offers.
+- Added simplified country-aware payroll withholding.
+- Corrected payroll accounting so the ledger records gross Income and separate Tax outflow while controlled cash receives net pay.
+- Added persistent policy snapshots for country tax, healthcare, education, labor, immigration and retirement conditions.
+- Added location-aware healthcare access using city healthcare access, country healthcare model, socioeconomic circumstances and insurance.
+- Added persistent city hospitals, universities, transit authorities and community networks with quality, capacity, reputation and operating status.
+- Added infrastructure-driven institution strain and local news.
+- Added deterministic recessions, housing booms/corrections, disasters, supply disruptions, labor shortages, technology shifts and strikes.
+- Added active → recovering → resolved regional-shock lifecycle rather than one-day random events.
+- Added canonical local/global/business world news generated from stored source entities and events.
+- Added permanent world-history records for major shocks, company changes and migrations.
+- Added player-directed domestic and international relocation with canonical moving cost, neighborhood housing cost, local labor/economic changes and residency updates.
+- Added onsite-job loss when a move takes the player outside the employer's city footprint.
+- Added persistent migration records, major move memories, world-history records and life events.
+- Added an interactive WORLD interface for city/country/neighborhood context, industries, institutions, shocks, causal news and relocation.
+- Added responsive Phase 12 styling.
+- Added dedicated Phase 12 regression coverage for v11 creation, custom hometowns, deterministic long-horizon world evolution, domestic relocation, international residency, tax differences, healthcare-access differences and v10 → v11 migration.
+- Added `docs/LIVING_WORLD_ARCHITECTURE.md` and `docs/PHASE12_ACCEPTANCE.md`.
+- Bumped the PWA cache to v12 and the app version to v0.12.0.
+- Currency conversion, detailed international tax/visa law, dynamic elections/legislation, climate simulation, pandemic generation, mergers/acquisitions, exhaustive geography and full distant-region fidelity tiers remain later depth rather than being claimed as complete.
+
 ## v0.11.0 — Lifestyle, Daily Life & Travel
 
 - Upgraded the canonical simulation world schema to v10.

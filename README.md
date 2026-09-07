@@ -5,7 +5,7 @@
 
 EVERA is a local-first persistent life and world simulation. The player is one person inside a world that continues independently.
 
-## Current build — v0.11.0 Lifestyle, Daily Life & Travel
+## Current build — v0.12.0 Deeper Living World & Locations
 
 ### Foundation
 - React + TypeScript + Vite
@@ -15,6 +15,28 @@ EVERA is a local-first persistent life and world simulation. The player is one p
 - Five primary areas: Life, People, World, Money, Timeline
 - GitHub Actions release gate: production dependency security, strict simulation typecheck, cumulative Vitest suite, production build and temporary Capacitor wrapper generation
 
+### Deeper living world
+- Canonical schema-v11 geography and world-state layer
+- Country profiles for the United States, Canada, United Kingdom and Mexico with simplified tax, healthcare, education, labor, benefit, retirement, immigration and cost conditions
+- Seeded city economies for Phoenix, Seattle, Atlanta, Toronto, Vancouver, London, Manchester, Mexico City and Monterrey
+- Unknown hometowns remain distinct through deterministic custom-city fallback rather than being silently mapped to another city in the same region
+- Neighborhood-level housing, safety, schools, transit, prestige and density tradeoffs
+- Location-aware wages, housing, unemployment and labor demand feed the existing economy/career systems
+- Persistent industries with demand, wages, growth and automation pressure
+- Persistent employer/company world state with city footprints, health, growth, headcount and contraction/failure foundations
+- Non-remote job availability respects employer city footprints; remote jobs remain portable
+- Local wage conditions affect compensation offers
+- Country tax environments drive simplified payroll withholding with gross-income and separate-tax ledger entries
+- City and country context influence healthcare access alongside socioeconomic circumstances and insurance
+- Persistent hospitals, universities, transit authorities and community institutions with quality/capacity/reputation/status
+- Deterministic recessions, housing booms/corrections, disasters, supply disruptions, labor shortages, technology shifts and strikes
+- Regional shocks can affect employment, housing, economy and infrastructure, then move through recovery rather than disappearing instantly
+- Local/global/business news is emitted from canonical simulation facts and keeps source IDs
+- Permanent world-history records preserve important shocks, company changes and migrations
+- Player-directed moving changes canonical city/neighborhood, household housing cost, local economy, residency and potentially employment
+- Cross-country moves create simplified persistent residency state
+- Interactive WORLD interface for local conditions, industries, institutions, shocks, news and relocation
+
 ### Human simulation
 - Multidimensional traits, values, needs, health, habits, goals and memories
 - Tier 1 / Tier 2 / Tier 3 NPC simulation
@@ -22,8 +44,7 @@ EVERA is a local-first persistent life and world simulation. The player is one p
 - Directional relationships, person-specific knowledge and canonical secrets
 
 ### Lifestyle & everyday life
-- Canonical schema-v10 lifestyle state layered around households, finance, health and relationships
-- Household comfort, bedrooms/bathrooms, organization, maintenance, furnishing quality, privacy and space pressure
+- Persistent household comfort, bedrooms/bathrooms, organization, maintenance, furnishing quality, privacy and space pressure
 - Persistent home upgrades with real checking-account spending, wear and comfort impact
 - Food strategies: budget, standard, healthy, premium and convenience
 - Grocery economics respond to household size and food strategy
@@ -33,15 +54,13 @@ EVERA is a local-first persistent life and world simulation. The player is one p
 - Restaurants, entertainment and social outings with real spending and relationship effects
 - Pets with household membership, individual attachment, monthly care, health, aging and mortality
 - Travel plans with companions, dates, lodging tier, purpose, budget, funding at departure and completion satisfaction
-- Household services such as cleaning, childcare and meal services trade money for time
+- Household services trade money for time
 - Phones, computers and other devices have condition/capability and can wear out or be replaced
 - Owned vehicles gain mileage, reliability, maintenance intervals, repair risk and service actions
 - Calendar commitments can conflict, forcing some plans to be missed
-- Lifestyle milestones such as travel, pets, hobbies, home upgrades, style and technology persist in TIMELINE
-- Dedicated interactive Everyday Life panel inside LIFE
+- Lifestyle milestones persist in TIMELINE
 
 ### Mortality, estates & generations
-- Canonical mortality/legal/legacy state
 - Hidden age-, health- and circumstance-driven mortality for the controlled character and high-fidelity NPCs
 - Persistent death records with cause, date and age at death
 - Controlled-character death immediately stops further time advancement until continuation is resolved
@@ -74,6 +93,7 @@ EVERA is a local-first persistent life and world simulation. The player is one p
 - Employer health coverage, deductible/coinsurance and medication state
 - Medical bills feed into the same finance system
 - Player-directed preventive care and treatment choices inside LIFE
+- Healthcare access now also responds to location and country healthcare context
 
 ### Relationships, family & households
 - Dating → exclusivity → cohabitation → engagement → marriage → breakup/divorce
@@ -87,7 +107,8 @@ EVERA is a local-first persistent life and world simulation. The player is one p
 - Tuition, scholarships, GPA, credits, student debt and credentials
 - Skills, job applications, interviews, offers and employment history
 - Employment contracts with salary, schedules, benefits, performance and satisfaction
-- Contract-driven payroll and labor-market simulation
+- Contract-driven payroll
+- Location-aware job availability and wage conditions
 - Criminal-history hiring friction integrated into application scoring
 
 ### Money, housing & wealth
@@ -98,6 +119,7 @@ EVERA is a local-first persistent life and world simulation. The player is one p
 - Deterministic investment markets, retirement accounts and net-worth accounting
 - Healthcare, legal and lifestyle spending use the same checking account and financial ledger
 - Estates and inheritance operate on existing canonical assets and liabilities
+- Moving costs and destination housing costs use the same canonical money system
 
 ### Sports
 - Persistent fictional soccer and American-football leagues, teams, rosters and fixtures
@@ -121,6 +143,7 @@ EVERA is a local-first persistent life and world simulation. The player is one p
 - Deterministic offline narration with mandatory fallback
 - Annual Life Chapters and persistent autobiography
 - Vendor-neutral remote-provider boundary and secure same-origin Netlify gateway
+- World facts remain simulation-owned; narration cannot create authoritative geography, shocks or news outcomes
 
 ### Optional cloud & native packaging
 - IndexedDB remains authoritative while offline
@@ -129,12 +152,15 @@ EVERA is a local-first persistent life and world simulation. The player is one p
 - CI generates temporary iOS and Android wrappers to verify packaging compatibility
 
 ### Save compatibility
-- Canonical simulation schema is **v10** in app v0.11 because lifestyle, possessions, travel and daily-life history are persistent gameplay state
-- Explicit v1 → v2 → v3 → v4 → v5 → v6 → v7 → v8 → v9 → v10 migration remains supported
-- v9 saves gain lifestyle state without deleting relationship, family, finance, sports, business, narration, health, legal or timeline history
-- New games are created directly as true v10 worlds
+- Canonical simulation schema is **v11** in app v0.12 because geography, industries, institutions, shocks, residency, migration and world history are persistent gameplay state
+- Explicit v1 → v2 → v3 → v4 → v5 → v6 → v7 → v8 → v9 → v10 → v11 migration remains supported
+- v10 saves gain living-world state without deleting relationship, family, finance, sports, business, narration, health, legal, lifestyle or timeline history
+- New games are created directly as true v11 worlds
 
-See `docs/CLOUD_NATIVE.md`, `docs/HEALTH_ARCHITECTURE.md`, `docs/LEGACY_LEGAL_ARCHITECTURE.md`, `docs/LIFESTYLE_ARCHITECTURE.md` and the phase acceptance documents for system boundaries.
+### Explicit Phase 12 boundaries
+Phase 12 does **not** claim full currency exchange, detailed international taxation, detailed visa/citizenship law, dynamic elections/legislation, climate simulation, pandemic generation, full mergers/acquisitions, a full entertainment/celebrity ecosystem, exhaustive global geography or complete distant-region statistical fidelity tiers.
+
+See `docs/LIVING_WORLD_ARCHITECTURE.md`, `docs/CLOUD_NATIVE.md`, `docs/HEALTH_ARCHITECTURE.md`, `docs/LEGACY_LEGAL_ARCHITECTURE.md`, `docs/LIFESTYLE_ARCHITECTURE.md` and the phase acceptance documents for system boundaries.
 
 ## Run
 
@@ -160,6 +186,8 @@ npm run build
 > Offline is the baseline. Cloud is an enhancement.
 
 > Simulate deeply. Interact selectively.
+
+> Geography is a cause, not decoration.
 
 > A generation ends. The world does not.
 

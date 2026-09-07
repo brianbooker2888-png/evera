@@ -5,6 +5,7 @@ import type { NarrationWorldState } from './narration';
 import type { HealthWorldState } from './health';
 import type { LegacyLegalWorldState } from './legacyLegal';
 import type { LifestyleWorldState } from './lifestyle';
+import type { LivingWorldState } from './livingWorld';
 
 export type Sex='female'|'male';
 export type Orientation='straight'|'gay'|'bisexual';
@@ -71,8 +72,8 @@ export interface LedgerEntry{id:string;date:string;description:string;amount:num
 export interface LifeEvent{id:string;date:string;title:string;body:string;type:'routine'|'opportunity'|'relationship'|'finance'|'health'|'legal'|'world';priority:'low'|'medium'|'major';}
 export interface Memory{id:string;date:string;title:string;summary:string;significance:number;}
 
-export interface WorldState extends FinanceWorldState,SportsWorldState,BusinessWorldState,NarrationWorldState,HealthWorldState,LegacyLegalWorldState,LifestyleWorldState{
-  version:10;seed:number;date:string;character:Character;npcs:Npc[];relationships:RelationshipState[];
+export interface WorldState extends FinanceWorldState,SportsWorldState,BusinessWorldState,NarrationWorldState,HealthWorldState,LegacyLegalWorldState,LifestyleWorldState,LivingWorldState{
+  version:11;seed:number;date:string;character:Character;npcs:Npc[];relationships:RelationshipState[];
   partnerships:Partnership[];households:Household[];pregnancies:Pregnancy[];familyLinks:FamilyLink[];custodyPlans:CustodyPlan[];conversations:ConversationRecord[];
   educationInstitutions:EducationInstitution[];educationEnrollments:EducationEnrollment[];credentials:Credential[];skills:SkillRecord[];
   employers:Employer[];employments:Employment[];jobOpenings:JobOpening[];jobApplications:JobApplication[];laborMarket:LaborMarket;
