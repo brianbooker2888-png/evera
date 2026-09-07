@@ -5,8 +5,8 @@
     "strict": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
-    "module": "CommonJS",
-    "moduleResolution": "Node",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
     "outDir": "/tmp/evera-sim-build",
     "rootDir": "src"
   },
