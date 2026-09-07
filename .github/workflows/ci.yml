@@ -22,5 +22,8 @@ jobs:
         run: npm test
       - name: Production build
         run: npm run build
-      - name: Native tooling sanity check
-        run: npx cap --version
+      - name: Generate native wrappers
+        run: |
+          npx cap add android
+          npx cap add ios
+          npx cap sync
