@@ -5,6 +5,7 @@ import type { SportKind } from '../types/sports';
 import { setCoachStyle, startAthletePath, startCoachPath, trainSport } from '../simulation/sportsEngine';
 import { acceptBusinessOpportunity, hireBusinessEmployee, playerBusiness, setBusinessPricing, setStaffingTarget, startLogisticsBusiness } from '../simulation/businessEngine';
 import { ageAt } from '../simulation/familyEngine';
+import { LivingWorldPanel } from './LivingWorldPanel';
 
 const money=new Intl.NumberFormat('en-US',{style:'currency',currency:'USD',maximumFractionDigits:0});
 const dateFmt=new Intl.DateTimeFormat('en-US',{month:'short',day:'numeric',year:'numeric',timeZone:'UTC'});
@@ -14,6 +15,7 @@ const footballPositions=['QB','RB','WR','LB'];
 
 export function DeepModulesPanel({world,onChange}:{world:WorldState;onChange:(world:WorldState)=>void}){
   return <>
+    <LivingWorldPanel world={world} onChange={onChange}/>
     <SportsPanel world={world} onChange={onChange}/>
     <BusinessPanel world={world} onChange={onChange}/>
   </>;
