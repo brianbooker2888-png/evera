@@ -1,5 +1,31 @@
 # EVERA Changelog
 
+## v0.11.0 — Lifestyle, Daily Life & Travel
+
+- Upgraded the canonical simulation world schema to v10.
+- Added an explicit v9 → v10 migration while preserving all prior mortality, legal, health, finance, family, career, sports, business, narration and timeline state.
+- Added persistent lifestyle profiles for food strategy, cooking, family meals, style, grooming, social spending, convenience, travel interest, home pride and time pressure.
+- Added household lifestyle state for bedrooms/bathrooms, comfort, organization, furnishing quality, maintenance, privacy and space pressure.
+- Added persistent home upgrades with real checking-account spending, condition and comfort impact.
+- Added food strategies that alter recurring grocery economics and create health/time tradeoffs.
+- Added family-meal behavior and relationship effects without requiring meal-by-meal micromanagement.
+- Added contextual style identity, grooming and persistent wardrobe-category state.
+- Added persistent hobbies with skill, enjoyment, social potential and recurring cost.
+- Added restaurants, entertainment and social outings with canonical spending and relationship effects.
+- Added household pets with adoption cost, monthly care, individual attachment, aging, health and mortality.
+- Added persistent travel plans with companions, origin/destination, dates, lodging tier, purpose, budget, departure funding, completion satisfaction and relationship effects.
+- Added household services such as cleaning, childcare, meal service, landscaping, assistant and pet care as money-for-time tradeoffs.
+- Added persistent device assets with condition/capability, wear, breakage and replacement.
+- Added daily vehicle mileage/reliability/service state, service intervals, deterministic breakdown risk and repair costs on top of canonical vehicle assets.
+- Added calendar commitments and deterministic time-conflict handling.
+- Added lifestyle milestones for home, travel, pets, hobbies, style and technology and surfaced them in TIMELINE.
+- Added an interactive Everyday Life panel inside LIFE for food, home, hobbies, pets, travel, services, technology, style and vehicle maintenance.
+- Added responsive Phase 11 styling.
+- Added dedicated deterministic regression tests including a 365-day lifestyle simulation.
+- Added `docs/LIFESTYLE_ARCHITECTURE.md`, `docs/PHASE11_SCOPE.md` and `docs/PHASE11_ACCEPTANCE.md`.
+- Bumped the PWA cache to v11 and app version to v0.11.0.
+- Detailed room placement, rich destination databases, visas and fully visual wardrobe/travel presentation remain later world/visual-layer work rather than being claimed as complete.
+
 ## v0.10.0 — Mortality, Law & Legacy
 
 - Upgraded the canonical simulation world schema to v9.
