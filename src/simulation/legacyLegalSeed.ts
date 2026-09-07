@@ -1,7 +1,6 @@
 import type { WorldState } from '../types/game';
 
 export function initializeLegacyLegal(world:WorldState,date=world.date){
-  (world as unknown as {version:number}).version=9;
   world.deathRecords??=[];
   world.funeralRecords??=[];
   world.estatePlans??=[];
