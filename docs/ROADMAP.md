@@ -62,18 +62,29 @@
 - [x] Vendor-neutral remote-provider adapter
 - [x] Annual Life Chapters and autobiography UI
 - [x] v6 → v7 migration and narration regression coverage
-- [ ] Connect and validate a production online narration provider (optional enhancement; core gameplay remains offline)
 
-## Phase 8 — Cloud and native distribution
-- [ ] Optional auth / cloud saves
-- [ ] Cross-device sync
-- [ ] Capacitor iOS / Android wrappers
-- [ ] Production online narration-provider configuration without exposing provider secrets in the client
+## Phase 8 — Optional cloud and native distribution
+- [x] Local sync metadata separated from canonical world state
+- [x] Deterministic save checksum and revision model
+- [x] Optional Supabase email-link authentication / cloud save provider
+- [x] Supabase row-level-security schema
+- [x] Cross-device upload/download sync
+- [x] Explicit divergent-history conflict detection and resolution
+- [x] Cloud & Device UI inside Timeline
+- [x] Capacitor iOS / Android configuration and scripts
+- [x] CI native-wrapper generation gate
+- [x] Server-side Netlify narration gateway and same-origin remote adapter
+- [ ] Provision production Supabase project/environment values
+- [ ] Provision a production enhanced-narration provider endpoint/secret
+- [ ] App-store signing, bundle-ID finalization and store submission assets
 
 ## Final integration / launch hardening
 - [ ] Full save-migration matrix
 - [ ] Long-horizon simulation / performance tests
 - [ ] Accessibility and responsive-device audit
 - [ ] Content and serious-topic settings audit
+- [ ] Async enhanced-narration UI handoff and failure-state audit
 - [ ] Stylized 2.5D sports presentation prototype
 - [ ] Netlify production deployment and installable PWA verification
+- [ ] External-service staging validation for Supabase and optional narration
+- [ ] Release candidate / launch checklist
