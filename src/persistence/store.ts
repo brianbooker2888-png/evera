@@ -55,5 +55,5 @@ export async function replaceWorldFromSync(world:WorldState,metadata:SyncMetadat
 export async function deleteWorld():Promise<void>{
   await deleteRaw(SAVE_STORE,KEY);
   const meta=await loadSyncMetadata();
-  await saveSyncMetadata({...meta,localRevision:meta.localRevision+1,status:'local_only',lastSyncedRevision:0,lastSyncedChecksum:null,lastSyncAt:null,status:'local_only',lastError:null});
+  await saveSyncMetadata({...meta,localRevision:meta.localRevision+1,status:'local_only',lastSyncedRevision:0,lastSyncedChecksum:null,lastSyncAt:null,lastError:null});
 }
