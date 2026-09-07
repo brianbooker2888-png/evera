@@ -1,19 +1,24 @@
 import { useEffect, useState } from 'react';
 import { Cloud, CloudOff, RefreshCw, Smartphone, TriangleAlert } from 'lucide-react';
 import type { WorldState } from '../types/game';
-import type { CloudConnectionState, CloudSession, SyncConflict, SyncMetadata } from '../cloud/types';
+import type { CloudConnectionState, CloudSession, SyncConflict, SyncMetadata, SyncResult } from '../cloud/types';
 import { loadSyncMetadata } from '../persistence/store';
 import { supabaseCloudProvider } from '../cloud/supabaseProvider';
 import { resolveConflictKeepLocal, resolveConflictUseRemote, syncWorld } from '../cloud/syncEngine';
+
+function applyResultMessage(result:SyncResult,setConflict:(value:SyncConflict|null)=>void,setMessage:(value:string)=>void){
+  if(result.kind==='conflict'){setConflict(result.conflict);setMessage(result.conflict.reason);}
+  else if(result.kind==='unavailable'||result.kind==='error')setMessage(result.reason);
+}
 
 export function CloudPanel({world,onChange}:{world:WorldState;onChange:(world:WorldState)=>void}){
   const[state,setState]=useState<CloudConnectionState>('unconfigured'),[session,setSession]=useState<CloudSession|null>(null),[meta,setMeta]=useState<SyncMetadata|null>(null),[email,setEmail]=useState(''),[message,setMessage]=useState(''),[busy,setBusy]=useState(false),[conflict,setConflict]=useState<SyncConflict|null>(null);
   const refresh=async()=>{setState(await supabaseCloudProvider.connectionState());setSession(await supabaseCloudProvider.session().catch(()=>null));setMeta(await loadSyncMetadata());};
   useEffect(()=>{void refresh();},[]);
   const sendLink=async()=>{if(!email.trim())return;setBusy(true);try{await supabaseCloudProvider.requestSignIn(email.trim());setMessage('Sign-in link sent. Open it on this device, then return to EVERA.');}catch(e){setMessage(e instanceof Error?e.message:'Could not send sign-in link.');}finally{setBusy(false);}};
-  const sync=async()=>{setBusy(true);setMessage('');try{const result=await syncWorld(world,supabaseCloudProvider);setMeta(result.metadata);if(result.kind==='synced'){setConflict(null);onChange(result.world);setMessage(result.direction==='upload'?'Saved to cloud.':result.direction==='download'?'Cloud save restored to this device.':'This device and cloud are already in sync.');}else if(result.kind==='conflict'){setConflict(result.conflict);setMessage(result.conflict.reason);}else setMessage(result.reason);}finally{setBusy(false);}};
-  const keepLocal=async()=>{if(!conflict)return;setBusy(true);const result=await resolveConflictKeepLocal(world,conflict.remote.revision,supabaseCloudProvider);setMeta(result.metadata);if(result.kind==='synced'){setConflict(null);onChange(result.world);setMessage('This device’s life is now the cloud version.');}else setMessage(result.reason);setBusy(false);};
-  const useCloud=async()=>{if(!conflict)return;setBusy(true);const result=await resolveConflictUseRemote(conflict.remote);setMeta(result.metadata);if(result.kind==='synced'){setConflict(null);onChange(result.world);setMessage('The cloud version is now active on this device.');}else setMessage(result.reason);setBusy(false);};
+  const sync=async()=>{setBusy(true);setMessage('');try{const result=await syncWorld(world,supabaseCloudProvider);setMeta(result.metadata);if(result.kind==='synced'){setConflict(null);onChange(result.world);setMessage(result.direction==='upload'?'Saved to cloud.':result.direction==='download'?'Cloud save restored to this device.':'This device and cloud are already in sync.');}else applyResultMessage(result,setConflict,setMessage);}finally{setBusy(false);}};
+  const keepLocal=async()=>{if(!conflict)return;setBusy(true);const result=await resolveConflictKeepLocal(world,conflict.remote.revision,supabaseCloudProvider);setMeta(result.metadata);if(result.kind==='synced'){setConflict(null);onChange(result.world);setMessage('This device’s life is now the cloud version.');}else applyResultMessage(result,setConflict,setMessage);setBusy(false);};
+  const useCloud=async()=>{if(!conflict)return;setBusy(true);const result=await resolveConflictUseRemote(conflict.remote);setMeta(result.metadata);if(result.kind==='synced'){setConflict(null);onChange(result.world);setMessage('The cloud version is now active on this device.');}else applyResultMessage(result,setConflict,setMessage);setBusy(false);};
   const signOut=async()=>{setBusy(true);try{await supabaseCloudProvider.signOut();setMessage('Signed out. Your local life remains on this device.');await refresh();}finally{setBusy(false);}};
 
   return <section className="section"><header><h2>Cloud & device</h2><p>Cloud saves are optional. Local play never requires an account or network connection.</p></header><div className="section-body">
