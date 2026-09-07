@@ -20,6 +20,8 @@ export type InvestmentAssetClass='us_equity'|'international_equity'|'bond'|'cash
 export interface InvestmentPosition{ id:string; accountId:string; assetClass:InvestmentAssetClass; units:number; price:number; costBasis:number; }
 export interface MarketState{ usEquityIndex:number; internationalEquityIndex:number; bondIndex:number; volatility:number; regime:'bull'|'neutral'|'bear'; lastUpdatedDate:string; }
 
+export interface BankruptcyRecord{ id:string; personId:string; filedDate:string; chapter:'liquidation'|'reorganization'; dischargedLiabilityIds:string[]; status:'filed'|'discharged'; creditPenaltyUntil:string; }
+
 export interface FinanceWorldState{
   financialAccounts:FinancialAccount[];
   recurringObligations:RecurringObligation[];
@@ -31,5 +33,6 @@ export interface FinanceWorldState{
   properties:PropertyAsset[];
   vehicles:VehicleAsset[];
   investmentPositions:InvestmentPosition[];
+  bankruptcyRecords:BankruptcyRecord[];
   market:MarketState;
 }
