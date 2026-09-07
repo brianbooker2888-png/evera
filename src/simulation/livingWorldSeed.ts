@@ -1,5 +1,5 @@
 import type { WorldState } from '../types/game';
-import type { CityProfile, CountryProfile, IndustryState, LivingWorldState, NeighborhoodProfile, ResidencyRecord, WorldInstitution } from '../types/livingWorld';
+import type { CityProfile, CountryProfile, IndustryState, LivingWorldState, NeighborhoodProfile, PolicyState, ResidencyRecord, WorldInstitution } from '../types/livingWorld';
 
 const norm=(s:string)=>s.trim().toLowerCase();
 const slug=(s:string)=>norm(s).replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
@@ -32,6 +32,14 @@ const industries=(date:string):IndustryState[]=>[
   {id:'industry-manufacturing',name:'Manufacturing',demandIndex:66,wageIndex:.9,automationPressure:72,growth:1.3,cityIds:['city-monterrey'],lastUpdatedDate:date}
 ];
 
+function policySeed(date:string):PolicyState[]{return countries.flatMap(c=>[
+  {id:`policy-${c.id}-tax`,countryId:c.id,kind:'tax' as const,name:'Household income tax environment',value:c.taxRate,effectiveDate:date},
+  {id:`policy-${c.id}-healthcare`,countryId:c.id,kind:'healthcare' as const,name:'Healthcare access framework',value:c.healthcareModel==='universal'?88:c.healthcareModel==='mixed_public'?68:52,effectiveDate:date},
+  {id:`policy-${c.id}-education`,countryId:c.id,kind:'education' as const,name:'Public education investment',value:c.educationIndex,effectiveDate:date},
+  {id:`policy-${c.id}-labor`,countryId:c.id,kind:'labor' as const,name:'Worker protection framework',value:c.laborProtection,effectiveDate:date},
+  {id:`policy-${c.id}-immigration`,countryId:c.id,kind:'immigration' as const,name:'Immigration openness',value:c.immigrationOpenness,effectiveDate:date},
+  {id:`policy-${c.id}-retirement`,countryId:c.id,kind:'retirement' as const,name:'Standard retirement age',value:c.retirementAge,effectiveDate:date}
+]);}
 function findSeedCity(location:string){const q=norm(location);return citySeed.find(c=>q.includes(norm(c.name))||q.includes(norm(c.region)));}
 function customCity(location:string):CityProfile{const name=location.split(',')[0]?.trim()||'Home City';return{id:`city-${slug(name)||'home'}`,countryId:'country-us',name,region:location.split(',')[1]?.trim()||'Region',population:350000,wageIndex:1,housingIndex:1,unemploymentRate:4.5,transit:52,safety:64,schoolQuality:68,healthcareAccess:72,nightlife:61,culture:67,industryIds:['industry-logistics','industry-healthcare'],growthRate:1};}
 function neighborhoodsFor(city:CityProfile):NeighborhoodProfile[]{return[
@@ -45,6 +53,12 @@ function institutionsFor(cities:CityProfile[],date:string):WorldInstitution[]{re
   {id:`institution-${city.id}-transit`,cityId:city.id,kind:'transit' as const,name:`${city.name} Transit Authority`,quality:city.transit,capacity:Math.round(city.population*.35),reputation:city.transit,status:'open' as const,lastUpdatedDate:date},
   {id:`institution-${city.id}-community`,cityId:city.id,kind:'community' as const,name:`${city.name} Community Network`,quality:Math.round((city.culture+city.safety)/2),capacity:Math.round(city.population*.03),reputation:city.culture,status:'open' as const,lastUpdatedDate:date}
 ]);}
+function employerCities(id:string,currentCityId:string){const known:Record<string,string[]>={
+  'employer-desert-distribution':['city-phoenix','city-atlanta','city-monterrey'],
+  'employer-horizon-retail':['city-phoenix','city-seattle','city-atlanta','city-toronto','city-london','city-mexico-city'],
+  'employer-copperline-health':['city-phoenix','city-seattle','city-atlanta','city-toronto','city-london'],
+  'employer-sunridge-tech':['city-phoenix','city-seattle','city-toronto','city-vancouver','city-london','city-manchester','city-monterrey']
+};const ids=[...(known[id]??[currentCityId])];if(!citySeed.some(c=>c.id===currentCityId)&&!ids.includes(currentCityId))ids.push(currentCityId);return ids;}
 
 export function emptyLivingWorldState():LivingWorldState{return{countries:[],cities:[],neighborhoods:[],industries:[],worldInstitutions:[],companyWorldStates:[],policies:[],residencyRecords:[],regionalShocks:[],worldNews:[],worldHistory:[],migrationRecords:[],currentCityId:'',currentNeighborhoodId:null};}
 export function initializeLivingWorld(world:WorldState):WorldState{
@@ -56,7 +70,8 @@ export function initializeLivingWorld(world:WorldState):WorldState{
   if(!world.currentNeighborhoodId||!world.neighborhoods.some(n=>n.id===world.currentNeighborhoodId&&n.cityId===world.currentCityId))world.currentNeighborhoodId=world.neighborhoods.find(n=>n.cityId===world.currentCityId&&n.id.endsWith('-family'))?.id??world.neighborhoods.find(n=>n.cityId===world.currentCityId)?.id??null;
   if(world.industries.length===0)world.industries.push(...industries(world.date));
   if(world.worldInstitutions.length===0)world.worldInstitutions.push(...institutionsFor(world.cities,world.date));
-  if(world.companyWorldStates.length===0)world.companyWorldStates.push(...world.employers.map(e=>({id:`company-world-${e.id}`,employerId:e.id,cityIds:[world.currentCityId],health:e.stability,growth:(e.wageIndex-1)*10,headcountIndex:e.size==='large'?100:e.size==='mid'?55:22,status:'stable' as const,lastUpdatedDate:world.date})));
+  if(world.policies.length===0)world.policies.push(...policySeed(world.date));
+  if(world.companyWorldStates.length===0)world.companyWorldStates.push(...world.employers.map(e=>({id:`company-world-${e.id}`,employerId:e.id,cityIds:employerCities(e.id,world.currentCityId),health:e.stability,growth:(e.wageIndex-1)*10,headcountIndex:e.size==='large'?100:e.size==='mid'?55:22,status:'stable' as const,lastUpdatedDate:world.date})));
   const current=world.cities.find(c=>c.id===world.currentCityId)!;const country=world.countries.find(c=>c.id===current.countryId)!;
   if(!world.residencyRecords.some(r=>r.personId===world.character.id&&r.countryId===country.id&&r.endDate===null)){const record:ResidencyRecord={id:`residency-${world.character.id}-${country.id}`,personId:world.character.id,countryId:country.id,kind:country.id==='country-us'?'citizen':'permanent_resident',startDate:world.date,endDate:null};world.residencyRecords.push(record);}
   world.character.location=`${current.name}, ${current.region}`;for(const h of world.households.filter(h=>!h.endedDate&&h.memberIds.includes(world.character.id)))h.location=world.character.location;
