@@ -32,13 +32,14 @@
 - [x] v3 → v4 migration
 
 ## Phase 5 — Money / housing / wealth
-- [ ] Bank accounts, recurring bills, budgets and household money rules
-- [ ] Credit reports, credit cards, loans, delinquency and bankruptcy
-- [ ] Insurance and emergency-fund mechanics
-- [ ] Dynamic rent, homeownership, mortgages and housing markets
-- [ ] Vehicles, financing, depreciation and transportation costs
-- [ ] Investments, retirement accounts, markets and wealth compounding
-- [ ] Financial consequences integrated with relationships, careers and children
+- [x] Bank accounts, recurring bills, budgets and household money rules
+- [x] Credit reports, credit cards, loans, delinquency and bankruptcy
+- [x] Insurance and emergency-fund mechanics
+- [x] Rent obligations, homeownership, mortgages and housing-market exposure
+- [x] Vehicles, financing, depreciation, insurance and repossession foundations
+- [x] Investments, retirement accounts, deterministic markets and wealth compounding
+- [x] Family-size household expenses and childcare costs
+- [x] v4 → v5 migration and finance regression suite
 
 ## Phase 6 — Deep modules
 - [ ] Soccer athlete / coach module
