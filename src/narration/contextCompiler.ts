@@ -1,21 +1,23 @@
 import type { WorldState } from '../types/game';
 import type { NarrativeFact, NarrationPurpose, SceneContextPacket } from '../types/narration';
+import { ageAt } from '../simulation/familyEngine';
 import { voiceProfileForPerson } from './voiceProfile';
 
 function nameFor(world:WorldState,id:string){if(id===world.character.id)return`${world.character.firstName} ${world.character.lastName}`;return world.npcs.find(n=>n.id===id)?.name??'Unknown person';}
+function personBirthDate(world:WorldState,id:string){return id===world.character.id?world.character.birthDate:world.npcs.find(n=>n.id===id)?.birthDate;}
+function personLocation(world:WorldState,id:string){return id===world.character.id?world.character.location:world.npcs.find(n=>n.id===id)?.location;}
 function pushUnique(facts:NarrativeFact[],fact:NarrativeFact){if(!facts.some(f=>f.id===fact.id))facts.push(fact);}
 function canonical(id:string,category:NarrativeFact['category'],text:string,sourceId=id):NarrativeFact{return{id,category,text,certainty:'canonical',sourceId,allowedToStateAsFact:true};}
 
 export function compileSceneContext(world:WorldState,purpose:NarrationPurpose,speakerId:string|null,listenerId:string|null=world.character.id):SceneContextPacket{
   const facts:NarrativeFact[]=[];
-  if(speakerId){const speaker=speakerId===world.character.id?world.character:world.npcs.find(n=>n.id===speakerId);if(speaker)pushUnique(facts,canonical(`identity-${speakerId}`,'identity',`${nameFor(world,speakerId)} is ${speaker.age??''}${'age'in speaker?' years old':''} and lives in ${speaker.location}.`,speakerId));}
+  if(speakerId){const birthDate=personBirthDate(world,speakerId),location=personLocation(world,speakerId);if(birthDate&&location)pushUnique(facts,canonical(`identity-${speakerId}`,'identity',`${nameFor(world,speakerId)} is ${ageAt(birthDate,world.date)} years old and lives in ${location}.`,speakerId));}
   if(speakerId&&listenerId){const edge=world.relationships.find(r=>r.fromId===speakerId&&r.toId===listenerId);if(edge)pushUnique(facts,canonical(`relationship-${edge.id}`,'relationship',`${nameFor(world,speakerId)} has an established relationship history with ${nameFor(world,listenerId)}.`,edge.id));const partnership=world.partnerships.find(p=>p.personIds.includes(speakerId)&&p.personIds.includes(listenerId)&&!['ended','divorced'].includes(p.status));if(partnership)pushUnique(facts,canonical(`partnership-${partnership.id}`,'relationship',`${nameFor(world,speakerId)} and ${nameFor(world,listenerId)} are ${partnership.status}.`,partnership.id));}
   if(speakerId){
     const directMemories=speakerId===world.character.id?world.character.human.memories:world.npcs.find(n=>n.id===speakerId)?.human?.memories??[];
     for(const memory of directMemories.slice().sort((a,b)=>b.date.localeCompare(a.date)).slice(0,6))pushUnique(facts,{id:`memory-${memory.id}`,category:'memory',text:memory.summary,certainty:memory.confidence>=90?'canonical':'believed',sourceId:memory.id,allowedToStateAsFact:memory.confidence>=90});
     const knowledge=world.knowledge.filter(k=>k.holderId===speakerId).sort((a,b)=>b.acquiredDate.localeCompare(a.acquiredDate)).slice(0,8);
     for(const k of knowledge)pushUnique(facts,{id:`belief-${k.id}`,category:'belief',text:k.summary,certainty:k.sourceType==='rumor'?'rumor':k.confidence>=90?'believed':'rumor',sourceId:k.id,allowedToStateAsFact:false});
-    // Secrets are only available if this speaker actually knows them.
     for(const secret of world.secrets.filter(s=>s.knownBy.some(k=>k.personId===speakerId)).slice(0,4))pushUnique(facts,{id:`secret-${secret.id}`,category:secret.category==='career'?'career':secret.category==='finance'?'finance':secret.category==='family'?'family':secret.category==='relationship'?'relationship':secret.category==='health'?'health':'identity',text:secret.summary,certainty:'believed',sourceId:secret.id,allowedToStateAsFact:false});
   }
   const recent=world.events.slice(0,8);for(const evt of recent)pushUnique(facts,canonical(`event-${evt.id}`,evt.type==='finance'?'finance':evt.type==='relationship'?'relationship':evt.type==='world'?'world':'identity',evt.body,evt.id));
