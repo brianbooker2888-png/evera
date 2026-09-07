@@ -1,5 +1,33 @@
 # EVERA Changelog
 
+## v0.9.0 — Health & Healthcare
+
+- Upgraded the canonical simulation world schema to v8.
+- Added persistent health profiles around the existing hidden human-health state.
+- Added hidden preventive-adherence, nutrition, sleep, substance-risk, chronic-risk, accident-risk and care-access factors.
+- Added persistent acute, chronic, mental-health and injury conditions.
+- Added suspected vs diagnosed condition state so medical facts are not revealed before the world records a diagnosis.
+- Added condition recovery, managed long-term conditions and treatment summaries.
+- Added preventive, primary-care, urgent-care, emergency, specialist and therapy encounter records.
+- Connected employer health benefits to a canonical active health-insurance policy.
+- Added deductible-year tracking and simplified deductible/coinsurance patient responsibility.
+- Routed healthcare costs through the same canonical checking account and ledger used by the rest of the finance simulation.
+- Added persistent medical bills when available cash cannot cover patient responsibility.
+- Added medical-bill payment attempts, past-due state and financial-security / mental-load consequences.
+- Added persistent medications with monthly cost, effectiveness and adherence.
+- Added deterministic daily illness/injury/long-term-condition simulation for the player and high-fidelity NPCs.
+- Added preventive-care reminders and player-directed care actions.
+- Added a dedicated Health & Healthcare interface inside LIFE with coverage, deductible usage, known conditions, care choices, medications, bills and recent encounters.
+- Kept hidden health-risk percentages out of the player interface.
+- Added health as a canonical life-event category.
+- Added diagnosed health facts and recorded healthcare activity to the grounded narration context and Annual Life Chapters.
+- Added effective-date handling so next-day encounters and January deductible resets remain chronologically correct.
+- Added v7 → v8 migration while preserving prior relationship, family, education, career, finance, sports, business, narration and timeline history.
+- Expanded the cumulative test suite with health initialization, preventive care, diagnosis/cost, deterministic 365-day health simulation, health narration and v7→v8 migration coverage.
+- Added `docs/HEALTH_ARCHITECTURE.md` describing the hidden-risk / known-medical-history boundary.
+- Bumped the PWA cache to v9 and the app version to v0.9.0.
+- Mortality remains intentionally disabled until Phase 10 can ship death together with grief, estates, inheritance and descendant continuation.
+
 ## v0.8.0 — Optional Cloud Sync & Native Packaging
 
 - Kept the canonical simulation world schema at v7 because cloud/device metadata is infrastructure rather than gameplay state.

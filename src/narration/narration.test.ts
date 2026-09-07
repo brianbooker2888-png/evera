@@ -3,7 +3,7 @@ import { createWorld } from '../simulation/createWorld';
 import { stepWorld } from '../simulation/engine';
 import { haveConversation } from '../simulation/relationshipEngine';
 import { migrateWorld } from '../persistence/migrate';
-import { compileSceneContext } from './contextCompiler';
+import { compileAnnualChapterContext, compileSceneContext } from './contextCompiler';
 import { buildAnnualLifeChapter, generateOfflineDialogue } from './narrationEngine';
 
 const draft={firstName:'Narration',lastName:'Test',age:28,sex:'male' as const,orientation:'straight' as const,hometown:'Phoenix, Arizona',socioeconomicBackground:'stable' as const,ambition:70,discipline:68,empathy:64,athleticism:58};
@@ -50,6 +50,13 @@ describe('Phase 7 grounded narration',()=>{
     expect(a.text).toBe(b.text);expect(a.sourceFactIds.length).toBeGreaterThan(0);
   });
 
+  it('allows only recorded diagnosed health facts into annual narration',()=>{
+    const world=createWorld(draft,7008),year=Number(world.date.slice(0,4));
+    world.medicalConditions.unshift({id:'diagnosed-health-fact',personId:world.character.id,name:'Recorded condition',kind:'chronic',severity:40,diagnosisStatus:'diagnosed',status:'managed',onsetDate:world.date,diagnosedDate:world.date,resolvedDate:null,recurrenceRisk:20,symptomSummary:'Recorded symptoms',treatmentSummary:'Recorded treatment'});
+    const context=compileAnnualChapterContext(world,year);
+    expect(context.facts.some(f=>f.sourceId==='diagnosed-health-fact'&&f.category==='health'&&f.certainty==='canonical')).toBe(true);
+  });
+
   it('creates the completed prior-year chapter at a January boundary',()=>{
     const world=createWorld(draft,7006);world.date='2026-12-31';
     const next=stepWorld(world,1);
@@ -57,14 +64,15 @@ describe('Phase 7 grounded narration',()=>{
     expect(next.annualLifeChapters.some(c=>c.year===2026)).toBe(true);
   });
 
-  it('migrates a v6 save into v7 without losing prior systems',()=>{
+  it('migrates a v6 save into v8 without losing prior systems',()=>{
     const current=createWorld(draft,7007);
-    const {narrationSettings,annualLifeChapters,...rest}=current;void narrationSettings;void annualLifeChapters;
+    const {narrationSettings,annualLifeChapters,healthProfiles,medicalConditions,medicalEncounters,medicalBills,medications,...rest}=current;void narrationSettings;void annualLifeChapters;void healthProfiles;void medicalConditions;void medicalEncounters;void medicalBills;void medications;
     const migrated=migrateWorld({...rest,version:6});
-    expect(migrated?.version).toBe(7);
+    expect(migrated?.version).toBe(8);
     expect(migrated?.npcs.length).toBe(current.npcs.length);
     expect(migrated?.sportsLeagues.length).toBe(current.sportsLeagues.length);
     expect(migrated?.financialAccounts.length).toBe(current.financialAccounts.length);
     expect(migrated?.narrationSettings.mode).toBe('offline');
+    expect(migrated?.healthProfiles.length).toBeGreaterThan(0);
   });
 });

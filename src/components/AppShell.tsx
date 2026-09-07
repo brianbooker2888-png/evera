@@ -13,6 +13,7 @@ import { saveWorld } from '../persistence/store';
 import { FinancePanel } from './FinancePanel';
 import { DeepModulesPanel } from './DeepModulesPanel';
 import { TimelinePanel } from './TimelinePanel';
+import { HealthPanel } from './HealthPanel';
 import { Logo } from './Logo';
 
 const money=new Intl.NumberFormat('en-US',{style:'currency',currency:'USD',maximumFractionDigits:0});
@@ -45,6 +46,7 @@ function Life({world,age,onFocus,onChange}:{world:WorldState;age:number;onFocus:
   const c=world.character,signals=needSignal(c.human),habits=habitSignal(c.human),goals=c.human.goals.filter(g=>g.status==='active').sort((a,b)=>b.priority-a.priority);
   return <><section className="identity-card"><div className="avatar">{c.firstName[0]}{c.lastName[0]}</div><div><span className="eyebrow">YOUR LIFE</span><h1>{c.firstName} {c.lastName}</h1><p>{age} · {c.career}</p></div></section>
     <div className="metric-grid"><Metric label="Cash" value={money.format(c.cash)} detail="Checking balance"/><Metric label="Energy" value={energyLabel(c.energy)} detail="How you seem to be holding up"/><Metric label="Pressure" value={stressLabel(c.stress)} detail="Not a diagnosis or score"/><Metric label="Mood" value={titleCase(c.human.mood.label)} detail="Current emotional weather"/></div>
+    <HealthPanel world={world} onChange={onChange}/>
     <CareerEducation world={world} onChange={onChange}/>
     <Section title="What you are noticing" subtitle="Underlying human-state math stays hidden.">{signals.length?<div className="signal-list">{signals.map(signal=><div className="signal" key={signal}><Brain size={18}/><span>{signal}</span></div>)}</div>:<div className="signal"><Sparkles size={18}/><span>Nothing feels especially out of balance right now.</span></div>}</Section>
     <Section title="Your direction" subtitle="Priorities are not guaranteed outcomes."><div className="goal-grid">{goals.map((goal,index)=><article className={`goal-card ${index===0?'focused':''}`} key={goal.id}><div><span className="eyebrow">{goal.domain.toUpperCase()}</span><h3>{goal.title}</h3><p>{goalProgressText(goal.progress)}</p></div><button className="secondary-btn" onClick={()=>onFocus(goal.id)}>{index===0?'Current focus':'Prioritize'}</button></article>)}</div></Section>
