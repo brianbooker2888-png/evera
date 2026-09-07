@@ -10,8 +10,10 @@ export function initializeLegacyLegal(world:WorldState){
   world.crimeIncidents??=[];
   world.criminalCases??=[];
   world.criminalRecords??=[];
+  world.incarcerationRecords??=[];
   world.civilCases??=[];
   return world;
 }
 
 export function isDeceased(world:WorldState,personId:string){return world.deathRecords.some(d=>d.personId===personId);}
+export function isIncarcerated(world:WorldState,personId:string){return world.incarcerationRecords.some(r=>r.personId===personId&&r.status==='incarcerated'&&r.endDate>=world.date);}
