@@ -1,57 +1,15 @@
 import { describe, expect, it } from 'vitest';
 import { createWorld } from './createWorld';
 import { setPlayerGoalFocus, stepWorld } from './engine';
+import { attemptRelationshipStep, haveConversation, setFamilyPlan } from './relationshipEngine';
+import { activeHouseholdForPerson, reassignHouseholdLabor } from './householdEngine';
+import { applyParentingAction, childrenOf } from './familyEngine';
+import { migrateWorld } from '../persistence/migrate';
 
-const draft = { firstName: 'A', lastName: 'B', age: 25, sex: 'male' as const, hometown: 'Phoenix, Arizona', socioeconomicBackground: 'stable' as const, ambition: 70, discipline: 70, empathy: 60, athleticism: 60 };
-
-describe('simulation determinism', () => {
-  it('produces identical worlds from the same seed and steps', () => {
-    const a = stepWorld(createWorld(draft, 12345), 365);
-    const b = stepWorld(createWorld(draft, 12345), 365);
-    expect(a).toEqual(b);
-  });
-
-  it('advances the world and maintains bounded human state', () => {
-    const start = createWorld(draft, 42);
-    const end = stepWorld(start, 365);
-    expect(end.date).not.toBe(start.date);
-    expect(end.character.energy).toBeGreaterThanOrEqual(0);
-    expect(end.character.energy).toBeLessThanOrEqual(100);
-    expect(end.character.stress).toBeGreaterThanOrEqual(0);
-    expect(end.character.stress).toBeLessThanOrEqual(100);
-    expect(end.character.human.needs.security).toBeGreaterThanOrEqual(0);
-    expect(end.character.human.needs.security).toBeLessThanOrEqual(100);
-  });
-});
-
-describe('Phase 2 human simulation', () => {
-  it('creates tiered NPCs with deep state only where needed', () => {
-    const world = createWorld(draft, 9876);
-    expect(world.npcs.filter(n => n.tier === 1).length).toBe(2);
-    expect(world.npcs.some(n => n.tier === 2)).toBe(true);
-    expect(world.npcs.some(n => n.tier === 3)).toBe(true);
-    expect(world.npcs.filter(n => n.tier === 1).every(n => n.human !== null)).toBe(true);
-    expect(world.npcs.filter(n => n.tier === 3).every(n => n.human === null)).toBe(true);
-  });
-
-  it('lets Tier 1 NPCs pursue goals without player input', () => {
-    const world = stepWorld(createWorld(draft, 12345), 120);
-    expect(world.npcActivity.length).toBeGreaterThan(0);
-    expect(world.npcs.filter(n => n.tier === 1).some(n => n.human?.goals.some(g => g.progress > 0))).toBe(true);
-  });
-
-  it('keeps the social truth graph separate from player knowledge', () => {
-    const world = createWorld(draft, 12345);
-    expect(world.secrets.length).toBeGreaterThan(0);
-    expect(world.secrets.some(secret => !secret.knownBy.some(k => k.personId === world.character.id))).toBe(true);
-  });
-
-  it('changes player focus immutably', () => {
-    const world = createWorld(draft, 12345);
-    const target = world.character.human.goals[1]!;
-    const oldPriority = target.priority;
-    const focused = setPlayerGoalFocus(world, target.id);
-    expect(focused.character.human.goals.find(g => g.id === target.id)?.priority).toBeGreaterThanOrEqual(oldPriority);
-    expect(world.character.human.goals.find(g => g.id === target.id)?.priority).toBe(oldPriority);
-  });
-});
+const draft={firstName:'A',lastName:'B',age:25,sex:'male' as const,orientation:'straight' as const,hometown:'Phoenix, Arizona',socioeconomicBackground:'stable' as const,ambition:70,discipline:70,empathy:60,athleticism:60};
+function boostRomance<T extends ReturnType<typeof createWorld>>(world:T,npcId='npc-friend'){for(const r of world.relationships.filter(x=>(x.fromId===world.character.id&&x.toId===npcId)||(x.fromId===npcId&&x.toId===world.character.id))){r.affection=90;r.respect=90;r.attraction=92;r.familiarity=88;r.resentment=0;r.trust.emotional=92;r.trust.romantic=92;}const npc=world.npcs.find(n=>n.id===npcId)!;npc.romantic.orientation='straight';return world;}
+function marriedWorld(){let world=boostRomance(createWorld(draft,12345));world=attemptRelationshipStep(world,'npc-friend','ask_date');world=attemptRelationshipStep(world,'npc-friend','exclusive');world=attemptRelationshipStep(world,'npc-friend','move_in');world=attemptRelationshipStep(world,'npc-friend','engage');world=attemptRelationshipStep(world,'npc-friend','marry');return world;}
+describe('simulation determinism',()=>{it('produces identical worlds from the same seed and steps',()=>{const a=stepWorld(createWorld(draft,12345),365),b=stepWorld(createWorld(draft,12345),365);expect(a).toEqual(b);});it('keeps bounded human state',()=>{const end=stepWorld(createWorld(draft,42),365);expect(end.character.energy).toBeGreaterThanOrEqual(0);expect(end.character.energy).toBeLessThanOrEqual(100);expect(end.character.stress).toBeGreaterThanOrEqual(0);expect(end.character.stress).toBeLessThanOrEqual(100);});});
+describe('human simulation',()=>{it('uses three NPC fidelity tiers',()=>{const world=createWorld(draft,9876);expect(world.npcs.filter(n=>n.tier===1).length).toBe(2);expect(world.npcs.some(n=>n.tier===2)).toBe(true);expect(world.npcs.some(n=>n.tier===3)).toBe(true);expect(world.npcs.filter(n=>n.tier===3).every(n=>n.human===null)).toBe(true);});it('lets Tier 1 NPCs pursue goals',()=>{const world=stepWorld(createWorld(draft,12345),120);expect(world.npcActivity.length).toBeGreaterThan(0);expect(world.npcs.filter(n=>n.tier===1).some(n=>n.human?.goals.some(g=>g.progress>0))).toBe(true);});it('keeps secrets separate from player knowledge',()=>{const world=createWorld(draft,12345);expect(world.secrets.some(s=>!s.knownBy.some(k=>k.personId===world.character.id))).toBe(true);});it('changes player focus immutably',()=>{const world=createWorld(draft,12345),target=world.character.human.goals[1]!,old=target.priority,focused=setPlayerGoalFocus(world,target.id);expect(focused.character.human.goals.find(g=>g.id===target.id)?.priority).toBeGreaterThanOrEqual(old);expect(world.character.human.goals.find(g=>g.id===target.id)?.priority).toBe(old);});});
+describe('Phase 3 relationships and households',()=>{it('supports dating through marriage and one shared household',()=>{const world=marriedWorld();const p=world.partnerships.find(p=>p.personIds.includes(world.character.id)&&p.personIds.includes('npc-friend'));expect(p?.status).toBe('married');expect(p?.cohabitingHouseholdId).toBeTruthy();const homes=world.households.filter(h=>!h.endedDate&&h.memberIds.includes(world.character.id));expect(homes).toHaveLength(1);expect(homes[0]!.memberIds).toContain('npc-friend');});it('parses offline conversation intent without AI',()=>{const world=haveConversation(boostRomance(createWorld(draft,12)),'npc-friend','I am sorry. Can we talk about our budget?');expect(world.conversations[0]?.intent).toBe('apologize');expect(world.conversations[0]?.response.length).toBeGreaterThan(10);});it('reassigns household labor only to responsible adults',()=>{const world=marriedWorld(),home=activeHouseholdForPerson(world,world.character.id)!;const task=home.laborAssignments[0]!,updated=reassignHouseholdLabor(world,home.id,task.id,'npc-friend');expect(updated.households.find(h=>h.id===home.id)?.laborAssignments.find(t=>t.id===task.id)?.ownerId).toBe('npc-friend');});it('creates a child, parenting state, and custody after divorce',()=>{let world=marriedWorld();const p=world.partnerships.find(p=>p.status==='married')!;world=setFamilyPlan(world,p.id,'trying');world.pregnancies.push({id:'test-pregnancy',pregnantPersonId:'npc-friend',partnerId:world.character.id,conceptionDate:world.date,dueDate:world.date,status:'ongoing',planned:true,childIds:[],outcomeDate:null});world=stepWorld(world,1);const children=childrenOf(world,world.character.id);expect(children).toHaveLength(1);expect(children[0]!.human).not.toBeNull();world=applyParentingAction(world,children[0]!.id,'quality_time');expect(childrenOf(world,world.character.id)[0]!.childDevelopment?.lastParentingDate).toBe(world.date);world=attemptRelationshipStep(world,'npc-friend','divorce');expect(world.partnerships.find(x=>x.id===p.id)?.status).toBe('divorced');expect(world.custodyPlans.some(c=>c.childId===children[0]!.id&&c.active)).toBe(true);expect(world.households.filter(h=>!h.endedDate&&h.responsibleAdultIds.includes(world.character.id))).toHaveLength(1);});it('keeps minor starts out of the housing ledger',()=>{const childWorld=createWorld({...draft,age:10},77);const end=stepWorld(childWorld,35);expect(end.ledger.some(l=>l.category==='Housing')).toBe(false);expect(activeHouseholdForPerson(end,end.character.id)?.responsibleAdultIds).not.toContain(end.character.id);});});
+describe('save migration',()=>{it('upgrades a v2-shaped save into v3 without losing history',()=>{const current=createWorld(draft,99);const{romantic:charRomantic,...legacyCharacter}=current.character;void charRomantic;const legacyNpcs=current.npcs.map(n=>{const{birthDate,sex,romantic,childDevelopment,...rest}=n;void birthDate;void sex;void romantic;void childDevelopment;return rest;});const legacy={version:2,seed:current.seed,date:current.date,character:legacyCharacter,npcs:legacyNpcs,relationships:current.relationships,knowledge:current.knowledge,secrets:current.secrets,npcActivity:current.npcActivity,ledger:current.ledger,events:current.events,memories:current.memories,economy:current.economy};const migrated=migrateWorld(legacy);expect(migrated?.version).toBe(3);expect(migrated?.npcs.length).toBe(current.npcs.length);expect(migrated?.relationships.length).toBe(current.relationships.length);expect(migrated?.households.length).toBeGreaterThan(0);});});

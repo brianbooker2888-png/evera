@@ -1,125 +1,37 @@
-import type { AthleticSet, Character, Npc, TraitSet, WorldState } from '../types/game';
+import type { AthleticSet, Character, Household, Npc, Orientation, RelationshipState, RomanticProfile, Sex, TraitSet, WorldState } from '../types/game';
 import { SeededRng } from '../simulation/rng';
 import { createHumanState, createNpcTraits } from '../simulation/humanFactory';
-import { createInitialSecrets } from '../simulation/socialEngine';
 
-interface LegacyNpc {
-  id: string;
-  name: string;
-  role: string;
-  age: number;
-  location: string;
-  affection: number;
-  trust: number;
-  respect: number;
-  resentment: number;
-  mood: string;
-  activeGoal: string;
+type LegacyCharacterV2 = Omit<Character,'romantic'>;
+type LegacyNpcV2 = Omit<Npc,'birthDate'|'sex'|'romantic'|'childDevelopment'>;
+interface LegacyWorldV2 {
+  version:2; seed:number; date:string; character:LegacyCharacterV2; npcs:LegacyNpcV2[]; relationships:RelationshipState[];
+  knowledge:WorldState['knowledge']; secrets:WorldState['secrets']; npcActivity:WorldState['npcActivity']; ledger:WorldState['ledger']; events:WorldState['events']; memories:WorldState['memories']; economy:WorldState['economy'];
 }
+interface LegacyNpcV1 { id:string; name:string; role:string; age:number; location:string; affection:number; trust:number; respect:number; resentment:number; mood:string; activeGoal:string; }
+interface LegacyWorldV1 { version:1; seed:number; date:string; character:Omit<LegacyCharacterV2,'human'>; npcs:LegacyNpcV1[]; ledger:WorldState['ledger']; events:WorldState['events']; memories:WorldState['memories']; economy:WorldState['economy']; }
+const clamp=(v:number)=>Math.max(0,Math.min(100,Math.round(v)));
+function isVersion(value:unknown,version:number){return typeof value==='object'&&value!==null&&(value as{version?:unknown}).version===version;}
+function birthDateForAge(date:string,age:number){const d=new Date(`${date}T12:00:00Z`);d.setUTCFullYear(d.getUTCFullYear()-age);return d.toISOString().slice(0,10);}
+function hash(text:string){let h=2166136261;for(let i=0;i<text.length;i++){h^=text.charCodeAt(i);h=Math.imul(h,16777619);}return h>>>0;}
+function sexFor(id:string):Sex{return(hash(id)&1)===0?'female':'male';}
+function romanticFor(traits:TraitSet,orientation:Orientation='straight'):RomanticProfile{return{orientation,relationshipStyle:'monogamous',wantsChildren:traits.familyOrientation>=72?'yes':traits.familyOrientation>=48?'maybe':'not_now'};}
+function ageAt(birthDate:string,date:string){const b=new Date(`${birthDate}T12:00:00Z`),d=new Date(`${date}T12:00:00Z`);let age=d.getUTCFullYear()-b.getUTCFullYear();const md=d.getUTCMonth()-b.getUTCMonth();if(md<0||(md===0&&d.getUTCDate()<b.getUTCDate()))age--;return age;}
+function averageAthleticism(a:AthleticSet){return(a.speed+a.strength+a.endurance+a.agility+a.coordination+a.reaction)/6;}
+function startingHousehold(character:Character,date:string,economy:WorldState['economy']):Household{return{id:`household-${character.id}-${date}`,name:`${character.lastName} household`,memberIds:[character.id],location:character.location,homeType:'apartment',monthlyHousingCost:Math.round(1450*economy.housingIndex),responsibleAdultIds:[character.id],financeStyle:'separate',laborAssignments:[{id:`labor-meals-${character.id}`,task:'Meals',ownerId:character.id,cadence:'daily',burden:18},{id:`labor-cleaning-${character.id}`,task:'Cleaning',ownerId:character.id,cadence:'weekly',burden:16},{id:`labor-admin-${character.id}`,task:'Household admin',ownerId:character.id,cadence:'weekly',burden:14}],schedule:[{id:`schedule-${character.id}-weekday`,personId:character.id,label:character.career==='Student'?'School / study':'Work / primary responsibilities',dayOfWeek:1,startHour:9,endHour:17}],createdDate:date,endedDate:null};}
 
-interface LegacyWorld {
-  version: 1;
-  seed: number;
-  date: string;
-  character: Omit<Character, 'human'>;
-  npcs: LegacyNpc[];
-  ledger: WorldState['ledger'];
-  events: WorldState['events'];
-  memories: WorldState['memories'];
-  economy: WorldState['economy'];
+function v1ToV2(legacy:LegacyWorldV1):LegacyWorldV2{
+  const rng=new SeededRng(legacy.seed^0x45564552);const characterHuman=createHumanState(legacy.character.id,legacy.character.traits as TraitSet,legacy.date,rng,{fitness:averageAthleticism(legacy.character.athleticism as AthleticSet),stress:legacy.character.stress,energy:legacy.character.energy});const character:LegacyCharacterV2={...legacy.character,human:characterHuman};
+  const npcs:LegacyNpcV2[]=legacy.npcs.map((old,index)=>{const traits=createNpcTraits(rng,old.role==='Parent'?{familyOrientation:84,empathy:74}:undefined);const human=createHumanState(old.id,traits,legacy.date,rng,{npc:true,stress:old.mood==='strained'?68:28});if(human.goals[0])human.goals[0].title=old.activeGoal||human.goals[0].title;return{id:old.id,name:old.name,role:old.role,age:old.age,location:old.location,tier:index<2?1:2,traits,human,currentFocus:old.activeGoal||'current priorities',lastSimulatedDate:legacy.date};});
+  const relationships:RelationshipState[]=legacy.npcs.flatMap(old=>{const shared={attraction:0,familiarity:clamp((old.affection+old.trust)/2),dependency:clamp(old.affection*.25),lastMeaningfulContactDate:legacy.date};return[{id:`rel-${old.id}-${character.id}`,fromId:old.id,toId:character.id,affection:old.affection,respect:old.respect,resentment:old.resentment,trust:{emotional:old.trust,financial:old.trust,professional:old.respect,romantic:0},...shared},{id:`rel-${character.id}-${old.id}`,fromId:character.id,toId:old.id,affection:old.affection,respect:old.respect,resentment:old.resentment,trust:{emotional:old.trust,financial:old.trust,professional:old.respect,romantic:0},...shared}];});
+  return{version:2,seed:legacy.seed,date:legacy.date,character,npcs,relationships,knowledge:[],secrets:[],npcActivity:[],ledger:legacy.ledger,events:legacy.events,memories:legacy.memories,economy:legacy.economy};
 }
-
-const clamp = (value: number) => Math.max(0, Math.min(100, Math.round(value)));
-
-function isV2(value: unknown): value is WorldState {
-  return typeof value === 'object' && value !== null && (value as { version?: unknown }).version === 2;
+function v2ToV3(legacy:LegacyWorldV2):WorldState{
+  const character:Character={...legacy.character,romantic:romanticFor(legacy.character.traits)};
+  const npcs:Npc[]=legacy.npcs.map(n=>({...n,birthDate:birthDateForAge(legacy.date,n.age),sex:sexFor(n.id),romantic:romanticFor(n.traits),childDevelopment:null}));
+  const world:WorldState={version:3,seed:legacy.seed,date:legacy.date,character,npcs,relationships:legacy.relationships,partnerships:[],households:[],pregnancies:[],familyLinks:[],custodyPlans:[],conversations:[],knowledge:legacy.knowledge??[],secrets:legacy.secrets??[],npcActivity:legacy.npcActivity??[],ledger:legacy.ledger??[],events:legacy.events??[],memories:legacy.memories??[],economy:legacy.economy};
+  world.households.push(startingHousehold(character,legacy.date,legacy.economy));const parent=npcs.find(n=>n.role==='Parent');if(parent&&ageAt(character.birthDate,legacy.date)<18){const home=world.households[0]!;home.memberIds=[character.id,parent.id];home.responsibleAdultIds=[parent.id];for(const task of home.laborAssignments)task.ownerId=parent.id;}if(parent){world.familyLinks.push({id:`family-${parent.id}-${character.id}-parent`,fromId:parent.id,toId:character.id,relation:'biological_parent',establishedDate:legacy.date,endedDate:null},{id:`family-${character.id}-${parent.id}-child`,fromId:character.id,toId:parent.id,relation:'biological_child',establishedDate:legacy.date,endedDate:null});}
+  if(world.secrets.length===0){const friend=npcs.find(n=>n.role==='Friend'&&n.tier===1);if(friend)world.secrets.push({id:`secret-${friend.id}-career-move`,subjectId:friend.id,category:'career',summary:`${friend.name} has quietly been considering an opportunity that could eventually take them to another city.`,sensitivity:44,createdDate:legacy.date,knownBy:[{personId:friend.id,since:legacy.date,sourceId:friend.id}],status:'active'});}return world;
 }
-
-function isV1(value: unknown): value is LegacyWorld {
-  return typeof value === 'object' && value !== null && (value as { version?: unknown }).version === 1;
-}
-
-export function migrateWorld(value: unknown): WorldState | null {
-  if (isV2(value)) return value;
-  if (!isV1(value)) return null;
-
-  const legacy = value;
-  const rng = new SeededRng(legacy.seed ^ 0x45564552);
-  const characterHuman = createHumanState(legacy.character.id, legacy.character.traits as TraitSet, legacy.date, rng, {
-    fitness: averageAthleticism(legacy.character.athleticism as AthleticSet),
-    stress: legacy.character.stress,
-    energy: legacy.character.energy,
-  });
-  const character: Character = { ...legacy.character, human: characterHuman };
-
-  const npcs: Npc[] = legacy.npcs.map((oldNpc, index) => {
-    const traits = createNpcTraits(rng, oldNpc.role === 'Parent' ? { familyOrientation: 84, empathy: 74 } : undefined);
-    const human = createHumanState(oldNpc.id, traits, legacy.date, rng, { npc: true, stress: oldNpc.mood === 'strained' ? 68 : 28 });
-    if (human.goals[0]) human.goals[0].title = oldNpc.activeGoal || human.goals[0].title;
-    return {
-      id: oldNpc.id,
-      name: oldNpc.name,
-      role: oldNpc.role,
-      age: oldNpc.age,
-      location: oldNpc.location,
-      tier: index < 2 ? 1 : 2,
-      traits,
-      human,
-      currentFocus: oldNpc.activeGoal || 'current priorities',
-      lastSimulatedDate: legacy.date,
-    };
-  });
-
-  const relationships = legacy.npcs.flatMap(oldNpc => {
-    const shared = {
-      attraction: 0,
-      familiarity: clamp((oldNpc.affection + oldNpc.trust) / 2),
-      dependency: clamp(oldNpc.affection * 0.25),
-      lastMeaningfulContactDate: legacy.date,
-    };
-    return [
-      {
-        id: `rel-${oldNpc.id}-${character.id}`,
-        fromId: oldNpc.id,
-        toId: character.id,
-        affection: oldNpc.affection,
-        respect: oldNpc.respect,
-        resentment: oldNpc.resentment,
-        trust: { emotional: oldNpc.trust, financial: oldNpc.trust, professional: oldNpc.respect, romantic: 0 },
-        ...shared,
-      },
-      {
-        id: `rel-${character.id}-${oldNpc.id}`,
-        fromId: character.id,
-        toId: oldNpc.id,
-        affection: oldNpc.affection,
-        respect: oldNpc.respect,
-        resentment: oldNpc.resentment,
-        trust: { emotional: oldNpc.trust, financial: oldNpc.trust, professional: oldNpc.respect, romantic: 0 },
-        ...shared,
-      },
-    ];
-  });
-
-  const migrated: WorldState = {
-    version: 2,
-    seed: legacy.seed,
-    date: legacy.date,
-    character,
-    npcs,
-    relationships,
-    knowledge: [],
-    secrets: [],
-    npcActivity: [],
-    ledger: legacy.ledger,
-    events: legacy.events,
-    memories: legacy.memories,
-    economy: legacy.economy,
-  };
-  migrated.secrets = createInitialSecrets(migrated);
-  return migrated;
-}
-
-function averageAthleticism(a: AthleticSet): number {
-  return (a.speed + a.strength + a.endurance + a.agility + a.coordination + a.reaction) / 6;
-}
+function normalizeV3(value:unknown):WorldState|null{if(!isVersion(value,3))return null;const world=structuredClone(value) as WorldState;world.partnerships??=[];world.households??=[];world.pregnancies??=[];world.familyLinks??=[];world.custodyPlans??=[];world.conversations??=[];world.character.romantic??=romanticFor(world.character.traits);for(const n of world.npcs){n.birthDate??=birthDateForAge(world.date,n.age);n.sex??=sexFor(n.id);n.romantic??=romanticFor(n.traits);n.childDevelopment??=null;}for(const h of world.households)h.responsibleAdultIds??=h.memberIds.filter(id=>id===world.character.id?ageAt(world.character.birthDate,world.date)>=18:(world.npcs.find(n=>n.id===id)?.age??18)>=18);if(!world.households.some(h=>!h.endedDate&&h.memberIds.includes(world.character.id)))world.households.push(startingHousehold(world.character,world.date,world.economy));return world;}
+export function migrateWorld(value:unknown):WorldState|null{if(isVersion(value,3))return normalizeV3(value);if(isVersion(value,2))return v2ToV3(value as LegacyWorldV2);if(isVersion(value,1))return v2ToV3(v1ToV2(value as LegacyWorldV1));return null;}

@@ -5,32 +5,31 @@
 
 EVERA is a local-first persistent life and world simulation. The player is one person inside a world that continues independently.
 
-## Current build — v0.2 Human Simulation Core
+## Current build — v0.3.0 Relationships & Households
 
 ### Foundation
 - React + TypeScript + Vite
 - Mobile-first dark UI
-- Character creation with player-selected starting circumstances
 - Deterministic seeded simulation engine
-- Day-based time progression with pause / 1x / 5x / 20x controls
-- Local IndexedDB autosave
-- Offline PWA shell and service worker
+- Local IndexedDB autosave and offline PWA shell
 - Five primary areas: Life, People, World, Money, Timeline
 
 ### Human simulation
-- Multidimensional traits and values
-- Hidden needs, mental load, fitness and sleep debt
-- Habits that strengthen or weaken through repeated behavior
-- Competing personal goals
-- Player goal reprioritization
-- Human memories with significance and decay
+- Multidimensional traits, values, needs, health, habits, goals and memories
 - Tier 1 / Tier 2 / Tier 3 NPC simulation
 - Autonomous goal-directed NPC decisions
-- Directional relationships and domain-specific trust
-- Social knowledge with source/confidence/privacy
-- Canonical secrets that can remain unknown to the player
-- Deterministic disclosure pathway
-- v1 → v2 save migration
+- Directional relationships, person-specific knowledge and canonical secrets
+
+### Relationships & households
+- Dating → exclusivity → cohabitation → engagement → marriage → breakup/divorce
+- Compatibility and deterministic chemistry foundations
+- Autonomous NPC-to-NPC romance
+- Canonical households, schedules, labor and finance styles
+- Offline free-text conversation intent/tone handling
+- Family planning, pregnancy and birth
+- Children as full simulated people with development state
+- Parenting, step-family links, custody and co-parenting foundations
+- v1/v2 → v3 save migrations
 
 ## Run
 
@@ -42,18 +41,13 @@ npm run dev
 ## Verify
 
 ```bash
+npm run typecheck:simulation
 npm test
 npm run build
-```
-
-The simulation-only layer can also be type-checked independently with:
-
-```bash
-tsc -p tsconfig.simulation.json
 ```
 
 ## Architecture principle
 
 > The database is truth. AI is narration.
 
-Core simulation must remain deterministic and fully playable offline. AI can enrich player-facing language but may not invent canonical facts.
+Core simulation remains deterministic and fully playable offline. AI may enrich player-facing language later, but it may not invent canonical facts or decide outcomes.
