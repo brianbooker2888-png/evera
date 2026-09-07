@@ -42,9 +42,13 @@
 - [x] v4 → v5 migration and finance regression suite
 
 ## Phase 6 — Deep modules
-- [ ] Soccer athlete / coach module
-- [ ] American football athlete / coach module
-- [ ] Logistics / warehousing business module
+- [x] Soccer athlete / coach simulation module
+- [x] American football athlete / coach simulation module
+- [x] Shared deterministic match engine, season stats, injuries and stored match moments
+- [x] Logistics / warehousing business simulation module
+- [x] Separate business finance, facilities, employees, contracts and operating KPIs
+- [x] v5 → v6 migration and Phase 6 regression coverage
+- [ ] Stylized 2.5D match-moment renderer (presentation layer; simulation moments already stored)
 
 ## Phase 7 — AI narration
 - [ ] Provider abstraction
@@ -63,4 +67,5 @@
 - [ ] Long-horizon simulation / performance tests
 - [ ] Accessibility and responsive-device audit
 - [ ] Content and serious-topic settings audit
+- [ ] Stylized 2.5D sports presentation prototype
 - [ ] Netlify production deployment and installable PWA verification
