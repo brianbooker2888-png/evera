@@ -5,7 +5,7 @@
 
 EVERA is a local-first persistent life and world simulation. The player is one person inside a world that continues independently.
 
-## Current build — v0.4.0 Education, Careers & Labor Market
+## Current build — v0.5.0 Money, Housing & Wealth
 
 ### Foundation
 - React + TypeScript + Vite
@@ -21,28 +21,33 @@ EVERA is a local-first persistent life and world simulation. The player is one p
 - Autonomous goal-directed NPC decisions
 - Directional relationships, person-specific knowledge and canonical secrets
 
-### Relationships & households
+### Relationships, family & households
 - Dating → exclusivity → cohabitation → engagement → marriage → breakup/divorce
-- Compatibility and deterministic chemistry foundations
 - Autonomous NPC-to-NPC romance
-- Canonical households, schedules, labor and finance styles
+- Household schedules, labor and finance styles
 - Offline free-text conversation intent/tone handling
-- Family planning, pregnancy and birth
-- Children as full simulated people with development state
-- Parenting, step-family links, custody and co-parenting foundations
+- Pregnancy, children, parenting, step-family links, custody and co-parenting foundations
 
 ### Education & careers
-- Persistent schools, universities, trade schools and employers
-- Age-appropriate school enrollment for minors
-- Postsecondary applications/enrollment, tuition, scholarships, GPA, attendance, credits and student debt
-- Persistent credentials and transferable skill records
-- Persistent job openings with credential and skill requirements
-- Deterministic job applications, interviews, offers and rejection
-- Employment contracts with salary, schedules, work mode, benefits, performance and satisfaction
-- Payroll generated from the active employment contract
-- Labor-market demand, wage index and remote-work share
-- Work and school schedules integrated into household life
-- v1/v2/v3 → v4 save migrations
+- Persistent schools, universities, trade schools, employers and job openings
+- Tuition, scholarships, GPA, credits, student debt and credentials
+- Skills, job applications, interviews, offers and employment history
+- Employment contracts with salary, schedules, benefits, performance and satisfaction
+- Contract-driven payroll and labor-market simulation
+
+### Money, housing & wealth
+- Canonical checking, savings, brokerage and retirement accounts
+- Recurring household obligations with persistent past-due balances
+- Household-size groceries/utilities and childcare obligations
+- Budget rules, emergency-fund targets and automated saving/investing
+- Credit profiles, utilization, payment history, credit cards and debt
+- Interest, delinquency, default, secured-debt consequences and bankruptcy records
+- Insurance policies and lapse behavior
+- Vehicle assets, depreciation, auto financing and repossession foundations
+- Home purchases, mortgages, homeowners insurance, property values and housing-market exposure
+- Deterministic investment markets, positions and net-worth accounting
+- v1/v2/v3/v4 → v5 save migrations
+- Interactive Money dashboard for accounts, debt, bills, credit, investments, vehicles, property and financial history
 
 ## Run
 
