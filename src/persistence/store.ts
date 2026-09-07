@@ -2,6 +2,7 @@ import type { WorldState } from '../types/game';
 import type { SyncMetadata } from '../cloud/types';
 import { checksum } from '../cloud/checksum';
 import { migrateWorld } from './migrate';
+import { initializeLegacyLegal } from '../simulation/legacyLegalSeed';
 
 const DB='evera-local';
 const SAVE_STORE='saves';
@@ -24,6 +25,7 @@ function openDb():Promise<IDBDatabase>{
 async function getRaw<T>(store:string,key:string):Promise<T|undefined>{const db=await openDb();const value=await new Promise<T|undefined>((resolve,reject)=>{const req=db.transaction(store,'readonly').objectStore(store).get(key);req.onsuccess=()=>resolve(req.result as T|undefined);req.onerror=()=>reject(req.error);});db.close();return value;}
 async function putRaw(store:string,key:string,value:unknown):Promise<void>{const db=await openDb();await new Promise<void>((resolve,reject)=>{const tx=db.transaction(store,'readwrite');tx.objectStore(store).put(value,key);tx.oncomplete=()=>resolve();tx.onerror=()=>reject(tx.error);});db.close();}
 async function deleteRaw(store:string,key:string):Promise<void>{const db=await openDb();await new Promise<void>((resolve,reject)=>{const tx=db.transaction(store,'readwrite');tx.objectStore(store).delete(key);tx.oncomplete=()=>resolve();tx.onerror=()=>reject(tx.error);});db.close();}
+function hydrateWorld(raw:unknown):WorldState|null{if(!raw||typeof raw!=='object')return null;const version=(raw as{version?:number}).version;if(version===9)return initializeLegacyLegal(structuredClone(raw) as WorldState);const migrated=migrateWorld(raw);return migrated?initializeLegacyLegal(migrated):null;}
 
 export async function loadSyncMetadata():Promise<SyncMetadata>{
   const existing=await getRaw<SyncMetadata>(META_STORE,META_KEY);if(existing)return existing;
@@ -41,17 +43,17 @@ export async function saveWorld(world:WorldState,options:{trackChange?:boolean}=
 }
 
 export async function loadWorld():Promise<WorldState|null>{
-  const raw=await getRaw<unknown>(SAVE_STORE,KEY),migrated=migrateWorld(raw);
+  const raw=await getRaw<unknown>(SAVE_STORE,KEY),migrated=hydrateWorld(raw);
   if(migrated&&raw&&typeof raw==='object'&&(raw as{version?:number}).version!==migrated.version)await saveWorld(migrated,{trackChange:false});
   return migrated;
 }
 
 export async function replaceWorldFromSync(world:WorldState,metadata:SyncMetadata):Promise<void>{
-  await putRaw(SAVE_STORE,KEY,world);await saveSyncMetadata(metadata);
+  const hydrated=hydrateWorld(world)??world;await putRaw(SAVE_STORE,KEY,hydrated);await saveSyncMetadata(metadata);
 }
 
 export async function deleteWorld():Promise<void>{
   await deleteRaw(SAVE_STORE,KEY);
   const meta=await loadSyncMetadata();
-  await saveSyncMetadata({...meta,localRevision:meta.localRevision+1,status:'local_only',lastSyncedRevision:0,lastSyncedChecksum:null,lastSyncAt:null,lastError:null});
+  await saveSyncMetadata({...meta,localRevision:meta.localRevision+1,status:'local_only',lastSyncedRevision:0,lastSyncedChecksum:null,lastSyncAt:null,status:'local_only',lastError:null});
 }
