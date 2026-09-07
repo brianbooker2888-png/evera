@@ -19,12 +19,13 @@ describe('Phase 12 deeper living world',()=>{
     expect(currentCountry(world)?.name).toBe('United States');
   });
 
-  it('preserves an unknown hometown through a deterministic custom city fallback',()=>{
-    const world=createWorld({...draft,hometown:'Flagstaff, Arizona'},12002);
-    expect(currentCity(world)?.name).toBe('Phoenix');
-    const custom=createWorld({...draft,hometown:'Boise, Idaho'},12003);
-    expect(currentCity(custom)?.name).toBe('Boise');
-    expect(custom.character.location).toContain('Boise');
+  it('preserves distinct unknown hometowns through deterministic custom-city fallback',()=>{
+    const flagstaff=createWorld({...draft,hometown:'Flagstaff, Arizona'},12002);
+    expect(currentCity(flagstaff)?.name).toBe('Flagstaff');
+    expect(flagstaff.character.location).toContain('Flagstaff');
+    const boise=createWorld({...draft,hometown:'Boise, Idaho'},12003);
+    expect(currentCity(boise)?.name).toBe('Boise');
+    expect(boise.character.location).toContain('Boise');
   });
 
   it('keeps multi-year world evolution deterministic',()=>{
