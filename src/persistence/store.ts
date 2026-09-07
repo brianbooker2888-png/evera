@@ -3,6 +3,7 @@ import type { SyncMetadata } from '../cloud/types';
 import { checksum } from '../cloud/checksum';
 import { migrateWorld } from './migrate';
 import { initializeLegacyLegal } from '../simulation/legacyLegalSeed';
+import { initializeLifestyle } from '../simulation/lifestyleSeed';
 
 const DB='evera-local';
 const SAVE_STORE='saves';
@@ -25,7 +26,14 @@ function openDb():Promise<IDBDatabase>{
 async function getRaw<T>(store:string,key:string):Promise<T|undefined>{const db=await openDb();const value=await new Promise<T|undefined>((resolve,reject)=>{const req=db.transaction(store,'readonly').objectStore(store).get(key);req.onsuccess=()=>resolve(req.result as T|undefined);req.onerror=()=>reject(req.error);});db.close();return value;}
 async function putRaw(store:string,key:string,value:unknown):Promise<void>{const db=await openDb();await new Promise<void>((resolve,reject)=>{const tx=db.transaction(store,'readwrite');tx.objectStore(store).put(value,key);tx.oncomplete=()=>resolve();tx.onerror=()=>reject(tx.error);});db.close();}
 async function deleteRaw(store:string,key:string):Promise<void>{const db=await openDb();await new Promise<void>((resolve,reject)=>{const tx=db.transaction(store,'readwrite');tx.objectStore(store).delete(key);tx.oncomplete=()=>resolve();tx.onerror=()=>reject(tx.error);});db.close();}
-function hydrateWorld(raw:unknown):WorldState|null{if(!raw||typeof raw!=='object')return null;const version=(raw as{version?:number}).version;if(version===9)return initializeLegacyLegal(structuredClone(raw) as WorldState);const migrated=migrateWorld(raw);return migrated?initializeLegacyLegal(migrated):null;}
+function toV10(world:WorldState){const hydrated=initializeLifestyle(initializeLegacyLegal(world));hydrated.version=10;return hydrated;}
+function hydrateWorld(raw:unknown):WorldState|null{
+  if(!raw||typeof raw!=='object')return null;
+  const version=(raw as{version?:number}).version;
+  if(version===10)return toV10(structuredClone(raw) as WorldState);
+  if(version===9)return toV10(structuredClone(raw) as WorldState);
+  const migrated=migrateWorld(raw);return migrated?toV10(migrated):null;
+}
 
 export async function loadSyncMetadata():Promise<SyncMetadata>{
   const existing=await getRaw<SyncMetadata>(META_STORE,META_KEY);if(existing)return existing;
@@ -49,7 +57,7 @@ export async function loadWorld():Promise<WorldState|null>{
 }
 
 export async function replaceWorldFromSync(world:WorldState,metadata:SyncMetadata):Promise<void>{
-  const hydrated=hydrateWorld(world)??world;await putRaw(SAVE_STORE,KEY,hydrated);await saveSyncMetadata(metadata);
+  const hydrated=hydrateWorld(world)??toV10(world);await putRaw(SAVE_STORE,KEY,hydrated);await saveSyncMetadata(metadata);
 }
 
 export async function deleteWorld():Promise<void>{
