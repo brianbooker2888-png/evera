@@ -5,7 +5,7 @@
 
 EVERA is a local-first persistent life and world simulation. The player is one person inside a world that continues independently.
 
-## Current build — v0.6.0 Sports & Logistics Business
+## Current build — v0.7.0 Grounded Narration & Life Chapters
 
 ### Foundation
 - React + TypeScript + Vite
@@ -25,7 +25,7 @@ EVERA is a local-first persistent life and world simulation. The player is one p
 - Dating → exclusivity → cohabitation → engagement → marriage → breakup/divorce
 - Autonomous NPC-to-NPC romance
 - Household schedules, labor and finance styles
-- Offline free-text conversation intent/tone handling
+- Free-text conversation intent/tone handling that works offline
 - Pregnancy, children, parenting, step-family links, custody and co-parenting foundations
 
 ### Education & careers
@@ -51,7 +51,7 @@ EVERA is a local-first persistent life and world simulation. The player is one p
 - Coach tactics, development, leadership and reputation
 - Sports contracts and payroll integrated with the same checking/finance system
 - Persistent season statistics and team standings
-- Stored match moments for score/chance/turnover/big-play review and future visual rendering
+- Stored match moments for future visual rendering
 - Interactive sports career, fixtures, match-moment and standings UI inside WORLD
 
 ### Logistics & warehousing business
@@ -63,9 +63,24 @@ EVERA is a local-first persistent life and world simulation. The player is one p
 - Business reputation, valuation, debt pressure, opportunities and failure risk
 - Interactive hiring, staffing, pricing, facility and contract controls inside WORLD
 
+### Grounded narration
+- Narration-specific canonical context compiler
+- Explicit separation of canonical facts, beliefs and rumors
+- Speaker knowledge filtering so NPCs cannot narrate secrets they do not know
+- Personality-, age- and relationship-aware voice profiles
+- Deterministic offline narration provider with no network dependency
+- Free-text conversations apply simulation consequences first, then narrate the reply
+- Annual Life Chapters generated from recorded events, memories, careers, sports and business facts
+- Persistent autobiography inside TIMELINE
+- Narration mode setting for offline or enhanced-when-available behavior
+- Provider registry and vendor-neutral remote adapter for future online AI providers
+- Mandatory offline fallback if an optional provider is unavailable
+
+Remote providers are not authoritative and never receive the full save. A provider may only receive a sanitized scene packet compiled from facts the narration layer is allowed to express.
+
 ### Save compatibility
-- v1 → v2 → v3 → v4 → v5 → v6 migrations
-- Prior family, relationship, career, finance, memory and timeline state is preserved while later modules are added
+- v1 → v2 → v3 → v4 → v5 → v6 → v7 migrations
+- Prior family, relationship, career, finance, sports, business, memory and timeline state is preserved while later modules are added
 
 ## Run
 
@@ -86,4 +101,6 @@ npm run build
 
 > The database is truth. AI is narration.
 
-Core simulation remains deterministic and fully playable offline. AI may enrich player-facing language later, but it may not invent canonical facts or decide outcomes.
+> The simulation decides what happened. Narration decides how it is expressed.
+
+Core simulation remains deterministic and fully playable offline. AI may enrich player-facing language, but it may not invent canonical facts or decide outcomes.
