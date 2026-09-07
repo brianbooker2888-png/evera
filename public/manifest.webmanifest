@@ -1,0 +1,12 @@
+{
+  "name": "EVERA",
+  "short_name": "EVERA",
+  "description": "Live one life. Shape generations.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0b0d10",
+  "theme_color": "#0b0d10",
+  "icons": [
+    { "src": "/evera-mark.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}

@@ -1,0 +1,18 @@
+import { useState } from 'react';
+import type { CharacterDraft } from '../simulation/createWorld';
+import { Logo } from './Logo';
+
+const Slider = ({ label, value, onChange }: { label: string; value: number; onChange: (v: number) => void }) => <label className="slider-row"><span>{label}<b>{value}</b></span><input type="range" min="0" max="100" value={value} onChange={e => onChange(Number(e.target.value))} /></label>;
+
+export function CharacterCreator({ onCreate }: { onCreate: (draft: CharacterDraft) => void }) {
+  const [draft, setDraft] = useState<CharacterDraft>({ firstName: 'Alex', lastName: 'Morgan', age: 18, sex: 'male', hometown: 'Phoenix, Arizona', socioeconomicBackground: 'stable', ambition: 70, discipline: 65, empathy: 65, athleticism: 60 });
+  const set = <K extends keyof CharacterDraft>(key: K, value: CharacterDraft[K]) => setDraft(d => ({ ...d, [key]: value }));
+  const valid = draft.firstName.trim().length > 0 && draft.lastName.trim().length > 0 && draft.hometown.trim().length > 0;
+  return <main className="creator-page">
+    <header className="creator-hero"><Logo /><p>Live one life. Shape generations.</p><h1>Who will you become?</h1><p className="muted">Choose the circumstances. The world decides what comes next.</p></header>
+    <form className="creator-grid" onSubmit={e => { e.preventDefault(); if (valid) onCreate(draft); }}>
+      <section className="panel"><h2>Identity</h2><div className="fields two"><label>First name<input value={draft.firstName} onChange={e => set('firstName', e.target.value)} /></label><label>Last name<input value={draft.lastName} onChange={e => set('lastName', e.target.value)} /></label></div><div className="fields two"><label>Starting age<input type="number" min="5" max="90" value={draft.age} onChange={e => set('age', Math.max(5, Math.min(90, Number(e.target.value))))} /></label><label>Sex<select value={draft.sex} onChange={e => set('sex', e.target.value as CharacterDraft['sex'])}><option value="male">Male</option><option value="female">Female</option></select></label></div><label>Hometown<input value={draft.hometown} onChange={e => set('hometown', e.target.value)} /></label><label>Socioeconomic background<select value={draft.socioeconomicBackground} onChange={e => set('socioeconomicBackground', e.target.value as CharacterDraft['socioeconomicBackground'])}><option value="struggling">Struggling</option><option value="working">Working class</option><option value="stable">Stable</option><option value="affluent">Affluent</option><option value="wealthy">Wealthy</option></select></label></section>
+      <section className="panel"><h2>Starting traits</h2><p className="muted small">These are starting tendencies, not destiny. Experiences can change them.</p><Slider label="Ambition" value={draft.ambition} onChange={v => set('ambition', v)} /><Slider label="Discipline" value={draft.discipline} onChange={v => set('discipline', v)} /><Slider label="Empathy" value={draft.empathy} onChange={v => set('empathy', v)} /><Slider label="Athletic potential" value={draft.athleticism} onChange={v => set('athleticism', v)} /><button className="primary big" disabled={!valid}>Begin this life</button></section>
+    </form>
+  </main>;
+}

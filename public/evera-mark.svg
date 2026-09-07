@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="EVERA branching life mark">
+  <rect width="128" height="128" rx="28" fill="#0b0d10"/>
+  <g fill="none" stroke="#e7e5df" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M23 64h27c13 0 19-8 27-19l22-27"/>
+    <path d="M50 64h25c13 0 19 0 29 0"/>
+    <path d="M50 64h24c13 0 19 8 27 20l14 22"/>
+  </g>
+  <circle cx="23" cy="64" r="5" fill="#e7e5df"/>
+</svg>
