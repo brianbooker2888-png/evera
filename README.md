@@ -5,7 +5,7 @@
 
 EVERA is a local-first persistent life and world simulation. The player is one person inside a world that continues independently.
 
-## Current build — v0.5.0 Money, Housing & Wealth
+## Current build — v0.6.0 Sports & Logistics Business
 
 ### Foundation
 - React + TypeScript + Vite
@@ -37,17 +37,35 @@ EVERA is a local-first persistent life and world simulation. The player is one p
 
 ### Money, housing & wealth
 - Canonical checking, savings, brokerage and retirement accounts
-- Recurring household obligations with persistent past-due balances
-- Household-size groceries/utilities and childcare obligations
-- Budget rules, emergency-fund targets and automated saving/investing
-- Credit profiles, utilization, payment history, credit cards and debt
-- Interest, delinquency, default, secured-debt consequences and bankruptcy records
-- Insurance policies and lapse behavior
-- Vehicle assets, depreciation, auto financing and repossession foundations
-- Home purchases, mortgages, homeowners insurance, property values and housing-market exposure
-- Deterministic investment markets, positions and net-worth accounting
-- v1/v2/v3/v4 → v5 save migrations
-- Interactive Money dashboard for accounts, debt, bills, credit, investments, vehicles, property and financial history
+- Recurring obligations, childcare, budgets, savings/investment rules and past-due balances
+- Credit cards, loans, APR, utilization, delinquency, default and bankruptcy
+- Insurance, vehicles, auto financing, mortgages, homeownership and housing-market exposure
+- Deterministic investment markets, retirement accounts and net-worth accounting
+
+### Sports
+- Persistent fictional soccer and American-football leagues, teams, rosters and fixtures
+- Soccer academy → professional pathway
+- American football prep → college → professional pathway
+- Athlete and head-coach careers using one deterministic match engine
+- Training, fitness, fatigue, morale, injuries and recovery
+- Coach tactics, development, leadership and reputation
+- Sports contracts and payroll integrated with the same checking/finance system
+- Persistent season statistics and team standings
+- Stored match moments for score/chance/turnover/big-play review and future visual rendering
+- Interactive sports career, fixtures, match-moment and standings UI inside WORLD
+
+### Logistics & warehousing business
+- Separate personal and business finances
+- Warehouse facilities with rent, capacity, automation and utilization
+- Persistent employees with role, pay, productivity, reliability, morale and safety
+- Customer contracts with demand, pricing, complexity and service targets
+- Monthly productivity, inventory accuracy, service, safety, labor-cost, utilization, revenue and profit KPIs
+- Business reputation, valuation, debt pressure, opportunities and failure risk
+- Interactive hiring, staffing, pricing, facility and contract controls inside WORLD
+
+### Save compatibility
+- v1 → v2 → v3 → v4 → v5 → v6 migrations
+- Prior family, relationship, career, finance, memory and timeline state is preserved while later modules are added
 
 ## Run
 

@@ -1,5 +1,31 @@
 # EVERA Changelog
 
+## v0.6.0 — Sports & Logistics Business
+
+- Upgraded the world save schema to v6.
+- Added persistent fictional soccer and American-football leagues, teams, rosters and season fixtures.
+- Added age-aware soccer academy → professional and American-football prep → college → professional pathways.
+- Added athlete profiles with position, rating, potential, fitness, fatigue, morale, injury state and career status.
+- Added head-coach profiles with tactical, development, leadership, reputation and style state.
+- Added one deterministic match engine shared by athlete and coach careers.
+- Added soccer chances/goals and American-football drives, touchdowns, field goals, turnovers and big plays.
+- Added stored match moments for future stylized visual playback.
+- Added persistent team standings and player/coach season statistics.
+- Added training, recovery, fatigue accumulation, injury risk and injury recovery.
+- Added professional sports contracts and payroll integrated with the canonical checking account.
+- Added an interactive sports career UI with athlete/coach entry, training/tactics, fixtures, key moments, season stats and league standings inside WORLD.
+- Added the deep logistics/warehousing business module.
+- Added business ownership with separate business cash, debt, reputation and valuation.
+- Added warehouse facilities with square footage, pallet capacity, rent, condition, automation and utilization.
+- Added persistent business employees with roles, compensation, productivity, reliability, morale and safety.
+- Added logistics customer contracts with unit demand, price, service targets, complexity and duration.
+- Added monthly productivity, inventory accuracy, service level, safety, labor cost, facility utilization, revenue and operating-profit KPIs.
+- Added staffing, hiring, pricing, facility expansion and customer-contract opportunities.
+- Added business borrowing pressure and business-failure state when losses/debt become unsustainable.
+- Added v5 → v6 migration that preserves prior-system history and deterministically seeds Phase 6 world state.
+- Expanded deterministic regression coverage through sports, business and v6 migration.
+- Kept the stylized 2.5D sports renderer out of the v0.6 claim; it remains a presentation layer to be built on top of stored match moments.
+
 ## v0.5.0 — Money, Housing & Wealth
 
 - Upgraded the world save schema to v5.
