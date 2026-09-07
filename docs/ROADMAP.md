@@ -48,7 +48,7 @@
 - [x] Logistics / warehousing business simulation module
 - [x] Separate business finance, facilities, employees, contracts and operating KPIs
 - [x] v5 → v6 migration and Phase 6 regression coverage
-- [ ] Stylized 2.5D match-moment renderer (presentation layer; simulation moments already stored)
+- [ ] Stylized 2.5D match-moment renderer (presentation layer; scheduled for Phase 14)
 
 ## Phase 7 — Grounded narration
 - [x] Narration provider abstraction and registry
@@ -78,13 +78,105 @@
 - [ ] Provision a production enhanced-narration provider endpoint/secret
 - [ ] App-store signing, bundle-ID finalization and store submission assets
 
-## Final integration / launch hardening
-- [ ] Full save-migration matrix
-- [ ] Long-horizon simulation / performance tests
-- [ ] Accessibility and responsive-device audit
-- [ ] Content and serious-topic settings audit
+## Phase 9 — Health & healthcare
+- [x] Canonical health-profile and medical-history schema
+- [x] Hidden health-risk model layered around existing human-health state
+- [x] Acute illness, chronic condition, mental-health and injury foundations
+- [x] Suspected vs diagnosed conditions
+- [x] Preventive, primary, urgent, emergency, specialist and therapy encounter model
+- [x] Employer health coverage, deductible and coinsurance integration
+- [x] Medication cost/effectiveness/adherence state
+- [x] Medical bills and financial-stress consequences
+- [x] Player-directed care interface inside LIFE
+- [x] Health-aware grounded narration and Life Chapters
+- [x] v7 → v8 migration and deterministic health regression coverage
+- [ ] Mortality and end-of-life outcomes (intentionally Phase 10)
+
+## Phase 10 — Mortality, crime, law, estates & generational continuation
+- [ ] Age/health/accident-driven mortality model with hidden lifespan
+- [ ] Sudden death, illness-related death and long-term decline paths
+- [ ] NPC mortality and world continuation while distant/offscreen
+- [ ] Funeral, grief, survivor and household consequences
+- [ ] Wills, intestacy, life insurance, estates, trusts and inheritance
+- [ ] Death life review without a universal score
+- [ ] Continue as an eligible descendant or begin a new world
+- [ ] Permanent ancestor archive and dynasty continuity
+- [ ] Crime choices, victimization, investigation and evidence foundations
+- [ ] Arrest, legal representation, plea/trial and conviction state
+- [ ] Criminal-record effects on jobs, housing, finance and relationships
+- [ ] Civil lawsuits and settlement/trial foundations
+- [ ] Family-law and estate disputes
+- [ ] v8 → next schema migration and mortality/legal regression suite
+
+## Phase 11 — Lifestyle, daily life, possessions & travel
+- [ ] Broader home types, space pressure and household-quality effects
+- [ ] Furnishing/upgrades/home maintenance without mandatory micromanagement
+- [ ] Vehicle practicality, maintenance, breakdowns and customization
+- [ ] Contextual automatic wardrobe/outfit system and grooming/style identity
+- [ ] Household food strategy, cooking and family meals
+- [ ] Restaurants, outings, hosting and social spending
+- [ ] Travel planning, destinations, hotels, activities and companion dynamics
+- [ ] Hobbies with skill/social/career crossover
+- [ ] Pets, care, attachment and pet aging/death
+- [ ] Household calendar conflicts across work/school/daycare/sports/appointments
+- [ ] Buy-back-time services such as childcare, cleaning and household help
+- [ ] Phones/computers/technology ownership and replacement
+- [ ] Lifestyle milestones in Timeline
+
+## Phase 12 — Deeper living world, locations & institutions
+- [ ] Country-level tax, healthcare, education, labor, benefit and retirement profiles
+- [ ] City-level wages, housing, industries, schools, transit, crime and culture
+- [ ] Neighborhood-level housing/safety/schools/commute/social context
+- [ ] Moving between cities/countries and immigration/residency foundations
+- [ ] Persistent company growth, contraction, relocation, failure, merger and acquisition
+- [ ] Industry rise/fall and technology disruption
+- [ ] Richer local/world news generated from actual simulation state
+- [ ] Politics/policy changes as world inputs without making politics the core game
+- [ ] Geographic disasters, infrastructure disruption and long-tail recovery
+- [ ] Schools, universities, hospitals and community institutions that evolve over time
+- [ ] Entertainment, celebrity, media and social-trend ecosystem
+- [ ] Labor shortages, strikes/unionization and supply-chain disruption
+- [ ] World-history archive and starting-year conditions
+- [ ] Relevant-region deep simulation with distant statistical approximation
+
+## Phase 13 — Game modes, onboarding, controls & accessibility
+- [ ] Life Mode
+- [ ] Hard Life
+- [ ] Sandbox
+- [ ] Legacy Mode
+- [ ] Scenario framework
+- [ ] Character-creation expansion for full starting-family/background control
+- [ ] New-player onboarding without exposing optimal choices
+- [ ] Serious-content settings and optional premature-death controls
+- [ ] Scalable type, high contrast, reduced motion and color-safe information design
+- [ ] Screen-reader landmarks, labels and keyboard navigation
+- [ ] Large-touch-target and mobile usability audit
+- [ ] Save/export/import/recovery UX
+
+## Phase 14 — Visual experiences, sports presentation & memory cards
+- [ ] Stylized-realism visual system for important life scenes
+- [ ] 2.5D soccer match-moment renderer using stored deterministic match events
+- [ ] 2.5D American-football match-moment renderer using the same shared match state
+- [ ] Full / extended / key-moments / result sports viewing modes
+- [ ] Contextual athlete/coach match decisions in presentation layer
+- [ ] Visual aging and family resemblance presentation foundation
+- [ ] Automatic contextual outfit presentation
+- [ ] Visual Memory Cards for major milestones
+- [ ] Family albums and generational visual history
+- [ ] Major-scene presentation for birth, graduation, proposal, wedding, home, promotion, hospital, divorce, funeral and retirement
+
+## Phase 15 — Full integration, performance, deployment & release hardening
+- [ ] Full v1→current save-migration matrix fixtures
+- [ ] Multi-year / multi-decade long-horizon simulation performance tests
+- [ ] Memory/storage-growth and IndexedDB durability tests
 - [ ] Async enhanced-narration UI handoff and failure-state audit
-- [ ] Stylized 2.5D sports presentation prototype
+- [ ] Responsive-device and accessibility release audit
+- [ ] Content/serious-topic review
+- [ ] Supabase staging and sync-conflict staging validation
+- [ ] Production narration-provider staging validation
 - [ ] Netlify production deployment and installable PWA verification
-- [ ] External-service staging validation for Supabase and optional narration
-- [ ] Release candidate / launch checklist
+- [ ] Native signing, store assets and iOS/Android release builds
+- [ ] Crash/error reporting and recovery strategy
+- [ ] Release-candidate checklist and launch gate
+
+The roadmap remains modular by design. Each phase must keep offline deterministic play intact, preserve older saves through explicit migration, and pass the cumulative release gate before merge.
