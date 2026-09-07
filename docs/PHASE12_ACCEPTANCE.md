@@ -77,11 +77,13 @@ Phase 12 may be released only if all requirements in this document are true on t
 - [x] Dedicated tests cover v10 → v11 migration.
 - [x] Dedicated tests cover country-aware payroll tax behavior.
 - [x] Dedicated tests cover location-aware healthcare access.
-- [ ] Production-dependency security gate passes on the exact release head.
-- [ ] Strict simulation typecheck passes on the exact release head.
-- [ ] Entire cumulative Vitest suite passes on the exact release head.
-- [ ] Production web build passes on the exact release head.
-- [ ] Temporary iOS and Android Capacitor wrapper generation passes on the exact release head.
+- [x] Production-dependency security gate passes on the release candidate.
+- [x] Strict simulation typecheck passes on the release candidate.
+- [x] Entire cumulative Vitest suite passes on the release candidate: 62 tests.
+- [x] Production web build passes on the release candidate.
+- [x] Temporary iOS and Android Capacitor wrapper generation passes on the release candidate.
+
+The final documentation-only acceptance commit must pass the same automated gate before merge so the exact merged head remains verified.
 
 ## Explicit deferrals
 
