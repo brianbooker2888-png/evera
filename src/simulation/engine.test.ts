@@ -4,7 +4,7 @@ import { setPlayerGoalFocus, stepWorld } from './engine';
 import { attemptRelationshipStep, haveConversation, setFamilyPlan } from './relationshipEngine';
 import { activeHouseholdForPerson, reassignHouseholdLabor } from './householdEngine';
 import { applyParentingAction, childrenOf } from './familyEngine';
-import { activeEmployment, acceptJobOffer, applyForJob } from './careerEngine';
+import { activeEmployment, acceptJobOffer, applyForJob, leaveJob } from './careerEngine';
 import { activeEnrollment, startEducation } from './educationEngine';
 import { buyHome, buyVehicle, chargeCreditCard, fileBankruptcy, investAmount, netWorth, openCreditCard, payLiability } from './financeEngine';
 import { startAthletePath, startCoachPath, trainSport } from './sportsEngine';
@@ -104,6 +104,14 @@ describe('Phase 4 education and careers',()=>{
     const app=world.jobApplications.find(a=>a.openingId==='job-logistics-apprentice')!;
     expect(app.status).toBe('offer');world=acceptJobOffer(world,app.id);
     expect(activeEmployment(world)?.title).toBe('Logistics Systems Apprentice');
+  });
+  it('does not silently recreate employment after the player leaves a job',()=>{
+    let world=createWorld(draft,556);const prior=activeEmployment(world)!;
+    world=leaveJob(world);expect(activeEmployment(world)).toBeUndefined();
+    world=stepWorld(world,35);
+    expect(activeEmployment(world)).toBeUndefined();
+    expect(world.employments.find(e=>e.id===prior.id)?.status).toBe('ended');
+    expect(world.character.career).toBe('Unemployed');
   });
   it('supports postsecondary progress and minor school enrollment',()=>{
     let world=createWorld(draft,666);world=startEducation(world,'edu-trade','Logistics');const enrollment=activeEnrollment(world)!;
