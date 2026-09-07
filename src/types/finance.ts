@@ -2,7 +2,7 @@ export type FinancialAccountType='checking'|'savings'|'investment'|'retirement';
 export interface FinancialAccount{ id:string; ownerIds:string[]; institution:string; name:string; type:FinancialAccountType; balance:number; apy:number; status:'open'|'closed'; openedDate:string; }
 
 export type ObligationFrequency='weekly'|'monthly'|'annual';
-export interface RecurringObligation{ id:string; ownerId:string|null; householdId:string|null; name:string; category:'Housing'|'Utilities'|'Groceries'|'Childcare'|'Transportation'|'Insurance'|'Debt'|'Subscription'|'Other'; amount:number; frequency:ObligationFrequency; dueDay:number; autopay:boolean; essential:boolean; active:boolean; nextDueDate:string; }
+export interface RecurringObligation{ id:string; ownerId:string|null; householdId:string|null; name:string; category:'Housing'|'Utilities'|'Groceries'|'Childcare'|'Transportation'|'Insurance'|'Debt'|'Subscription'|'Other'; amount:number; frequency:ObligationFrequency; dueDay:number; autopay:boolean; essential:boolean; active:boolean; nextDueDate:string; pastDueAmount:number; missedPayments:number; }
 export interface BudgetRule{ id:string; householdId:string; category:string; monthlyLimit:number; }
 export interface HouseholdFinancePlan{ householdId:string; emergencyFundTargetMonths:number; savingsRate:number; investmentRate:number; debtStrategy:'minimums'|'highest_apr'|'lowest_balance'; }
 
