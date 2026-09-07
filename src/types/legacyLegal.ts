@@ -12,6 +12,7 @@ export type OffenseKind='theft'|'fraud'|'assault'|'impaired_driving'|'property_o
 export interface CrimeIncident{ id:string; actorId:string; date:string; offense:OffenseKind; severity:number; discovered:boolean; evidenceStrength:number; victimId:string|null; status:'undiscovered'|'investigating'|'charged'|'closed'; }
 export interface CriminalCase{ id:string; defendantId:string; incidentId:string; filedDate:string; status:'charged'|'plea'|'trial'|'dismissed'|'convicted'|'acquitted'|'closed'; representation:'public_defender'|'private_attorney'|'self'; legalCost:number; outcomeDate:string|null; sentenceSummary:string|null; }
 export interface CriminalRecord{ id:string; personId:string; caseId:string; offense:OffenseKind; convictionDate:string; severity:number; active:boolean; }
+export interface IncarcerationRecord{ id:string; personId:string; caseId:string; startDate:string; endDate:string; status:'incarcerated'|'released'; }
 export interface CivilCase{ id:string; plaintiffId:string; defendantId:string; filedDate:string; category:'injury'|'contract'|'property'|'employment'|'estate'|'family'; amountClaimed:number; status:'filed'|'negotiating'|'settled'|'trial'|'judgment'|'dismissed'; outcomeDate:string|null; amountAwarded:number; legalCost:number; }
 
 export interface LegacyLegalWorldState{
@@ -24,5 +25,6 @@ export interface LegacyLegalWorldState{
   crimeIncidents:CrimeIncident[];
   criminalCases:CriminalCase[];
   criminalRecords:CriminalRecord[];
+  incarcerationRecords:IncarcerationRecord[];
   civilCases:CivilCase[];
 }
