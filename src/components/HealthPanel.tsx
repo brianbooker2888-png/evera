@@ -4,6 +4,7 @@ import type { EncounterKind, MedicalCondition } from '../types/health';
 import { getPreventiveCare, seekMedicalCare } from '../simulation/healthEngine';
 import { isDeceased } from '../simulation/legacyLegalSeed';
 import { LegacyLegalPanel } from './LegacyLegalPanel';
+import { LifestylePanel } from './LifestylePanel';
 
 const money=new Intl.NumberFormat('en-US',{style:'currency',currency:'USD',maximumFractionDigits:0});
 const dateFmt=new Intl.DateTimeFormat('en-US',{month:'short',day:'numeric',year:'numeric',timeZone:'UTC'});
@@ -21,5 +22,5 @@ export function HealthPanel({world,onChange}:{world:WorldState;onChange:(world:W
     {meds.length>0&&<div className="health-subsection"><h3><Pill size={18}/>Active medications</h3>{meds.map(m=><div className="medical-row" key={m.id}><span><b>{m.name}</b><small>{money.format(m.monthlyCost)}/mo · started {fmtDate(m.startDate)}</small></span><small>{m.adherence>=80?'Taking consistently':m.adherence>=55?'Some doses are being missed':'Adherence has become inconsistent'}</small></div>)}</div>}
     {bills.length>0&&<div className="health-subsection"><h3><ReceiptText size={18}/>Medical bills</h3>{bills.map(b=><div className="medical-row" key={b.id}><span><b>{money.format(b.balance)} remaining</b><small>Opened {fmtDate(b.openedDate)}</small></span><small>{b.status==='past_due'?'Past due':'Current'}</small></div>)}</div>}
     {history.length>0&&<div className="health-subsection"><h3><Stethoscope size={18}/>Recent care</h3>{history.map(e=><div className="medical-row" key={e.id}><span><b>{e.kind.replaceAll('_',' ')}</b><small>{fmtDate(e.date)} · {e.provider}</small></span><small>{money.format(e.patientResponsibility)} patient responsibility</small></div>)}</div>}
-  </div></section></>;
+  </div></section><LifestylePanel world={world} onChange={onChange}/></>;
 }
