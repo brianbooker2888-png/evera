@@ -7,6 +7,7 @@ import type { HealthWorldState } from '../types/health';
 import type { LegacyLegalWorldState } from '../types/legacyLegal';
 import type { LifestyleWorldState } from '../types/lifestyle';
 import type { LivingWorldState } from '../types/livingWorld';
+import type { GameplayWorldState } from '../types/gameplay';
 import { SeededRng } from '../simulation/rng';
 import { createHumanState, createNpcTraits } from '../simulation/humanFactory';
 import { initializeProgression } from '../simulation/progressionSeed';
@@ -17,11 +18,13 @@ import { initializeHealth } from '../simulation/healthSeed';
 import { initializeLegacyLegal } from '../simulation/legacyLegalSeed';
 import { emptyLifestyleState, initializeLifestyle } from '../simulation/lifestyleSeed';
 import { emptyLivingWorldState, initializeLivingWorld } from '../simulation/livingWorldSeed';
+import { emptyGameplayState, initializeGameConfiguration } from '../simulation/gameConfig';
 import { initializeNarration } from '../narration/narrationEngine';
 
 type Phase4Keys='educationInstitutions'|'educationEnrollments'|'credentials'|'skills'|'employers'|'employments'|'jobOpenings'|'jobApplications'|'laborMarket';
 type Phase6Keys=keyof SportsWorldState|keyof BusinessWorldState;
-type LegacyWorldV10=Omit<WorldState,'version'|keyof LivingWorldState>&{version:10};
+type LegacyWorldV11=Omit<WorldState,'version'|keyof GameplayWorldState>&{version:11};
+type LegacyWorldV10=Omit<LegacyWorldV11,'version'|keyof LivingWorldState>&{version:10};
 type LegacyWorldV9=Omit<LegacyWorldV10,'version'|keyof LifestyleWorldState>&{version:9};
 type LegacyWorldV8=Omit<LegacyWorldV9,'version'|keyof LegacyLegalWorldState>&{version:8};
 type LegacyWorldV7=Omit<LegacyWorldV8,'version'|keyof HealthWorldState>&{version:7};
@@ -64,19 +67,22 @@ function v8ToV9(legacy:LegacyWorldV8):LegacyWorldV9{const world={...structuredCl
 function normalizeV9(value:unknown):LegacyWorldV9|null{if(!isVersion(value,9))return null;const world=structuredClone(value) as LegacyWorldV9,compat=world as unknown as WorldState;initializeProgression(compat);initializeFinance(compat);initializeSports(compat);initializeBusinessWorld(compat);initializeHealth(compat);initializeNarration(compat);initializeLegacyLegal(compat);return world;}
 function v9ToV10(legacy:LegacyWorldV9):LegacyWorldV10{const world={...structuredClone(legacy),version:10,...emptyLifestyleState()} as LegacyWorldV10,compat=world as unknown as WorldState;initializeProgression(compat);initializeFinance(compat);initializeSports(compat);initializeBusinessWorld(compat);initializeHealth(compat);initializeNarration(compat);initializeLegacyLegal(compat);initializeLifestyle(compat);return world;}
 function normalizeV10(value:unknown):LegacyWorldV10|null{if(!isVersion(value,10))return null;const world=structuredClone(value) as LegacyWorldV10,compat=world as unknown as WorldState;initializeProgression(compat);initializeFinance(compat);initializeSports(compat);initializeBusinessWorld(compat);initializeHealth(compat);initializeNarration(compat);initializeLegacyLegal(compat);initializeLifestyle(compat);return world;}
-function v10ToV11(legacy:LegacyWorldV10):WorldState{const world={...structuredClone(legacy),version:11,...emptyLivingWorldState()} as WorldState;initializeProgression(world);initializeFinance(world);initializeSports(world);initializeBusinessWorld(world);initializeHealth(world);initializeNarration(world);initializeLegacyLegal(world);initializeLifestyle(world);return initializeLivingWorld(world);}
-function normalizeV11(value:unknown):WorldState|null{if(!isVersion(value,11))return null;const world=structuredClone(value) as WorldState;initializeProgression(world);initializeFinance(world);initializeSports(world);initializeBusinessWorld(world);initializeHealth(world);initializeNarration(world);initializeLegacyLegal(world);initializeLifestyle(world);return initializeLivingWorld(world);}
+function v10ToV11(legacy:LegacyWorldV10):LegacyWorldV11{const world={...structuredClone(legacy),version:11,...emptyLivingWorldState()} as LegacyWorldV11,compat=world as unknown as WorldState;initializeProgression(compat);initializeFinance(compat);initializeSports(compat);initializeBusinessWorld(compat);initializeHealth(compat);initializeNarration(compat);initializeLegacyLegal(compat);initializeLifestyle(compat);initializeLivingWorld(compat);return world;}
+function normalizeV11(value:unknown):LegacyWorldV11|null{if(!isVersion(value,11))return null;const world=structuredClone(value) as LegacyWorldV11,compat=world as unknown as WorldState;initializeProgression(compat);initializeFinance(compat);initializeSports(compat);initializeBusinessWorld(compat);initializeHealth(compat);initializeNarration(compat);initializeLegacyLegal(compat);initializeLifestyle(compat);initializeLivingWorld(compat);return world;}
+function v11ToV12(legacy:LegacyWorldV11):WorldState{const world={...structuredClone(legacy),version:12,...emptyGameplayState()} as WorldState;initializeProgression(world);initializeFinance(world);initializeSports(world);initializeBusinessWorld(world);initializeHealth(world);initializeNarration(world);initializeLegacyLegal(world);initializeLifestyle(world);initializeLivingWorld(world);return initializeGameConfiguration(world);}
+function normalizeV12(value:unknown):WorldState|null{if(!isVersion(value,12))return null;const world=structuredClone(value) as WorldState;initializeProgression(world);initializeFinance(world);initializeSports(world);initializeBusinessWorld(world);initializeHealth(world);initializeNarration(world);initializeLegacyLegal(world);initializeLifestyle(world);initializeLivingWorld(world);return initializeGameConfiguration(world);}
 export function migrateWorld(value:unknown):WorldState|null{
-  if(isVersion(value,11))return normalizeV11(value);
-  if(isVersion(value,10)){const v10=normalizeV10(value);return v10?v10ToV11(v10):null;}
-  if(isVersion(value,9)){const v9=normalizeV9(value);return v9?v10ToV11(v9ToV10(v9)):null;}
-  if(isVersion(value,8)){const v8=normalizeV8(value);return v8?v10ToV11(v9ToV10(v8ToV9(v8))):null;}
-  if(isVersion(value,7)){const v7=normalizeV7(value);return v7?v10ToV11(v9ToV10(v8ToV9(v7ToV8(v7)))):null;}
-  if(isVersion(value,6)){const v6=normalizeV6(value);return v6?v10ToV11(v9ToV10(v8ToV9(v7ToV8(v6ToV7(v6))))):null;}
-  if(isVersion(value,5))return v10ToV11(v9ToV10(v8ToV9(v7ToV8(v6ToV7(v5ToV6(value as LegacyWorldV5))))));
-  if(isVersion(value,4))return v10ToV11(v9ToV10(v8ToV9(v7ToV8(v6ToV7(v5ToV6(v4ToV5(value as LegacyWorldV4)))))));
-  if(isVersion(value,3)){const v3=normalizeV3(value);return v3?v10ToV11(v9ToV10(v8ToV9(v7ToV8(v6ToV7(v5ToV6(v3ToV5(v3))))))):null;}
-  if(isVersion(value,2))return v10ToV11(v9ToV10(v8ToV9(v7ToV8(v6ToV7(v5ToV6(v3ToV5(v2ToV3(value as LegacyWorldV2))))))));
-  if(isVersion(value,1))return v10ToV11(v9ToV10(v8ToV9(v7ToV8(v6ToV7(v5ToV6(v3ToV5(v2ToV3(v1ToV2(value as LegacyWorldV1)))))))));
+  if(isVersion(value,12))return normalizeV12(value);
+  if(isVersion(value,11)){const v11=normalizeV11(value);return v11?v11ToV12(v11):null;}
+  if(isVersion(value,10)){const v10=normalizeV10(value);return v10?v11ToV12(v10ToV11(v10)):null;}
+  if(isVersion(value,9)){const v9=normalizeV9(value);return v9?v11ToV12(v10ToV11(v9ToV10(v9))):null;}
+  if(isVersion(value,8)){const v8=normalizeV8(value);return v8?v11ToV12(v10ToV11(v9ToV10(v8ToV9(v8)))):null;}
+  if(isVersion(value,7)){const v7=normalizeV7(value);return v7?v11ToV12(v10ToV11(v9ToV10(v8ToV9(v7ToV8(v7))))):null;}
+  if(isVersion(value,6)){const v6=normalizeV6(value);return v6?v11ToV12(v10ToV11(v9ToV10(v8ToV9(v7ToV8(v6ToV7(v6)))))):null;}
+  if(isVersion(value,5))return v11ToV12(v10ToV11(v9ToV10(v8ToV9(v7ToV8(v6ToV7(v5ToV6(value as LegacyWorldV5)))))));
+  if(isVersion(value,4))return v11ToV12(v10ToV11(v9ToV10(v8ToV9(v7ToV8(v6ToV7(v5ToV6(v4ToV5(value as LegacyWorldV4))))))));
+  if(isVersion(value,3)){const v3=normalizeV3(value);return v3?v11ToV12(v10ToV11(v9ToV10(v8ToV9(v7ToV8(v6ToV7(v5ToV6(v3ToV5(v3)))))))):null;}
+  if(isVersion(value,2))return v11ToV12(v10ToV11(v9ToV10(v8ToV9(v7ToV8(v6ToV7(v5ToV6(v3ToV5(v2ToV3(value as LegacyWorldV2)))))))));
+  if(isVersion(value,1))return v11ToV12(v10ToV11(v9ToV10(v8ToV9(v7ToV8(v6ToV7(v5ToV6(v3ToV5(v2ToV3(v1ToV2(value as LegacyWorldV1))))))))));
   return null;
 }
