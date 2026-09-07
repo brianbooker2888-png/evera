@@ -19,10 +19,10 @@ function familyWorld(){
 }
 
 describe('Phase 10 mortality, law and legacy',()=>{
-  it('creates fresh v9 legal state and migrates a true v8 shape into v9',()=>{
-    const current=createWorld(draft,10002);expect(current.version).toBe(9);expect(current.deathRecords).toEqual([]);expect(current.civilCases).toEqual([]);
-    const {deathRecords,funeralRecords,estatePlans,estateCases,ancestorArchives,controlTransitions,crimeIncidents,criminalCases,criminalRecords,incarcerationRecords,civilCases,...v8}=current;void deathRecords;void funeralRecords;void estatePlans;void estateCases;void ancestorArchives;void controlTransitions;void crimeIncidents;void criminalCases;void criminalRecords;void incarcerationRecords;void civilCases;
-    const migrated=migrateWorld({...v8,version:8});expect(migrated?.version).toBe(9);expect(migrated?.healthProfiles.length).toBe(current.healthProfiles.length);expect(migrated?.deathRecords).toEqual([]);
+  it('creates fresh v10 legal state and migrates a true v8 shape into v10',()=>{
+    const current=createWorld(draft,10002);expect(current.version).toBe(10);expect(current.deathRecords).toEqual([]);expect(current.civilCases).toEqual([]);
+    const {deathRecords,funeralRecords,estatePlans,estateCases,ancestorArchives,controlTransitions,crimeIncidents,criminalCases,criminalRecords,incarcerationRecords,civilCases,lifestyleProfiles,homeLifestyles,homeUpgrades,vehicleUseProfiles,wardrobeItems,hobbies,pets,travelPlans,lifestyleOutings,householdServices,deviceAssets,calendarCommitments,lifestyleMilestones,...v8}=current;void deathRecords;void funeralRecords;void estatePlans;void estateCases;void ancestorArchives;void controlTransitions;void crimeIncidents;void criminalCases;void criminalRecords;void incarcerationRecords;void civilCases;void lifestyleProfiles;void homeLifestyles;void homeUpgrades;void vehicleUseProfiles;void wardrobeItems;void hobbies;void pets;void travelPlans;void lifestyleOutings;void householdServices;void deviceAssets;void calendarCommitments;void lifestyleMilestones;
+    const migrated=migrateWorld({...v8,version:8});expect(migrated?.version).toBe(10);expect(migrated?.healthProfiles.length).toBe(current.healthProfiles.length);expect(migrated?.deathRecords).toEqual([]);expect(migrated?.lifestyleProfiles.length).toBeGreaterThan(0);
   });
 
   it('settles insurance and estate state before cleanup and freezes a deceased controlled life',()=>{
