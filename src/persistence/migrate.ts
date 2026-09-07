@@ -3,17 +3,20 @@ import type { FinanceWorldState } from '../types/finance';
 import type { SportsWorldState } from '../types/sports';
 import type { BusinessWorldState } from '../types/business';
 import type { NarrationWorldState } from '../types/narration';
+import type { HealthWorldState } from '../types/health';
 import { SeededRng } from '../simulation/rng';
 import { createHumanState, createNpcTraits } from '../simulation/humanFactory';
 import { initializeProgression } from '../simulation/progressionSeed';
 import { initializeFinance } from '../simulation/financeSeed';
 import { initializeSports } from '../simulation/sportsSeed';
 import { initializeBusinessWorld } from '../simulation/businessEngine';
+import { initializeHealth } from '../simulation/healthSeed';
 import { initializeNarration } from '../narration/narrationEngine';
 
 type Phase4Keys='educationInstitutions'|'educationEnrollments'|'credentials'|'skills'|'employers'|'employments'|'jobOpenings'|'jobApplications'|'laborMarket';
 type Phase6Keys=keyof SportsWorldState|keyof BusinessWorldState;
-type LegacyWorldV6=Omit<WorldState,'version'|keyof NarrationWorldState>&{version:6};
+type LegacyWorldV7=Omit<WorldState,'version'|keyof HealthWorldState>&{version:7};
+type LegacyWorldV6=Omit<LegacyWorldV7,'version'|keyof NarrationWorldState>&{version:6};
 type LegacyWorldV5=Omit<LegacyWorldV6,'version'|Phase6Keys>&{version:5};
 type LegacyWorldV4=Omit<LegacyWorldV5,'version'|keyof FinanceWorldState>&{version:4};
 type LegacyWorldV3=Omit<LegacyWorldV4,'version'|Phase4Keys>&{version:3};
@@ -39,8 +42,11 @@ function hydrateV5(world:LegacyWorldV5):LegacyWorldV5{initializeProgression(worl
 function v3ToV5(legacy:LegacyWorldV3):LegacyWorldV5{const world={...structuredClone(legacy),version:5,educationInstitutions:[],educationEnrollments:[],credentials:[],skills:[],employers:[],employments:[],jobOpenings:[],jobApplications:[],laborMarket:{wageIndex:1,demandIndex:64,remoteShare:28},...phase5Finance(legacy.date)} as LegacyWorldV5;return hydrateV5(world);}
 function v4ToV5(legacy:LegacyWorldV4):LegacyWorldV5{const world={...structuredClone(legacy),version:5,...phase5Finance(legacy.date)} as LegacyWorldV5;return hydrateV5(world);}
 function phase6State():SportsWorldState&BusinessWorldState{return{sportsLeagues:[],sportsTeams:[],sportsParticipants:[],athleteProfiles:[],coachProfiles:[],sportsContracts:[],sportsFixtures:[],sportsSeasonStats:[],businesses:[],warehouseFacilities:[],businessEmployees:[],logisticsContracts:[],logisticsKpis:[],businessOpportunities:[]};}
+function phase8Health():HealthWorldState{return{healthProfiles:[],medicalConditions:[],medicalEncounters:[],medicalBills:[],medications:[]};}
 function v5ToV6(legacy:LegacyWorldV5):LegacyWorldV6{const world={...structuredClone(legacy),version:6,...phase6State()} as LegacyWorldV6;initializeProgression(world as unknown as WorldState);initializeFinance(world as unknown as WorldState);initializeSports(world as unknown as WorldState);initializeBusinessWorld(world as unknown as WorldState);return world;}
 function normalizeV6(value:unknown):LegacyWorldV6|null{if(!isVersion(value,6))return null;const world=structuredClone(value) as LegacyWorldV6;initializeProgression(world as unknown as WorldState);initializeFinance(world as unknown as WorldState);initializeSports(world as unknown as WorldState);initializeBusinessWorld(world as unknown as WorldState);return world;}
-function v6ToV7(legacy:LegacyWorldV6):WorldState{const world={...structuredClone(legacy),version:7,narrationSettings:{mode:'offline',preferredProvider:'evera-offline',allowRemoteNarration:false},annualLifeChapters:[]} as WorldState;return initializeNarration(initializeBusinessWorld(initializeSports(initializeFinance(initializeProgression(world)))));}
-function normalizeV7(value:unknown):WorldState|null{if(!isVersion(value,7))return null;const world=structuredClone(value) as WorldState;initializeProgression(world);initializeFinance(world);initializeSports(world);initializeBusinessWorld(world);initializeNarration(world);return world;}
-export function migrateWorld(value:unknown):WorldState|null{if(isVersion(value,7))return normalizeV7(value);if(isVersion(value,6)){const v6=normalizeV6(value);return v6?v6ToV7(v6):null;}if(isVersion(value,5))return v6ToV7(v5ToV6(value as LegacyWorldV5));if(isVersion(value,4))return v6ToV7(v5ToV6(v4ToV5(value as LegacyWorldV4)));if(isVersion(value,3)){const v3=normalizeV3(value);return v3?v6ToV7(v5ToV6(v3ToV5(v3))):null;}if(isVersion(value,2))return v6ToV7(v5ToV6(v3ToV5(v2ToV3(value as LegacyWorldV2))));if(isVersion(value,1))return v6ToV7(v5ToV6(v3ToV5(v2ToV3(v1ToV2(value as LegacyWorldV1)))));return null;}
+function v6ToV7(legacy:LegacyWorldV6):LegacyWorldV7{const world={...structuredClone(legacy),version:7,narrationSettings:{mode:'offline',preferredProvider:'evera-offline',allowRemoteNarration:false},annualLifeChapters:[]} as LegacyWorldV7;initializeProgression(world as unknown as WorldState);initializeFinance(world as unknown as WorldState);initializeSports(world as unknown as WorldState);initializeBusinessWorld(world as unknown as WorldState);initializeNarration(world as unknown as WorldState);return world;}
+function normalizeV7(value:unknown):LegacyWorldV7|null{if(!isVersion(value,7))return null;const world=structuredClone(value) as LegacyWorldV7;initializeProgression(world as unknown as WorldState);initializeFinance(world as unknown as WorldState);initializeSports(world as unknown as WorldState);initializeBusinessWorld(world as unknown as WorldState);initializeNarration(world as unknown as WorldState);return world;}
+function v7ToV8(legacy:LegacyWorldV7):WorldState{const world={...structuredClone(legacy),version:8,...phase8Health()} as WorldState;return initializeNarration(initializeHealth(initializeBusinessWorld(initializeSports(initializeFinance(initializeProgression(world))))));}
+function normalizeV8(value:unknown):WorldState|null{if(!isVersion(value,8))return null;const world=structuredClone(value) as WorldState;initializeProgression(world);initializeFinance(world);initializeSports(world);initializeBusinessWorld(world);initializeHealth(world);initializeNarration(world);return world;}
+export function migrateWorld(value:unknown):WorldState|null{if(isVersion(value,8))return normalizeV8(value);if(isVersion(value,7)){const v7=normalizeV7(value);return v7?v7ToV8(v7):null;}if(isVersion(value,6)){const v6=normalizeV6(value);return v6?v7ToV8(v6ToV7(v6)):null;}if(isVersion(value,5))return v7ToV8(v6ToV7(v5ToV6(value as LegacyWorldV5)));if(isVersion(value,4))return v7ToV8(v6ToV7(v5ToV6(v4ToV5(value as LegacyWorldV4))));if(isVersion(value,3)){const v3=normalizeV3(value);return v3?v7ToV8(v6ToV7(v5ToV6(v3ToV5(v3)))):null;}if(isVersion(value,2))return v7ToV8(v6ToV7(v5ToV6(v3ToV5(v2ToV3(value as LegacyWorldV2)))));if(isVersion(value,1))return v7ToV8(v6ToV7(v5ToV6(v3ToV5(v2ToV3(v1ToV2(value as LegacyWorldV1))))));return null;}
