@@ -117,19 +117,27 @@
 - [x] Phase 10 architecture and acceptance documentation
 
 ## Phase 11 — Lifestyle, daily life, possessions & travel
-- [ ] Broader home types, space pressure and household-quality effects
-- [ ] Furnishing/upgrades/home maintenance without mandatory micromanagement
-- [ ] Vehicle practicality, maintenance, breakdowns and customization
-- [ ] Contextual automatic wardrobe/outfit system and grooming/style identity
-- [ ] Household food strategy, cooking and family meals
-- [ ] Restaurants, outings, hosting and social spending
-- [ ] Travel planning, destinations, hotels, activities and companion dynamics
-- [ ] Hobbies with skill/social/career crossover
-- [ ] Pets, care, attachment and pet aging/death
-- [ ] Household calendar conflicts across work/school/daycare/sports/appointments
-- [ ] Buy-back-time services such as childcare, cleaning and household help
-- [ ] Phones/computers/technology ownership and replacement
-- [ ] Lifestyle milestones in Timeline
+- [x] Household home-quality, privacy and space-pressure simulation across existing home types
+- [x] Furnishing/upgrades/home maintenance without mandatory room-by-room micromanagement
+- [x] Vehicle practicality, mileage, maintenance, reliability and deterministic breakdown foundations
+- [ ] Expanded vehicle customization catalog and visual presentation (later visual depth)
+- [x] Contextual wardrobe/style/grooming identity state
+- [ ] Fully visual automatic outfit selection (Phase 14 presentation layer)
+- [x] Household food strategy, cooking and family-meal foundations
+- [x] Restaurants, entertainment outings and social spending
+- [ ] Expanded hosting/venue catalog tied to Phase 12 locations
+- [x] Travel planning, destinations, lodging, budget and companion dynamics
+- [ ] Rich destination activities, visas and location-aware travel data (Phase 12)
+- [x] Hobbies with skill, recreation and social foundations
+- [ ] Expanded hobby-to-career crossover content
+- [x] Pets, care, attachment, aging and pet mortality
+- [x] Canonical calendar commitments and deterministic schedule-conflict foundation
+- [ ] Full cross-system calendar merger across every work/school/daycare/sports/medical commitment
+- [x] Buy-back-time services such as childcare, cleaning, meals and household help
+- [x] Phones/computers/technology ownership, wear and replacement
+- [x] Lifestyle milestones in Timeline
+- [x] v9 → v10 migration and Phase 11 deterministic regression coverage
+- [x] Phase 11 architecture, scope and acceptance documentation
 
 ## Phase 12 — Deeper living world, locations & institutions
 - [ ] Country-level tax, healthcare, education, labor, benefit and retirement profiles

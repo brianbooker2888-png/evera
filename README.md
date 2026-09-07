@@ -5,7 +5,7 @@
 
 EVERA is a local-first persistent life and world simulation. The player is one person inside a world that continues independently.
 
-## Current build — v0.10.0 Mortality, Law & Legacy
+## Current build — v0.11.0 Lifestyle, Daily Life & Travel
 
 ### Foundation
 - React + TypeScript + Vite
@@ -13,7 +13,7 @@ EVERA is a local-first persistent life and world simulation. The player is one p
 - Deterministic seeded simulation engine
 - Local IndexedDB autosave and offline PWA shell
 - Five primary areas: Life, People, World, Money, Timeline
-- GitHub Actions release gate: production dependency security gate, strict simulation typecheck, cumulative Vitest suite, production build and temporary Capacitor wrapper generation
+- GitHub Actions release gate: production dependency security, strict simulation typecheck, cumulative Vitest suite, production build and temporary Capacitor wrapper generation
 
 ### Human simulation
 - Multidimensional traits, values, needs, health, habits, goals and memories
@@ -21,8 +21,27 @@ EVERA is a local-first persistent life and world simulation. The player is one p
 - Autonomous goal-directed NPC decisions
 - Directional relationships, person-specific knowledge and canonical secrets
 
+### Lifestyle & everyday life
+- Canonical schema-v10 lifestyle state layered around households, finance, health and relationships
+- Household comfort, bedrooms/bathrooms, organization, maintenance, furnishing quality, privacy and space pressure
+- Persistent home upgrades with real checking-account spending, wear and comfort impact
+- Food strategies: budget, standard, healthy, premium and convenience
+- Grocery economics respond to household size and food strategy
+- Cooking skill and recurring family-meal behavior
+- Contextual style identity, grooming and persistent wardrobe categories without daily outfit micromanagement
+- Persistent hobbies with skill, enjoyment, social potential and ongoing cost
+- Restaurants, entertainment and social outings with real spending and relationship effects
+- Pets with household membership, individual attachment, monthly care, health, aging and mortality
+- Travel plans with companions, dates, lodging tier, purpose, budget, funding at departure and completion satisfaction
+- Household services such as cleaning, childcare and meal services trade money for time
+- Phones, computers and other devices have condition/capability and can wear out or be replaced
+- Owned vehicles gain mileage, reliability, maintenance intervals, repair risk and service actions
+- Calendar commitments can conflict, forcing some plans to be missed
+- Lifestyle milestones such as travel, pets, hobbies, home upgrades, style and technology persist in TIMELINE
+- Dedicated interactive Everyday Life panel inside LIFE
+
 ### Mortality, estates & generations
-- Canonical v9 mortality/legal/legacy world state
+- Canonical mortality/legal/legacy state
 - Hidden age-, health- and circumstance-driven mortality for the controlled character and high-fidelity NPCs
 - Persistent death records with cause, date and age at death
 - Controlled-character death immediately stops further time advancement until continuation is resolved
@@ -30,12 +49,10 @@ EVERA is a local-first persistent life and world simulation. The player is one p
 - Wills and deterministic intestacy fallback
 - Life-insurance proceeds captured before policy cleanup
 - Estate settlement across cash, debts, property, vehicles and business ownership
-- Investment positions are extinguished during estate settlement so deceased portfolios cannot reappear on later market ticks
 - Permanent ancestor archive containing identity, life dates, career, location, net worth and descendants
 - Existing eligible descendants can become the next controlled character without creating a replacement identity
 - Control-transition history is preserved permanently in Timeline
 - Generation-aware finance initialization prevents prior-generation bills, budgets and policies from being incorrectly reused
-- LIFE becomes a continuation interface after controlled-character death; TIMELINE keeps permanent dynasty history afterward
 
 ### Crime, law & consequences
 - Persistent crime incidents with offense, severity, evidence, victim and discovery state
@@ -45,25 +62,18 @@ EVERA is a local-first persistent life and world simulation. The player is one p
 - Fines, legal debt, incarceration and release
 - Active criminal records reduce job-application competitiveness
 - Incarceration blocks ordinary hiring and ends affected hiring processes
-- Employment history no longer auto-respawns a job after resignation, conviction or another job-ending event
+- Employment history does not silently respawn jobs after resignation, conviction or another job-ending event
 - Civil claims, negotiation, settlement, trial, judgment and dismissal foundations
-- Legal outcomes use the same canonical checking, debt and ledger systems as the rest of the finance simulation
 
 ### Health & healthcare
 - Persistent health profiles around the hidden human-health model
 - Hidden preventive, nutrition, sleep, substance, chronic-condition, accident and care-access factors
 - Persistent acute, chronic, mental-health and injury conditions
-- Separate suspected vs diagnosed state so the player does not receive omniscient medical information
-- Condition recovery, long-term management and treatment history
+- Separate suspected vs diagnosed state
 - Preventive, primary-care, urgent-care, emergency, specialist and therapy encounter model
-- Employer health coverage integrated with existing employment benefits and insurance premiums
-- Deductible and coinsurance tracking by calendar year
-- Medication cost, effectiveness and adherence state
-- Medical bills when current cash cannot cover patient responsibility
-- Past-due medical costs feed back into security and mental load
+- Employer health coverage, deductible/coinsurance and medication state
+- Medical bills feed into the same finance system
 - Player-directed preventive care and treatment choices inside LIFE
-- Health events affect energy, stress and other human-state consequences without exposing hidden risk percentages
-- Diagnosed medical history can enter grounded narration and annual Life Chapters only when recorded by the simulation
 
 ### Relationships, family & households
 - Dating → exclusivity → cohabitation → engagement → marriage → breakup/divorce
@@ -78,7 +88,7 @@ EVERA is a local-first persistent life and world simulation. The player is one p
 - Skills, job applications, interviews, offers and employment history
 - Employment contracts with salary, schedules, benefits, performance and satisfaction
 - Contract-driven payroll and labor-market simulation
-- Criminal-history hiring friction integrated into the same application scoring model
+- Criminal-history hiring friction integrated into application scoring
 
 ### Money, housing & wealth
 - Canonical checking, savings, brokerage and retirement accounts
@@ -86,66 +96,45 @@ EVERA is a local-first persistent life and world simulation. The player is one p
 - Credit cards, loans, APR, utilization, delinquency, default and bankruptcy
 - Insurance, vehicles, auto financing, mortgages, homeownership and housing-market exposure
 - Deterministic investment markets, retirement accounts and net-worth accounting
-- Healthcare and legal spending use the same checking account and financial ledger as the rest of the simulation
-- Estates and inheritance operate on existing canonical assets and liabilities rather than a separate legacy currency
+- Healthcare, legal and lifestyle spending use the same checking account and financial ledger
+- Estates and inheritance operate on existing canonical assets and liabilities
 
 ### Sports
 - Persistent fictional soccer and American-football leagues, teams, rosters and fixtures
 - Soccer academy → professional pathway
 - American football prep → college → professional pathway
 - Athlete and head-coach careers using one deterministic match engine
-- Training, fitness, fatigue, morale, injuries and recovery
-- Coach tactics, development, leadership and reputation
-- Sports contracts and payroll integrated with the same checking/finance system
-- Persistent season statistics and team standings
-- Stored match moments for future visual rendering
-- Interactive sports career, fixtures, match-moment and standings UI inside WORLD
+- Training, fatigue, injuries, contracts, standings and season statistics
+- Stored match moments for later 2.5D rendering
 
 ### Logistics & warehousing business
 - Separate personal and business finances
-- Warehouse facilities with rent, capacity, automation and utilization
-- Persistent employees with role, pay, productivity, reliability, morale and safety
-- Customer contracts with demand, pricing, complexity and service targets
-- Monthly productivity, inventory accuracy, service, safety, labor-cost, utilization, revenue and profit KPIs
+- Warehouse facilities, employees, customer contracts and operating KPIs
+- Productivity, inventory accuracy, service, safety, labor cost, utilization, revenue and profit
 - Business reputation, valuation, debt pressure, opportunities and failure risk
-- Interactive hiring, staffing, pricing, facility and contract controls inside WORLD
-- Business ownership can pass through the estate system when a controlled owner dies
+- Business ownership can pass through the estate system
 
 ### Grounded narration
-- Canonical context compiler with fact / belief / rumor separation
+- Canonical fact / belief / rumor separation
 - Speaker knowledge and secret filtering
 - Personality-, age- and relationship-aware voice profiles
-- Deterministic offline narration provider with mandatory fallback
-- Annual Life Chapters and persistent autobiography inside TIMELINE
-- Provider registry and vendor-neutral remote adapter
-- Same-origin Netlify narration gateway so optional provider secrets remain server-side
-- Health facts are only narratable as canonical medical facts after the simulation records a diagnosis or healthcare event
+- Deterministic offline narration with mandatory fallback
+- Annual Life Chapters and persistent autobiography
+- Vendor-neutral remote-provider boundary and secure same-origin Netlify gateway
 
-### Optional cloud & cross-device sync
-- Local IndexedDB remains the authoritative save while offline
-- Device/revision metadata is stored separately from simulation state
-- Deterministic world checksums
-- Optional Supabase email-link authentication and cloud save transport
-- Row-level-security schema included in `docs/supabase-schema.sql`
-- Safe upload/download when only one side changed
-- Explicit conflict flow when two devices independently advance the same life
-- No field-level auto-merge of divergent simulation timelines
-- Cloud failures never block local play or local saving
-
-### Native packaging
-- Capacitor configuration for one shared web/iOS/Android codebase
-- Working bundle identifier `com.evera.game` while EVERA remains a working brand
-- Scripts for adding, syncing and opening iOS/Android projects
+### Optional cloud & native packaging
+- IndexedDB remains authoritative while offline
+- Optional Supabase auth/cloud save transport with deterministic checksums and explicit conflict handling
+- Capacitor shares the same web codebase across web/iOS/Android
 - CI generates temporary iOS and Android wrappers to verify packaging compatibility
-- Generated platform projects are not the source of truth; React/TypeScript remains the core application
 
 ### Save compatibility
-- Canonical simulation schema is v9 in app v0.10 because mortality, estates, legal cases and control transitions are persistent gameplay state
-- v1 → v2 → v3 → v4 → v5 → v6 → v7 → v8 → v9 migration paths remain supported
-- v8 saves are upgraded with empty legal/legacy collections without deleting relationship, family, finance, sports, business, narration, health or timeline history
-- New games are created as true v9 worlds rather than being silently upgraded after creation
+- Canonical simulation schema is **v10** in app v0.11 because lifestyle, possessions, travel and daily-life history are persistent gameplay state
+- Explicit v1 → v2 → v3 → v4 → v5 → v6 → v7 → v8 → v9 → v10 migration remains supported
+- v9 saves gain lifestyle state without deleting relationship, family, finance, sports, business, narration, health, legal or timeline history
+- New games are created directly as true v10 worlds
 
-See `docs/CLOUD_NATIVE.md`, `docs/HEALTH_ARCHITECTURE.md`, `docs/LEGACY_LEGAL_ARCHITECTURE.md` and `docs/PHASE10_ACCEPTANCE.md` for the current system boundaries and release contract.
+See `docs/CLOUD_NATIVE.md`, `docs/HEALTH_ARCHITECTURE.md`, `docs/LEGACY_LEGAL_ARCHITECTURE.md`, `docs/LIFESTYLE_ARCHITECTURE.md` and the phase acceptance documents for system boundaries.
 
 ## Run
 
@@ -170,7 +159,7 @@ npm run build
 
 > Offline is the baseline. Cloud is an enhancement.
 
-> Hidden risk is simulation state. Known medical history is player-facing state.
+> Simulate deeply. Interact selectively.
 
 > A generation ends. The world does not.
 

@@ -10,5 +10,6 @@ import './styles/phase7.css';
 import './styles/phase8.css';
 import './styles/phase9.css';
 import './styles/phase10.css';
+import './styles/phase11.css';
 createRoot(document.getElementById('root')!).render(<StrictMode><App /></StrictMode>);
 if('serviceWorker'in navigator&&import.meta.env.PROD)window.addEventListener('load',()=>navigator.serviceWorker.register('/sw.js').catch(console.error));
