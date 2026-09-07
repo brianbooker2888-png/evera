@@ -4,9 +4,9 @@ import { activeHouseholdForPerson } from './householdEngine';
 
 const clamp=(v:number)=>Math.max(0,Math.min(100,Math.round(v)));
 const profileFor=(world:WorldState):LifestyleProfile=>{
-  const c=world.character,t=c.traits,bg=c.socioeconomicBackground;
+  const c=world.character,t=c.traits,v=c.human.values,bg=c.socioeconomicBackground;
   const quality={struggling:38,working:48,stable:62,affluent:76,wealthy:90}[bg];
-  return{personId:c.id,foodStrategy:bg==='struggling'?'budget':bg==='wealthy'?'premium':'standard',cookingSkill:clamp(42+t.discipline*.24+t.creativity*.18),familyMealFrequency:clamp(45+t.familyOrientation*.4),styleIdentity:bg==='wealthy'?'luxury':t.creativity>72?'fashion_forward':t.discipline>70?'classic':'practical',grooming:clamp(quality*.75+t.discipline*.25),wardrobeQuality:quality,socialSpending:clamp(30+t.riskTolerance*.25+t.confidence*.25),conveniencePreference:clamp(35+(100-t.discipline)*.35+t.ambition*.2),travelInterest:clamp(t.riskTolerance*.35+t.creativity*.25+t.values?.adventure??50),homePride:clamp(45+t.discipline*.25+t.familyOrientation*.25),timePressure:28,lastUpdatedDate:world.date};
+  return{personId:c.id,foodStrategy:bg==='struggling'?'budget':bg==='wealthy'?'premium':'standard',cookingSkill:clamp(42+t.discipline*.24+t.creativity*.18),familyMealFrequency:clamp(45+t.familyOrientation*.4),styleIdentity:bg==='wealthy'?'luxury':t.creativity>72?'fashion_forward':t.discipline>70?'classic':'practical',grooming:clamp(quality*.75+t.discipline*.25),wardrobeQuality:quality,socialSpending:clamp(30+t.riskTolerance*.25+t.confidence*.25),conveniencePreference:clamp(35+(100-t.discipline)*.35+t.ambition*.2),travelInterest:clamp(t.riskTolerance*.3+t.creativity*.2+v.adventure*.5),homePride:clamp(45+t.discipline*.25+t.familyOrientation*.25),timePressure:28,lastUpdatedDate:world.date};
 };
 function homeFor(world:WorldState,householdId:string):HomeLifestyle{
   const h=world.households.find(x=>x.id===householdId),type=h?.homeType??'apartment',members=h?.memberIds.length??1;
