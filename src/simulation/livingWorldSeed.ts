@@ -40,7 +40,7 @@ function policySeed(date:string):PolicyState[]{return countries.flatMap(c=>[
   {id:`policy-${c.id}-immigration`,countryId:c.id,kind:'immigration' as const,name:'Immigration openness',value:c.immigrationOpenness,effectiveDate:date},
   {id:`policy-${c.id}-retirement`,countryId:c.id,kind:'retirement' as const,name:'Standard retirement age',value:c.retirementAge,effectiveDate:date}
 ]);}
-function findSeedCity(location:string){const q=norm(location);return citySeed.find(c=>q.includes(norm(c.name))||q.includes(norm(c.region)));}
+function findSeedCity(location:string){const q=norm(location),name=norm(location.split(',')[0]??location);return citySeed.find(c=>name===norm(c.name)||q.startsWith(`${norm(c.name)},`));}
 function customCity(location:string):CityProfile{const name=location.split(',')[0]?.trim()||'Home City';return{id:`city-${slug(name)||'home'}`,countryId:'country-us',name,region:location.split(',')[1]?.trim()||'Region',population:350000,wageIndex:1,housingIndex:1,unemploymentRate:4.5,transit:52,safety:64,schoolQuality:68,healthcareAccess:72,nightlife:61,culture:67,industryIds:['industry-logistics','industry-healthcare'],growthRate:1};}
 function neighborhoodsFor(city:CityProfile):NeighborhoodProfile[]{return[
   {id:`neighborhood-${city.id}-central`,cityId:city.id,name:'Central District',housingCostIndex:city.housingIndex*1.12,safety:Math.max(20,city.safety-4),schoolQuality:city.schoolQuality,transit:Math.min(100,city.transit+12),prestige:68,density:82},
