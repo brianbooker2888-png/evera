@@ -50,17 +50,25 @@
 - [x] v5 → v6 migration and Phase 6 regression coverage
 - [ ] Stylized 2.5D match-moment renderer (presentation layer; simulation moments already stored)
 
-## Phase 7 — AI narration
-- [ ] Provider abstraction
-- [ ] Canonical context compiler
+## Phase 7 — Grounded narration
+- [x] Narration provider abstraction and registry
+- [x] Canonical scene-context compiler
+- [x] Canonical fact / belief / rumor separation
+- [x] Speaker knowledge and secret-access filtering
 - [x] Offline free-text intent parser foundation
-- [ ] Voice profiles and online enriched dialogue
-- [ ] Annual Life Chapters
+- [x] Personality-, age- and relationship-aware voice profiles
+- [x] Deterministic offline narration with mandatory fallback
+- [x] Narration-safe conversation wrapper: simulate first, narrate second
+- [x] Vendor-neutral remote-provider adapter
+- [x] Annual Life Chapters and autobiography UI
+- [x] v6 → v7 migration and narration regression coverage
+- [ ] Connect and validate a production online narration provider (optional enhancement; core gameplay remains offline)
 
 ## Phase 8 — Cloud and native distribution
 - [ ] Optional auth / cloud saves
 - [ ] Cross-device sync
 - [ ] Capacitor iOS / Android wrappers
+- [ ] Production online narration-provider configuration without exposing provider secrets in the client
 
 ## Final integration / launch hardening
 - [ ] Full save-migration matrix
