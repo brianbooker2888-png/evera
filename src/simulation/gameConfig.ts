@@ -33,8 +33,32 @@ export function initializeGameConfiguration(world:WorldState):WorldState{
   world.gameConfiguration.onboarding??={completed:false,dismissedHints:[]};
   world.gameConfiguration.mode??='life';world.gameConfiguration.scenarioId??='none';
   world.gameConfiguration.rules??=configurationForMode(world.gameConfiguration.mode,world.gameConfiguration.scenarioId,world.gameConfiguration.accessibility,world.gameConfiguration.seriousContent).rules;
-  world.gameConfiguration.rules.allowPrematureDeath=world.gameConfiguration.rules.allowPrematureDeath&&world.gameConfiguration.seriousContent.allowPrematureDeath;
+  const modeRules=configurationForMode(world.gameConfiguration.mode,world.gameConfiguration.scenarioId,world.gameConfiguration.accessibility,world.gameConfiguration.seriousContent).rules;
+  world.gameConfiguration.rules.allowPrematureDeath=modeRules.allowPrematureDeath;
   return world;
+}
+
+export function updateAccessibilitySettings(input:WorldState,patch:Partial<AccessibilitySettings>):WorldState{
+  const world=initializeGameConfiguration(structuredClone(input));
+  world.gameConfiguration.accessibility={...world.gameConfiguration.accessibility,...patch};
+  return world;
+}
+
+export function updateSeriousContentSettings(input:WorldState,patch:Partial<SeriousContentSettings>):WorldState{
+  const world=initializeGameConfiguration(structuredClone(input));
+  world.gameConfiguration.seriousContent={...world.gameConfiguration.seriousContent,...patch};
+  const modeRules=configurationForMode(world.gameConfiguration.mode,world.gameConfiguration.scenarioId,world.gameConfiguration.accessibility,world.gameConfiguration.seriousContent).rules;
+  world.gameConfiguration.rules.allowPrematureDeath=modeRules.allowPrematureDeath;
+  world.events.unshift({id:`evt-content-settings-${world.date}-${world.events.length+1}`,date:world.date,title:'Serious-content preferences changed',body:'The new preferences apply to future generated events. Existing world history is not rewritten.',type:'routine',priority:'low'});
+  return world;
+}
+
+export function completeOnboarding(input:WorldState):WorldState{
+  const world=initializeGameConfiguration(structuredClone(input));world.gameConfiguration.onboarding.completed=true;return world;
+}
+
+export function reopenOnboarding(input:WorldState):WorldState{
+  const world=initializeGameConfiguration(structuredClone(input));world.gameConfiguration.onboarding.completed=false;return world;
 }
 
 export function applyAccessibilityPreferences(config:GameConfiguration){
