@@ -7,9 +7,9 @@ import { migrateWorld } from '../persistence/migrate';
 const draft={firstName:'World',lastName:'Test',age:30,sex:'male' as const,orientation:'straight' as const,hometown:'Phoenix, Arizona',socioeconomicBackground:'stable' as const,ambition:72,discipline:68,empathy:64,athleticism:58};
 
 describe('Phase 12 deeper living world',()=>{
-  it('creates a true v11 world with causal geography and institutions',()=>{
+  it('keeps Phase 12 causal geography and institutions inside current schema worlds',()=>{
     const world=createWorld(draft,12001);
-    expect(world.version).toBe(11);
+    expect(world.version).toBe(12);
     expect(world.countries.length).toBeGreaterThanOrEqual(4);
     expect(world.cities.length).toBeGreaterThanOrEqual(9);
     expect(world.neighborhoods.some(n=>n.cityId===world.currentCityId)).toBe(true);
@@ -68,15 +68,16 @@ describe('Phase 12 deeper living world',()=>{
     let us=createWorld({...draft,socioeconomicBackground:'stable'},12009),ca=createWorld({...draft,socioeconomicBackground:'affluent'},12009);const before=us.healthProfiles.find(p=>p.personId===us.character.id)!.careAccess;ca=moveToCity(ca,'city-toronto','neighborhood-city-toronto-family');ca=stepWorld(ca,30);us=stepWorld(us,30);expect(ca.healthProfiles.find(p=>p.personId===ca.character.id)!.careAccess).toBeGreaterThan(before);expect(ca.healthProfiles.find(p=>p.personId===ca.character.id)!.careAccess).toBeGreaterThan(us.healthProfiles.find(p=>p.personId===us.character.id)!.careAccess);
   });
 
-  it('migrates a true v10 save into v11 without losing Phase 11 history',()=>{
+  it('migrates a true v10 save through v12 without losing Phase 11 history',()=>{
     const current=createWorld(draft,12007);
     const {countries,cities,neighborhoods,industries,worldInstitutions,companyWorldStates,policies,residencyRecords,regionalShocks,worldNews,worldHistory,migrationRecords,currentCityId,currentNeighborhoodId,...v10}=current;
     void countries;void cities;void neighborhoods;void industries;void worldInstitutions;void companyWorldStates;void policies;void residencyRecords;void regionalShocks;void worldNews;void worldHistory;void migrationRecords;void currentCityId;void currentNeighborhoodId;
     const migrated=migrateWorld({...v10,version:10});
-    expect(migrated?.version).toBe(11);
+    expect(migrated?.version).toBe(12);
     expect(migrated?.lifestyleProfiles.length).toBe(current.lifestyleProfiles.length);
     expect(migrated?.countries.length).toBeGreaterThan(0);
     expect(migrated?.currentCityId).toBeTruthy();
     expect(migrated?.homeLifestyles.length).toBe(current.homeLifestyles.length);
+    expect(migrated?.gameConfiguration.mode).toBe('life');
   });
 });
