@@ -31,6 +31,9 @@ Phase 13 may be released only if all requirements in this document are true on t
 - [x] Two-parent, single-parent, guardian and independent starts are supported.
 - [x] Minor starts place configured resident family into the starting household.
 - [x] Adult starts preserve family relationships without forcing co-residence.
+- [x] Guardian starts persist explicit guardian/ward family links.
+- [x] Starting caregivers and siblings form a canonical family graph rather than only player-centered links.
+- [x] Active close-family links block romantic eligibility.
 - [x] Simple defaults remain available so advanced setup is optional.
 
 ## Serious-content preferences
@@ -74,6 +77,7 @@ Phase 13 may be released only if all requirements in this document are true on t
 - [x] Dedicated tests cover actual mode-resource/rule differences.
 - [x] Dedicated tests cover Sandbox mortality behavior.
 - [x] Dedicated tests cover minor/adult starting-family behavior.
+- [x] Dedicated tests cover guardian/ward links, the starting-family graph and family-romance exclusion.
 - [x] Dedicated tests cover deterministic Scenario starts.
 - [x] Dedicated tests cover persisted accessibility/content preferences.
 - [x] Dedicated tests cover mid-save comfort-setting updates without mode mutation.
@@ -83,7 +87,7 @@ Phase 13 may be released only if all requirements in this document are true on t
 - [x] Dedicated tests cover long-horizon mode determinism.
 - [x] Production-dependency security gate passes on the final release candidate.
 - [x] Strict simulation typecheck passes on the final release candidate.
-- [x] Entire cumulative Vitest suite passes on the final release candidate: 78 tests.
+- [x] Entire cumulative Vitest suite passes on the final release candidate: 79 tests.
 - [x] Production web build passes on the final release candidate.
 - [x] Temporary iOS and Android Capacitor wrapper generation passes on the final release candidate.
 
