@@ -55,12 +55,11 @@ function bestWardrobe(world:WorldState,personId:string,context:VisualContext){
 }
 
 export function visualPerson(world:WorldState,personId:string,date=world.date,context:VisualContext='casual'):VisualPersonDescriptor|null{
-  const current=personId===world.character.id?world.character:world.npcs.find(n=>n.id===personId);
-  const archive=world.ancestorArchives.find(a=>a.personId===personId);
-  if(!current&&!archive)return null;
-  const name=current?(personId===world.character.id?`${world.character.firstName} ${world.character.lastName}`:current.name):archive!.name;
-  const birthDate=current?current.birthDate:archive!.birthDate,age=current?ageAtDate(birthDate,date):archive!.ageAtDeath,key=familyKey(world,personId),familyHash=hash(key),personHash=hash(personId),wardrobe=bestWardrobe(world,personId,context),profile=world.lifestyleProfiles.find(p=>p.personId===personId);
-  return{personId,name,initials:name.split(/\s+/).filter(Boolean).slice(0,2).map(part=>part[0]?.toUpperCase()).join(''),age,ageBand:ageBandFor(age),familyKey:key,palette:familyHash%6,faceShape:(familyHash+personHash)%4,hairShape:(familyHash+Math.floor(personHash/7))%5,outfit:wardrobe?.category??contextCategory(context),outfitQuality:wardrobe?Math.round((wardrobe.quality+wardrobe.condition)/2):Math.round(profile?.wardrobeQuality??55),archived:Boolean(archive&&!current)};
+  const isPlayer=personId===world.character.id,npc=isPlayer?undefined:world.npcs.find(n=>n.id===personId),archive=world.ancestorArchives.find(a=>a.personId===personId);
+  if(!isPlayer&&!npc&&!archive)return null;
+  const name:string=isPlayer?`${world.character.firstName} ${world.character.lastName}`:npc?.name??archive!.name;
+  const birthDate=isPlayer?world.character.birthDate:npc?.birthDate??archive!.birthDate,age=archive&&!isPlayer&&!npc?archive.ageAtDeath:ageAtDate(birthDate,date),key=familyKey(world,personId),familyHash=hash(key),personHash=hash(personId),wardrobe=bestWardrobe(world,personId,context),profile=world.lifestyleProfiles.find(p=>p.personId===personId);
+  return{personId,name,initials:name.split(/\s+/).filter(Boolean).slice(0,2).map((part:string)=>part[0]?.toUpperCase()).join(''),age,ageBand:ageBandFor(age),familyKey:key,palette:familyHash%6,faceShape:(familyHash+personHash)%4,hairShape:(familyHash+Math.floor(personHash/7))%5,outfit:wardrobe?.category??contextCategory(context),outfitQuality:wardrobe?Math.round((wardrobe.quality+wardrobe.condition)/2):Math.round(profile?.wardrobeQuality??55),archived:Boolean(archive&&!isPlayer&&!npc)};
 }
 
 export function matchMomentsForView(fixture:SportsFixture,mode:MatchViewMode):MatchMoment[]{
