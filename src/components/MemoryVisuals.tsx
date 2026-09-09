@@ -1,0 +1,19 @@
+import { Baby, BookOpenCheck, BriefcaseBusiness, HeartHandshake, Home, Hospital, Plane, Scale, Sparkles, Trophy, UsersRound, WalletCards } from 'lucide-react';
+import type { WorldState } from '../types/game';
+import type { VisualMemoryCard, VisualSceneKind } from '../presentation/visualPresentation';
+import { currentFamilyIds, visualMemories } from '../presentation/visualPresentation';
+import { VisualPerson } from './VisualPerson';
+
+const dateFmt=new Intl.DateTimeFormat('en-US',{month:'short',day:'numeric',year:'numeric',timeZone:'UTC'});
+function SceneIcon({kind}:{kind:VisualSceneKind}){if(kind==='birth')return <Baby/>;if(kind==='graduation')return <BookOpenCheck/>;if(kind==='proposal'||kind==='wedding'||kind==='family')return <HeartHandshake/>;if(kind==='home')return <Home/>;if(kind==='promotion'||kind==='career')return <BriefcaseBusiness/>;if(kind==='hospital')return <Hospital/>;if(kind==='divorce'||kind==='funeral')return <Scale/>;if(kind==='retirement'||kind==='finance')return <WalletCards/>;if(kind==='sports')return <Trophy/>;if(kind==='travel')return <Plane/>;return <Sparkles/>;}
+function contextFor(kind:VisualSceneKind){if(kind==='sports')return'athletic' as const;if(['wedding','proposal','graduation','funeral'].includes(kind))return'formal' as const;if(kind==='promotion'||kind==='career')return'work' as const;if(kind==='travel')return'travel' as const;return'casual' as const;}
+
+function MemorySceneCard({world,card}:{world:WorldState;card:VisualMemoryCard}){return <article className={`visual-memory scene-${card.scene}`}><div className="memory-scene-art"><SceneIcon kind={card.scene}/><span>{card.scene.replace('_',' ')}</span></div><div className="memory-scene-copy"><span className="eyebrow">AGE {card.age} · {dateFmt.format(new Date(`${card.date}T12:00:00Z`))}</span><h3>{card.title}</h3><p>{card.summary}</p><div className="memory-significance"><span style={{width:`${Math.max(8,card.significance)}%`}}/></div><small>Significance {Math.round(card.significance)}/100 · canonical {card.source}</small></div><VisualPerson world={world} personId={world.character.id} date={card.date} context={contextFor(card.scene)} compact/></article>;}
+
+export function VisualMemoryDeck({world}:{world:WorldState}){const cards=visualMemories(world,12);if(!cards.length)return null;return <section className="section"><header><h2>Visual memories</h2><p>Important moments are presented from recorded simulation history. The artwork changes presentation, never the underlying fact.</p></header><div className="section-body"><div className="visual-memory-grid">{cards.map(card=><MemorySceneCard key={card.id} world={world} card={card}/>)}</div></div></section>;}
+
+export function FamilyAlbum({world}:{world:WorldState}){
+  const familyIds=currentFamilyIds(world).filter(id=>id===world.character.id||world.npcs.some(n=>n.id===id)),archives=world.ancestorArchives.slice().sort((a,b)=>b.deathDate.localeCompare(a.deathDate));
+  if(familyIds.length<=1&&!archives.length)return null;
+  return <section className="section"><header><h2>Family album</h2><p>Living family and archived generations share a deterministic visual language, including age and family resemblance cues.</p></header><div className="section-body"><div className="family-album-grid">{familyIds.map(id=><VisualPerson key={id} world={world} personId={id} context="formal" compact caption={id===world.character.id?'Current controlled life':'Family connection in the current world'}/>)}</div>{archives.length>0&&<><div className="album-divider"><UsersRound/><span>Earlier generations</span></div><div className="family-album-grid archived">{archives.map(a=><VisualPerson key={a.id} world={world} personId={a.personId} date={a.deathDate} context="formal" compact caption={`${a.career} · ${a.location}`}/>)}</div></>}</div></section>;
+}
