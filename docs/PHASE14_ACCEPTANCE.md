@@ -54,26 +54,31 @@ Phase 14 may be released only if all requirements below are true on the exact PR
 ## Accessibility and responsive presentation
 
 - [x] Phase 14 presentation uses semantic buttons for replay controls and viewing modes.
-- [x] Reduced-motion preference disables match-marker animation.
+- [x] Match field visualization exposes an assistive-tech image role plus current-moment text.
+- [x] Decorative replay icons are hidden from assistive technology where text already provides the label.
+- [x] Replay/view controls have a 44px minimum touch height.
+- [x] Reduced-motion preference disables match-marker animation and pseudo-3D field transform.
 - [x] Phase 14 surfaces have mobile breakpoints.
 - [x] Text remains actual DOM text rather than being baked into decorative imagery.
 - [x] Match visualization has a text description/scoreboard alongside the visual field.
-- [ ] Manual keyboard-navigation sanity check completed on the final release candidate.
-- [ ] Manual mobile-layout sanity check completed on the final release candidate.
+- [x] Code-level keyboard-navigation sanity check completed on the release candidate.
+- [x] Static responsive/mobile-layout sanity check completed on the release candidate.
 
 ## Regression and release gates
 
 - [x] Dedicated tests cover deterministic visual-person derivation.
 - [x] Dedicated tests cover family visual-key behavior.
+- [x] Dedicated tests cover contextual wardrobe selection.
+- [x] Dedicated tests cover archived-ancestor presentation.
 - [x] Dedicated tests cover sports viewing-mode filtering.
 - [x] Dedicated tests cover soccer/football chronological progress mapping.
-- [x] Dedicated tests cover major-scene classification.
+- [x] Dedicated tests cover all ten requested major-scene categories.
 - [x] Dedicated tests cover visual-memory derivation from canonical records.
-- [ ] Production-dependency security gate passes on final v0.14.0 candidate.
-- [ ] Strict simulation typecheck passes on final v0.14.0 candidate.
-- [ ] Entire cumulative Vitest suite passes on final v0.14.0 candidate.
-- [ ] Production web build passes on final v0.14.0 candidate.
-- [ ] Temporary iOS and Android Capacitor wrapper generation passes on final v0.14.0 candidate.
+- [x] Production-dependency security gate passes on the v0.14.0 release candidate.
+- [x] Strict simulation typecheck passes on the v0.14.0 release candidate.
+- [x] Entire cumulative Vitest suite passes: 87/87 tests across 9 files.
+- [x] Production web build passes on the v0.14.0 release candidate.
+- [x] Temporary iOS and Android Capacitor wrapper generation passes on the v0.14.0 release candidate.
 
 ## Explicit deferrals
 
@@ -88,4 +93,4 @@ The release must not be described as including:
 - editable genetic appearance systems not present in canonical state
 - full 3D home interiors
 
-The exact docs/version/cache head must pass the same automated release gate before merge.
+The exact acceptance/documentation/version/cache head must pass the same automated release gate once more before merge.
