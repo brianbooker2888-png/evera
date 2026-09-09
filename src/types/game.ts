@@ -42,7 +42,7 @@ export interface HouseholdLaborAssignment{id:string;task:string;ownerId:string;c
 export interface HouseholdScheduleEntry{id:string;personId:string;label:string;dayOfWeek:number;startHour:number;endHour:number;}
 export interface Household{id:string;name:string;memberIds:string[];location:string;homeType:'apartment'|'townhome'|'house'|'shared'|'temporary';monthlyHousingCost:number;responsibleAdultIds:string[];financeStyle:'separate'|'hybrid'|'joint';laborAssignments:HouseholdLaborAssignment[];schedule:HouseholdScheduleEntry[];createdDate:string;endedDate:string|null;}
 export interface Pregnancy{id:string;pregnantPersonId:string;partnerId:string|null;conceptionDate:string;dueDate:string;status:'ongoing'|'birth'|'loss';planned:boolean;childIds:string[];outcomeDate:string|null;}
-export type FamilyRelation='biological_parent'|'biological_child'|'adoptive_parent'|'adoptive_child'|'step_parent'|'step_child'|'sibling'|'spouse'|'ex_spouse';
+export type FamilyRelation='biological_parent'|'biological_child'|'adoptive_parent'|'adoptive_child'|'step_parent'|'step_child'|'guardian'|'ward'|'sibling'|'spouse'|'ex_spouse';
 export interface FamilyLink{id:string;fromId:string;toId:string;relation:FamilyRelation;establishedDate:string;endedDate:string|null;}
 export interface CustodyPlan{id:string;childId:string;parentIds:[string,string];householdIds:[string,string];arrangement:'shared'|'primary_first'|'primary_second';currentHouseholdId:string;monthlySupport:number;supportPayerId:string|null;startDate:string;active:boolean;}
 export type ConversationIntent='connect'|'apologize'|'support'|'boundary'|'conflict'|'family'|'money'|'future'|'neutral';
