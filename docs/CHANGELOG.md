@@ -1,5 +1,33 @@
 # EVERA Changelog
 
+## v0.14.0 — Visual Experiences, Sports Presentation & Memory Cards
+
+- Added a deterministic stylized-realism presentation layer without introducing a second simulation or new canonical save state.
+- Kept the canonical world schema at v12 because Phase 14 derives presentation from existing state.
+- Added deterministic visual-person descriptors driven by identity, age, family links, wardrobe and lifestyle state.
+- Added age-band presentation for children, teens, young adults, adults and older adults.
+- Added family-resemblance presentation cues using canonical family relationships while deliberately avoiding inference of unstored sensitive demographic attributes.
+- Added contextual outfit presentation for casual, work, formal, athletic and nightlife contexts using canonical wardrobe categories.
+- Added wardrobe-quality presentation metadata and neutral fallback behavior when no matching owned item exists.
+- Added archived-ancestor visual presentation that remains available when the prior controlled life no longer has a live NPC record.
+- Added a shared soccer/American-football visual match room driven only by stored deterministic `MatchMoment` records.
+- Added Full, Extended, Key moments and Result-only sports viewing modes.
+- Added previous, next, autoplay and restart replay controls.
+- Added controlled-character visual highlighting when a stored match moment identifies the player as actor.
+- Added a stylized pseudo-3D field/pitch depth treatment with reduced-motion fallback.
+- Added next-match athlete preparation using the existing skills, fitness and recovery actions.
+- Added next-match coach approach selection using the existing aggressive, balanced and conservative coaching-style state.
+- Kept completed-match viewing read-only so presentation cannot alter scores, statistics, injuries or world history.
+- Added Visual Memory Cards derived only from recorded canonical memories and lifestyle milestones.
+- Added presentation-time duplicate suppression without deleting or rewriting the source records.
+- Added visual major-scene categories for birth, graduation, proposal, wedding, home/move, promotion, hospital, divorce, funeral and retirement.
+- Added a family album combining current canonical family links with archived earlier generations.
+- Added responsive Phase 14 presentation styling and reduced-motion behavior.
+- Added dedicated deterministic presentation regressions covering visual people, family keys, wardrobe selection, ancestor rendering, sports filtering/progress, major-scene classification and visual-memory derivation.
+- Added `docs/PHASE14_SCOPE.md` and `docs/PHASE14_ACCEPTANCE.md`.
+- Bumped the app version to v0.14.0 and the PWA cache to v14.
+- Photorealistic/fully 3D characters, user likeness uploads, licensed sports assets, joystick sports gameplay, real-time physics, generated cinematic video, editable unstored genetic appearance traits and full 3D home interiors remain explicit future work.
+
 ## v0.13.0 — Game Modes, Onboarding, Accessibility & Recovery
 
 - Upgraded the canonical simulation world schema to v12.
