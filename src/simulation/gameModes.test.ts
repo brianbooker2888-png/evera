@@ -5,6 +5,7 @@ import { simulateConfiguredMortality } from './modeRuntime';
 import { SeededRng } from './rng';
 import { migrateWorld } from '../persistence/migrate';
 import { commitOffense } from './legalEngine';
+import { romanceEligible } from './relationshipEngine';
 import { updateAccessibilitySettings, updateSeriousContentSettings } from './gameConfig';
 import { parsePortableWorld, portableSaveFilename, serializePortableWorld } from '../persistence/portableSave';
 
@@ -48,6 +49,16 @@ describe('Phase 13 game modes, setup and preferences',()=>{
     const home=world.households.find(h=>!h.endedDate&&h.memberIds.includes(world.character.id))!;
     expect(home.memberIds).toEqual(expect.arrayContaining(['npc-parent','npc-parent-2','npc-sibling-1','npc-sibling-2']));
     expect(home.responsibleAdultIds).not.toContain(world.character.id);
+  });
+
+  it('persists guardian/ward links and excludes close family from romance',()=>{
+    const guardianWorld=createWorld({...draft,age:12,familyStructure:'guardian' as const},130041);
+    expect(guardianWorld.familyLinks.some(f=>f.fromId==='npc-parent'&&f.toId===guardianWorld.character.id&&f.relation==='guardian')).toBe(true);
+    expect(guardianWorld.familyLinks.some(f=>f.fromId===guardianWorld.character.id&&f.toId==='npc-parent'&&f.relation==='ward')).toBe(true);
+    const adultFamily=createWorld({...draft,age:28,familyStructure:'two_parent' as const,siblingCount:1},130042);
+    expect(romanceEligible(adultFamily,adultFamily.character.id,'npc-parent')).toBe(false);
+    expect(romanceEligible(adultFamily,adultFamily.character.id,'npc-sibling-1')).toBe(false);
+    expect(romanceEligible(adultFamily,adultFamily.character.id,'npc-friend')).toBe(true);
   });
 
   it('keeps adult family relationships without forcing co-residence',()=>{
