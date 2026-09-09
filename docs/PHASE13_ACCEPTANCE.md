@@ -81,13 +81,13 @@ Phase 13 may be released only if all requirements in this document are true on t
 - [x] Dedicated tests cover v11 → v12 migration.
 - [x] Dedicated tests cover portable-save round trip, legacy migration and malformed-file rejection.
 - [x] Dedicated tests cover long-horizon mode determinism.
-- [ ] Production-dependency security gate passes on the final release candidate.
-- [ ] Strict simulation typecheck passes on the final release candidate.
-- [ ] Entire cumulative Vitest suite passes on the final release candidate.
-- [ ] Production web build passes on the final release candidate.
-- [ ] Temporary iOS and Android Capacitor wrapper generation passes on the final release candidate.
+- [x] Production-dependency security gate passes on the final release candidate.
+- [x] Strict simulation typecheck passes on the final release candidate.
+- [x] Entire cumulative Vitest suite passes on the final release candidate: 78 tests.
+- [x] Production web build passes on the final release candidate.
+- [x] Temporary iOS and Android Capacitor wrapper generation passes on the final release candidate.
 
-The exact documentation/version/cache head must pass the same automated gate before merge. The final five items should only be checked after that run completes successfully.
+The exact acceptance head must pass the same automated gate before merge so the merged code is identical to a verified release candidate.
 
 ## Explicit deferrals
 
