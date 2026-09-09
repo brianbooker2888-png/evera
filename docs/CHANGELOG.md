@@ -1,5 +1,41 @@
 # EVERA Changelog
 
+## v0.13.0 — Game Modes, Onboarding, Accessibility & Recovery
+
+- Upgraded the canonical simulation world schema to v12.
+- Added persistent game configuration covering mode, simulation rules, serious-content preferences, accessibility preferences and onboarding state.
+- Added explicit v11 → v12 migration and extended every older supported migration path through the same v12 configuration upgrade.
+- Existing saves migrate to standard Life Mode instead of being silently reinterpreted as Hard Life, Sandbox or Legacy.
+- Added Life Mode, Hard Life, Sandbox, Legacy and Scenario configurations.
+- Hard Life now reduces starting resources and increases world/economic and mortality pressure through actual deterministic simulation rules.
+- Sandbox now increases starting resources, softens world shocks and disables configured random premature mortality.
+- Legacy adds dynasty-focused rules/goals without replacing the normal simulation.
+- Added Scenario foundations for Fresh Start, Career Rebuild and Legacy Seed.
+- Locked the selected game mode to the life while allowing comfort/content preferences to change later.
+- Rebuilt character creation as a five-step guided setup flow.
+- Expanded explicit personality and six-dimension athletic setup while keeping simple defaults available.
+- Added configurable two-parent, single-parent, guardian and independent starting-family structures.
+- Added configurable siblings and parent closeness.
+- Minor starts can now live with their configured starting family; adult starts retain family relationships without forced co-residence.
+- Added persistent text-scale, high-contrast, reduced-motion and stronger-focus accessibility preferences.
+- Added first-life onboarding explaining time controls, independent world behavior and where persistent preferences live.
+- Added persistent serious-content preferences for premature death, pregnancy loss, violent crime, severe illness and future addiction content.
+- Added simulation gates for premature death, pregnancy loss, violent-crime generation and severe-illness generation.
+- Violent-crime-off blocks player assault actions and removes assault from background crime generation.
+- Severe-illness-off blocks chronic severe-illness generation and keeps ordinary acute generated illness below the severe range.
+- Added rare deterministic pregnancy-loss events when enabled, with persistent consequences/history.
+- Kept the addiction preference honest: it is persisted for future systems, but v0.13.0 does not claim a complete addiction/substance-use disorder generator.
+- Added in-save accessibility and serious-content controls in Timeline.
+- Added portable JSON save export with schema metadata.
+- Added safe portable restore through the normal migration path, including supported older raw saves.
+- Restore now validates first and requires explicit replacement confirmation before changing the active life.
+- Invalid/unsupported portable files fail safely without replacing the current world.
+- Restored accessibility preferences apply immediately.
+- Expanded Phase 13 regression coverage for mode rules, starting families, scenarios, configuration migration, content gates, accessibility mutations, portable-save round trips, malformed backups and long-horizon determinism.
+- Added `docs/PHASE13_SCOPE.md` and `docs/PHASE13_ACCEPTANCE.md`.
+- Bumped the PWA cache to v13 and the app version to v0.13.0.
+- Arbitrary Sandbox sliders, mid-life mode switching, a large authored Scenario library, full 3D character creation, localization, formal third-party accessibility certification and a complete addiction system remain explicit future work.
+
 ## v0.12.0 — Deeper Living World & Locations
 
 - Upgraded the canonical simulation world schema to v11.
@@ -68,7 +104,7 @@
 - Changed new-world creation so fresh games are born as true v9 worlds rather than being silently upgraded after initialization.
 - Added persistent death records, funeral records, estate plans, estate cases, ancestor archives and controlled-generation transition history.
 - Added deterministic age/health/circumstance-driven mortality for the controlled character and high-fidelity NPCs.
-- Controlled-character death now hard-stops further requested time advancement until the player chooses how to continue.
+- Controlled-character death now hard-stops further requested time advancement until continuation is resolved.
 - Added funeral/grief consequences that affect surviving connected people and active household/life systems.
 - Added player wills and deterministic intestacy fallback.
 - Added life-insurance settlement with ordering that captures proceeds before policy cleanup.
