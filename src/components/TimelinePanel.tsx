@@ -2,6 +2,7 @@ import { BookOpen, History, Sparkles, UsersRound } from 'lucide-react';
 import type { WorldState } from '../types/game';
 import { setNarrationMode } from '../narration/narrationEngine';
 import { CloudPanel } from './CloudPanel';
+import { PreferencesRecoveryPanel } from './PreferencesRecoveryPanel';
 
 const dateFmt=new Intl.DateTimeFormat('en-US',{month:'short',day:'numeric',year:'numeric',timeZone:'UTC'});
 const money=new Intl.NumberFormat('en-US',{style:'currency',currency:'USD',maximumFractionDigits:0});
@@ -17,6 +18,7 @@ export function TimelinePanel({world,onChange}:{world:WorldState;onChange:(world
     </div></section>
     {ancestors.length>0&&<section className="section"><header><h2>Family legacy</h2><p>Past controlled lives and deceased family identities remain part of this world rather than disappearing when control changes.</p></header><div className="section-body"><div className="ancestor-grid">{ancestors.map(a=><article className="ancestor-card" key={a.id}><UsersRound size={20}/><span className="eyebrow">{a.birthDate.slice(0,4)}–{a.deathDate.slice(0,4)}</span><h3>{a.name}</h3><p>{a.career} · {a.location}</p><small>Died at {a.ageAtDeath} · {money.format(a.netWorthAtDeath)} net worth at death · {a.childIds.length} recorded children</small></article>)}</div>{transitions.length>0&&<div className="health-subsection"><h3>Generational control</h3>{transitions.map(t=><div className="medical-row" key={t.id}><span><b>{archivedName(world,t.fromPersonId)} → {archivedName(world,t.toPersonId)}</b><small>{fmtDate(t.date)}</small></span><small>{money.format(t.inheritedAmount)} inherited cash</small></div>)}</div>}</div></section>}
     {lifestyle.length>0&&<section className="section"><header><h2>Lifestyle milestones</h2><p>Homes, travel, pets, hobbies, technology and personal style can become part of the story too.</p></header><div className="section-body">{lifestyle.map(m=><article className="memory" key={m.id}><time>{fmtDate(m.date)}</time><div><span className="eyebrow">{m.category.toUpperCase()}</span><h3>{m.title}</h3><p>{m.summary}</p></div></article>)}</div></section>}
+    <PreferencesRecoveryPanel world={world} onChange={onChange}/>
     <CloudPanel world={world} onChange={onChange}/>
     <section className="section"><header><h2>Life timeline</h2></header><div className="section-body">{world.memories.map(m=><article className="memory" key={m.id}><time>{fmtDate(m.date)}</time><div><h3>{m.title}</h3><p>{m.summary}</p></div></article>)}</div></section>
     <section className="section"><header><h2>Personal memory</h2></header><div className="section-body">{personal.length?personal.map(m=><article className="memory subtle" key={m.id}><time>{fmtDate(m.date)}</time><div><span className="eyebrow">{m.kind.toUpperCase()}</span><p>{m.summary}</p></div></article>):<div className="chapter-empty"><History size={24}/><p>No additional long-term memories have formed yet.</p></div>}</div></section>
