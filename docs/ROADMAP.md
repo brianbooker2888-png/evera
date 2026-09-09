@@ -48,7 +48,7 @@
 - [x] Logistics / warehousing business simulation module
 - [x] Separate business finance, facilities, employees, contracts and operating KPIs
 - [x] v5 → v6 migration and Phase 6 regression coverage
-- [ ] Stylized 2.5D match-moment renderer (presentation layer; scheduled for Phase 14)
+- [x] Stylized 2.5D match-moment presentation layer delivered in Phase 14
 
 ## Phase 7 — Grounded narration
 - [x] Narration provider abstraction and registry
@@ -120,9 +120,9 @@
 - [x] Household home-quality, privacy and space-pressure simulation across existing home types
 - [x] Furnishing/upgrades/home maintenance without mandatory room-by-room micromanagement
 - [x] Vehicle practicality, mileage, maintenance, reliability and deterministic breakdown foundations
-- [ ] Expanded vehicle customization catalog and visual presentation (later visual depth)
+- [ ] Expanded vehicle customization catalog and visual presentation
 - [x] Contextual wardrobe/style/grooming identity state
-- [ ] Fully visual automatic outfit selection (Phase 14 presentation layer)
+- [x] Visual automatic contextual outfit presentation delivered in Phase 14
 - [x] Household food strategy, cooking and family-meal foundations
 - [x] Restaurants, entertainment outings and social spending
 - [ ] Expanded hosting/venue catalog tied to locations
@@ -165,30 +165,34 @@
 - [x] Phase 12 architecture and acceptance documentation
 
 ## Phase 13 — Game modes, onboarding, controls & accessibility
-- [ ] Life Mode
-- [ ] Hard Life
-- [ ] Sandbox
-- [ ] Legacy Mode
-- [ ] Scenario framework
-- [ ] Character-creation expansion for full starting-family/background control
-- [ ] New-player onboarding without exposing optimal choices
-- [ ] Serious-content settings and optional premature-death controls
-- [ ] Scalable type, high contrast, reduced motion and color-safe information design
-- [ ] Screen-reader landmarks, labels and keyboard navigation
-- [ ] Large-touch-target and mobile usability audit
-- [ ] Save/export/import/recovery UX
+- [x] Life Mode
+- [x] Hard Life
+- [x] Sandbox
+- [x] Legacy Mode
+- [x] Scenario framework
+- [x] Character-creation expansion for starting-family/background control
+- [x] New-player onboarding without exposing optimal choices
+- [x] Serious-content settings and optional premature-death controls
+- [x] Scalable type, high contrast, reduced motion and color-safe information design
+- [x] Screen-reader semantics, labels and keyboard-operable controls for Phase 13 surfaces
+- [x] Large-touch-target and mobile presentation for Phase 13 surfaces
+- [x] Save/export/import/recovery UX
+- [x] v11 → v12 migration and Phase 13 regression/acceptance documentation
 
 ## Phase 14 — Visual experiences, sports presentation & memory cards
-- [ ] Stylized-realism visual system for important life scenes
-- [ ] 2.5D soccer match-moment renderer using stored deterministic match events
-- [ ] 2.5D American-football match-moment renderer using the same shared match state
-- [ ] Full / extended / key-moments / result sports viewing modes
-- [ ] Contextual athlete/coach match decisions in presentation layer
-- [ ] Visual aging and family resemblance presentation foundation
-- [ ] Automatic contextual outfit presentation
-- [ ] Visual Memory Cards for major milestones
-- [ ] Family albums and generational visual history
-- [ ] Major-scene presentation for birth, graduation, proposal, wedding, home, promotion, hospital, divorce, funeral and retirement
+- [x] Stylized-realism visual system for important life scenes
+- [x] 2.5D soccer match-moment renderer using stored deterministic match events
+- [x] 2.5D American-football match-moment renderer using the same shared match state
+- [x] Full / Extended / Key moments / Result sports viewing modes
+- [x] Contextual athlete/coach pre-match decisions using existing canonical actions
+- [x] Visual aging and family-resemblance presentation foundation
+- [x] Automatic contextual outfit presentation
+- [x] Visual Memory Cards for recorded major milestones
+- [x] Family albums and generational visual history
+- [x] Major-scene presentation for birth, graduation, proposal, wedding, home, promotion, hospital, divorce, funeral and retirement
+- [x] Phase 14 deterministic presentation regression coverage
+- [x] Phase 14 scope and acceptance documentation
+- [ ] Final exact-head v0.14.0 release gate and merge
 
 ## Phase 15 — Full integration, performance, deployment & release hardening
 - [ ] Full v1→current save-migration matrix fixtures

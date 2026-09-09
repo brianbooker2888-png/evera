@@ -3,6 +3,7 @@ import type { WorldState } from '../types/game';
 import { setNarrationMode } from '../narration/narrationEngine';
 import { CloudPanel } from './CloudPanel';
 import { PreferencesRecoveryPanel } from './PreferencesRecoveryPanel';
+import { FamilyAlbum, VisualMemoryDeck } from './MemoryVisuals';
 
 const dateFmt=new Intl.DateTimeFormat('en-US',{month:'short',day:'numeric',year:'numeric',timeZone:'UTC'});
 const money=new Intl.NumberFormat('en-US',{style:'currency',currency:'USD',maximumFractionDigits:0});
@@ -12,6 +13,8 @@ function archivedName(world:WorldState,id:string){return world.ancestorArchives.
 export function TimelinePanel({world,onChange}:{world:WorldState;onChange:(world:WorldState)=>void}){
   const personal=world.character.human.memories.slice().sort((a,b)=>b.date.localeCompare(a.date)).slice(0,10),ancestors=world.ancestorArchives.slice().sort((a,b)=>b.deathDate.localeCompare(a.deathDate)),transitions=world.controlTransitions.slice().sort((a,b)=>b.date.localeCompare(a.date)),lifestyle=world.lifestyleMilestones.filter(m=>m.personId===world.character.id).slice().sort((a,b)=>b.date.localeCompare(a.date)).slice(0,20);
   return <>
+    <VisualMemoryDeck world={world}/>
+    <FamilyAlbum world={world}/>
     <section className="section"><header><h2>Your autobiography</h2><p>At each completed year boundary, EVERA turns recorded simulation facts into a grounded Life Chapter.</p></header><div className="section-body">
       <article className="narration-settings"><div><Sparkles size={20}/><span><b>Narration mode</b><small>The simulation is authoritative in both modes.</small></span></div><select value={world.narrationSettings.mode} onChange={e=>onChange(setNarrationMode(world,e.target.value as WorldState['narrationSettings']['mode']))}><option value="offline">Offline deterministic</option><option value="enhanced_when_available">Enhanced when available</option></select></article>
       {world.annualLifeChapters.length===0?<div className="chapter-empty"><BookOpen size={28}/><h3>Your first chapter is still being lived.</h3><p>A chapter is archived after a calendar year completes. Offline generation is always available.</p></div>:<div className="chapter-list">{world.annualLifeChapters.map(chapter=><article className="life-chapter" key={chapter.id}><span className="eyebrow">LIFE CHAPTER · {chapter.year}</span><h3>{chapter.title}</h3><p>{chapter.text}</p><small>{chapter.enhanced?'Enhanced narration':'Offline grounded narration'} · {chapter.sourceFactIds.length} recorded facts used</small></article>)}</div>}

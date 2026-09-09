@@ -5,7 +5,7 @@
 
 EVERA is a local-first persistent life and world simulation. The player is one person inside a world that continues independently.
 
-## Current build — v0.13.0 Game Modes, Onboarding, Accessibility & Recovery
+## Current build — v0.14.0 Visual Experiences, Sports Presentation & Memory Cards
 
 ### Foundation
 - React + TypeScript + Vite
@@ -16,14 +16,35 @@ EVERA is a local-first persistent life and world simulation. The player is one p
 - GitHub Actions release gate: production dependency security, strict simulation typecheck, cumulative Vitest suite, production build and temporary Capacitor wrapper generation
 - Capacitor-compatible iOS and Android packaging from the same web codebase
 
-### Phase 13: game configuration
-- Canonical simulation schema is **v12**
-- Persistent `gameConfiguration` stores mode, rules, serious-content preferences, accessibility preferences and onboarding state
-- Explicit v11 → v12 migration
-- All older supported saves continue through the cumulative migration ladder to v12
-- Existing worlds migrate to standard Life Mode rather than being reinterpreted as a harder/easier mode
+### Phase 14: deterministic visual presentation
+- Stylized-realism presentation layer built on existing canonical state
+- No separate visual simulation and no retroactive result mutation
+- Deterministic visual-person cards derived from identity, age, family links and lifestyle state
+- Age-band presentation across childhood, adolescence, adulthood and later life
+- Family-resemblance cues derived from canonical family relationships without inferring unstored sensitive demographic attributes
+- Automatic contextual outfit presentation using canonical wardrobe categories, quality and condition
+- Visual Memory Cards derived only from recorded memories and lifestyle milestones
+- Family album combining living family links with archived earlier generations
+- Major-scene presentation categories for birth, graduation, proposal, wedding, home, promotion, hospital, divorce, funeral and retirement
 
-### Game modes
+### Sports presentation
+- Shared stylized match room for soccer and American football
+- Completed fixtures replay from stored deterministic `MatchMoment` records
+- **Full** mode shows all stored moments
+- **Extended** mode emphasizes meaningful chances and big plays
+- **Key moments** mode emphasizes high-importance stored events
+- **Result** mode presents the final score without replay moments
+- Previous / next / autoplay / restart replay controls
+- Controlled-character involvement is highlighted when the canonical match moment stores the player as actor
+- Pre-match athlete preparation uses the existing skills, fitness and recovery actions
+- Pre-match coach decisions use the existing aggressive, balanced and conservative coaching approaches
+- Completed-match viewing cannot alter score, statistics, injuries or world history
+
+### Game configuration and modes
+- Canonical simulation schema remains **v12**
+- Persistent `gameConfiguration` stores mode, rules, serious-content preferences, accessibility preferences and onboarding state
+- Explicit v11 → v12 migration and cumulative migration from all older supported saves
+- Existing worlds migrate to standard Life Mode rather than being reinterpreted as a harder/easier mode
 - **Life Mode** — standard persistent-life rules
 - **Hard Life** — lower starting resources with stronger world/economic and mortality pressure
 - **Sandbox** — increased starting resources, softer world shocks and no configured random premature mortality
@@ -31,21 +52,21 @@ EVERA is a local-first persistent life and world simulation. The player is one p
 - **Scenario** — deterministic preset starting conditions
 - Scenario foundations currently include Fresh Start, Career Rebuild and Legacy Seed
 - The selected mode is part of the life and cannot be switched mid-save
-- Modes modify simulation rules; they do not script hidden outcomes
 
-### Guided character creation
+### Guided character creation and starting family
 - Five-step creator instead of one large form
 - Identity, age, sex, orientation, hometown and socioeconomic background
 - Major personality dimensions including ambition, discipline, empathy, analytical ability, emotional ability, creativity, confidence, patience, loyalty, impulsivity, risk tolerance and family orientation
 - Six athletic dimensions: speed, strength, endurance, agility, coordination and reaction
-- Simple defaults remain available so deep setup is optional
-- Starting family configuration supports two-parent, single-parent, guardian and independent starts
-- Configurable siblings and parent closeness
+- Two-parent, single-parent, guardian and independent starting structures
+- Configurable siblings and parent/guardian closeness
+- Canonical parent, sibling, guardian and ward family links
 - Minor characters can begin inside the configured family household
-- Adult characters retain family relationships without being forced to co-reside
+- Adult characters retain family relationships without forced co-residence
+- Direct family relationships are excluded from romantic eligibility
 
 ### Serious-content preferences
-Preferences are persisted per save and affect **future generated events** without rewriting history.
+Preferences are persisted per save and affect future generated events without rewriting history.
 
 - Premature death can be disabled
 - Pregnancy-loss generation can be disabled
@@ -53,29 +74,19 @@ Preferences are persisted per save and affect **future generated events** withou
 - Severe-illness generation can be disabled; chronic severe-illness generation is blocked and ordinary acute generation is kept below the severe range
 - Addiction-content preference is persisted for future addiction systems
 
-**Important boundary:** v0.13.0 does not yet contain a full addiction/substance-use disorder generator. The preference is stored so future systems can honor it without another save-schema redesign.
+**Important boundary:** v0.14.0 still does not contain a complete addiction/substance-use disorder generator. The preference is stored so future systems can honor it without another save-schema redesign.
 
-### Accessibility
+### Accessibility, onboarding and recovery
 - Standard, large and extra-large text scaling
 - High-contrast mode
-- Reduced-motion mode
+- Reduced-motion mode, including removal of Phase 14 match-marker animation and pseudo-3D motion treatment
 - Stronger keyboard focus outlines
-- Preferences persist with the save and can change after world creation
-- Accessibility settings do not change simulation outcomes
-- First-life onboarding uses dialog semantics and a keyboard-focused primary action
-- Restore feedback uses an announced status region
-- Phase 13 setup/settings/recovery surfaces include responsive mobile layouts
-
-### Onboarding and save recovery
-- Concise first-life introduction before time begins
-- Explains time controls, independent-world behavior and save-level preferences
+- First-life onboarding with dialog semantics
 - Timeline exposes in-save accessibility and serious-content settings
 - Portable JSON backup contains canonical world state and schema metadata
-- Portable restore accepts current v12 saves
-- Supported older raw saves restore through the normal migration path
+- Supported older saves restore through the normal migration path
 - Invalid/unsupported files fail safely
 - Selecting a restore file does not overwrite the active life until explicit confirmation
-- Restored accessibility preferences are applied immediately
 
 ### Deeper living world
 - Country/city/neighborhood state with simplified tax, healthcare, education, labor, benefit, retirement, immigration and cost conditions
@@ -100,7 +111,7 @@ Preferences are persisted per save and affect **future generated events** withou
 - Household schedules, labor and finance styles
 - Offline free-text conversation intent/tone handling
 - Pregnancy, children, parenting, step-family links, custody and co-parenting foundations
-- Persistent starting-family relationships introduced in v0.13.0
+- Persistent starting-family and generational relationships
 
 ### Education & careers
 - Persistent schools, universities, trade schools, employers and job openings
@@ -125,7 +136,7 @@ Preferences are persisted per save and affect **future generated events** withou
 - Home upgrades with canonical spending
 - Food strategies and grocery economics
 - Cooking and recurring family-meal behavior
-- Contextual style/grooming and wardrobe-category state
+- Contextual style/grooming and canonical wardrobe categories
 - Hobbies, restaurants, entertainment and social outings
 - Pets with care, attachment, aging and mortality
 - Travel plans with companions, dates, lodging, budget and completion state
@@ -142,7 +153,6 @@ Preferences are persisted per save and affect **future generated events** withou
 - Preventive, primary, urgent, emergency, specialist and therapy encounters
 - Employer health coverage, deductible/coinsurance, medications and medical bills
 - Location/country healthcare context
-- Phase 13 severe-illness generation preference applies at the simulation boundary
 
 ### Mortality, estates & generations
 - Hidden age-, health- and circumstance-driven mortality for controlled/high-fidelity people
@@ -153,7 +163,6 @@ Preferences are persisted per save and affect **future generated events** withou
 - Permanent ancestor archive
 - Continue as an eligible existing descendant without creating a replacement identity
 - Generation-aware finance initialization
-- Phase 13 mode/content rules can alter random mortality availability/pressure without replacing the estate system
 
 ### Crime & law
 - Persistent crime incidents with separate discovery/evidence state
@@ -161,15 +170,14 @@ Preferences are persisted per save and affect **future generated events** withou
 - Legal representation/costs, fines, legal debt, incarceration and release
 - Criminal-record employment consequences
 - Civil filing, negotiation, settlement, trial, judgment and dismissal foundations
-- Phase 13 violent-crime preference removes assault from future player/background generation when disabled
 
-### Sports
+### Sports simulation
 - Persistent fictional soccer and American-football leagues, teams, rosters and fixtures
 - Soccer academy → professional pathway
 - American football prep → college → professional pathway
 - Athlete and head-coach careers using one deterministic match engine
 - Training, fatigue, injuries, contracts, standings and season statistics
-- Stored match moments for later richer visual rendering
+- Stored match moments now power the Phase 14 presentation layer
 
 ### Logistics & warehousing business
 - Separate personal and business finances
@@ -197,23 +205,24 @@ Preferences are persisted per save and affect **future generated events** withou
 
 - Current canonical schema: **v12**
 - Explicit cumulative migration remains supported from v1 through v12
-- v11 saves gain standard Life Mode configuration, accessibility/content defaults and onboarding state without deleting prior world history
+- Phase 14 is presentation-only and does not require a new save schema
 - New games are created directly as v12 worlds
 - Portable restore uses the same migration function as ordinary local-load compatibility
 
-## Explicit Phase 13 boundaries
+## Explicit Phase 14 boundaries
 
-v0.13.0 does **not** claim:
+v0.14.0 does **not** claim:
+- photorealistic or fully 3D character rendering
+- user-uploaded face likenesses
+- licensed real-world teams, kits, stadiums or player likenesses
+- joystick-controlled sports gameplay or real-time physics
+- generated cinematic video
+- editable genetic appearance attributes that are not canonical state
+- a full room-by-room 3D home renderer
+- presentation-created canonical memories
 - complete addiction/substance-use disorder simulation
-- arbitrary Sandbox rule sliders
-- mid-life game-mode switching
-- a large authored Scenario campaign library
-- full 3D/visual character creation
-- localization
-- formal third-party accessibility certification
-- automatic cross-device portable-file transfer
 
-See `docs/PHASE13_SCOPE.md`, `docs/PHASE13_ACCEPTANCE.md`, `docs/LIVING_WORLD_ARCHITECTURE.md`, `docs/CLOUD_NATIVE.md`, `docs/HEALTH_ARCHITECTURE.md`, `docs/LEGACY_LEGAL_ARCHITECTURE.md` and `docs/LIFESTYLE_ARCHITECTURE.md` for boundaries and prior-system architecture.
+See `docs/PHASE14_SCOPE.md`, `docs/PHASE14_ACCEPTANCE.md`, `docs/PHASE13_SCOPE.md`, `docs/LIVING_WORLD_ARCHITECTURE.md`, `docs/CLOUD_NATIVE.md`, `docs/HEALTH_ARCHITECTURE.md`, `docs/LEGACY_LEGAL_ARCHITECTURE.md` and `docs/LIFESTYLE_ARCHITECTURE.md` for boundaries and prior-system architecture.
 
 ## Run
 
@@ -246,4 +255,4 @@ npm run build
 
 > The world does not exist for the player. The player exists inside the world.
 
-Core simulation remains deterministic and fully playable offline. AI, accounts and cloud services may enrich the experience, but they may not become prerequisites for the life simulation.
+Core simulation remains deterministic and fully playable offline. AI, accounts, cloud services and visual presentation may enrich the experience, but none may become prerequisites for the life simulation.
