@@ -51,13 +51,17 @@ describe('Phase 13 game modes, setup and preferences',()=>{
     expect(home.responsibleAdultIds).not.toContain(world.character.id);
   });
 
-  it('persists guardian/ward links and excludes close family from romance',()=>{
-    const guardianWorld=createWorld({...draft,age:12,familyStructure:'guardian' as const},130041);
+  it('persists guardian/ward links, a complete starting-family graph, and excludes close family from romance',()=>{
+    const guardianWorld=createWorld({...draft,age:12,familyStructure:'guardian' as const,siblingCount:1},130041);
     expect(guardianWorld.familyLinks.some(f=>f.fromId==='npc-parent'&&f.toId===guardianWorld.character.id&&f.relation==='guardian')).toBe(true);
     expect(guardianWorld.familyLinks.some(f=>f.fromId===guardianWorld.character.id&&f.toId==='npc-parent'&&f.relation==='ward')).toBe(true);
-    const adultFamily=createWorld({...draft,age:28,familyStructure:'two_parent' as const,siblingCount:1},130042);
+    expect(guardianWorld.familyLinks.some(f=>f.fromId==='npc-parent'&&f.toId==='npc-sibling-1'&&f.relation==='guardian')).toBe(true);
+    const adultFamily=createWorld({...draft,age:28,familyStructure:'two_parent' as const,siblingCount:2},130042);
+    expect(adultFamily.familyLinks.some(f=>f.fromId==='npc-parent'&&f.toId==='npc-sibling-1'&&f.relation==='biological_parent')).toBe(true);
+    expect(adultFamily.familyLinks.some(f=>f.fromId==='npc-sibling-1'&&f.toId==='npc-sibling-2'&&f.relation==='sibling')).toBe(true);
     expect(romanceEligible(adultFamily,adultFamily.character.id,'npc-parent')).toBe(false);
     expect(romanceEligible(adultFamily,adultFamily.character.id,'npc-sibling-1')).toBe(false);
+    expect(romanceEligible(adultFamily,'npc-sibling-1','npc-sibling-2')).toBe(false);
     expect(romanceEligible(adultFamily,adultFamily.character.id,'npc-friend')).toBe(true);
   });
 
