@@ -9,9 +9,9 @@ const draft={firstName:'Lifestyle',lastName:'Test',age:31,sex:'male' as const,or
 function addDays(date:string,days:number){const d=new Date(`${date}T12:00:00Z`);d.setUTCDate(d.getUTCDate()+days);return d.toISOString().slice(0,10);}
 
 describe('Phase 11 lifestyle and daily life',()=>{
-  it('keeps Phase 11 lifestyle state inside schema v11 worlds',()=>{
+  it('keeps Phase 11 lifestyle state inside current schema worlds',()=>{
     const world=createWorld(draft,11001);
-    expect(world.version).toBe(11);
+    expect(world.version).toBe(12);
     expect(world.lifestyleProfiles.some(p=>p.personId===world.character.id)).toBe(true);
     expect(world.homeLifestyles.length).toBeGreaterThan(0);
     expect(world.wardrobeItems.length).toBeGreaterThan(0);
